@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Mobile</string>
+    <string name="app_name">Поиск предложения</string>
+    <string name="no_text_result">Введите текст, содержащий хотя бы одно слово.</string>
+    <plurals name="word_count">
+        <item quantity="one">Самое длинное предложение (%1$d слово):</item>
+        <item quantity="few">Самое длинное предложение (%1$d слова):</item>
+        <item quantity="many">Самое длинное предложение (%1$d слов):</item>
+        <item quantity="other">Самое длинное предложение (%1$d слова):</item>
+    </plurals>
 </resources>
