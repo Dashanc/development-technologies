@@ -11,6 +11,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
+
+    private val defaultText = "Наступило утро. Мы отправились в долгую и увлекательную поездку через весь город. Ради одной пары в шесть вечера. Зато не нормисы."
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,6 +27,10 @@ class MainActivity : AppCompatActivity() {
         val input = findViewById<TextInputEditText>(R.id.inputText)
         val findButton = findViewById<Button>(R.id.findButton)
         val result = findViewById<TextView>(R.id.resultText)
+
+        if (savedInstanceState == null) {
+            input.setText(defaultText)
+        }
 
         findButton.setOnClickListener {
             val text = input.text?.toString().orEmpty()
