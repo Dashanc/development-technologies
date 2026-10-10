@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Поиск предложения</string>
+    <string name="default_text">Нас тупило утро. Мы отправились в долгую и увлекательную поездку через весь город. Ради одной пары в шесть вечера. Зато не нормисы.</string>
     <string name="no_text_result">Введите текст, содержащий хотя бы одно слово.</string>
     <plurals name="word_count">
         <item quantity="one">Самое длинное предложение (%1$d слово):</item>
