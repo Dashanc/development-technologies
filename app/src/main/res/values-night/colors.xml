@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mp_primary">#C4A5EB</color>
+    <color name="mp_primary_soft">#352B43</color>
+    <color name="mp_on_primary">#2B183E</color>
+    <color name="mp_surface">#1D1922</color>
+    <color name="mp_card">#25212B</color>
+    <color name="mp_text">#F1EAF6</color>
+    <color name="mp_text_secondary">#C1B8CB</color>
+    <color name="mp_outline">#403848</color>
+    <color name="mp_icon_muted">#A89AAF</color>
+    <color name="mp_icon_ink">#332B3B</color>
+    <color name="mp_badge_neutral">#D6CFDE</color>
+</resources>

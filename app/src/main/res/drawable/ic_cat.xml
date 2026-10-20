@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="36"
+    android:viewportHeight="36">
+    <group
+        android:translateX="-91"
+        android:translateY="-260.5">
+        <path
+            android:pathData="M98.0798 275.12L100.6 266.72L107.32 270.92C108.44 270.36 109.56 270.36 110.68 270.92L117.4 266.72L119.92 275.12C122.16 277.92 122.72 281.28 121.6 285.2C119.92 290.24 115.72 292.76 109 292.76C102.28 292.76 98.0798 290.24 96.3998 285.2C95.2798 281.28 95.8398 277.92 98.0798 275.12Z"
+            android:fillColor="#00000000"
+            android:strokeColor="@color/mp_icon_ink"
+            android:strokeWidth="1.848"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M103.119 281.84C104.239 280.72 105.359 280.72 106.479 281.84M111.519 281.84C112.639 280.72 113.759 280.72 114.879 281.84M106.479 286.88C108.159 288.56 109.839 288.56 111.519 286.88"
+            android:fillColor="#00000000"
+            android:strokeColor="@color/mp_icon_ink"
+            android:strokeWidth="1.848"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M98.9191 284.36L93.0391 282.68M98.9191 287.72L93.0391 288.56M119.079 284.36L124.959 282.68M119.079 287.72L124.959 288.56"
+            android:fillColor="#00000000"
+            android:strokeColor="@color/mp_icon_ink"
+            android:strokeWidth="1.848"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>
