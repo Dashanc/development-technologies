@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/mp_screen_padding">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/back"
+            style="@style/MpIconButton"
+            app:srcCompat="@drawable/ic_back"
+            android:contentDescription="@string/back" />
+        <TextView
+            style="@style/MpTitle"
+            android:text="@string/history"
+            android:layout_width="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+    <TextView
+        style="@style/MpCaption"
+        android:id="@+id/pet_name"
+        tools:text="@string/pet_name" />
+    <TextView
+        style="@style/MpCaption"
+        android:id="@+id/history_summary"
+        tools:text="3 записи" />
+    <RadioGroup
+        android:id="@+id/filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:checkedButton="@id/filters_0">
+        <RadioButton
+            style="@style/MpRadio"
+            android:id="@+id/filters_0"
+            android:text="@string/filter_all" />
+        <RadioButton
+            style="@style/MpRadio"
+            android:id="@+id/filters_1"
+            android:text="@string/filter_weight" />
+        <RadioButton
+            style="@style/MpRadio"
+            android:id="@+id/filters_2"
+            android:text="@string/filter_vaccine" />
+        <RadioButton
+            style="@style/MpRadio"
+            android:id="@+id/filters_3"
+            android:text="@string/filter_visits" />
+    </RadioGroup>
+    <TextView
+        style="@style/MpCaption"
+        android:id="@+id/records_empty"
+        android:text="@string/no_health_records"
+        tools:visibility="gone" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/health_records"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_health_record"
+        tools:itemCount="2" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButton"
+        android:id="@+id/add_record"
+        android:text="@string/add_record"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="textStart" />
+</LinearLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@color/mp_icon_muted" />
+        <TextView
+            style="@style/MpSection"
+            android:text="@string/extra_data" />
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/optional_later" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/coat"
+            android:labelFor="@id/coat" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/coat"
+                android:hint="@string/coat_hint"
+                android:inputType="textCapSentences"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/microchip"
+            android:labelFor="@id/microchip" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/microchip"
+                android:hint="@string/microchip_hint"
+                android:inputType="number"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/passport"
+            android:labelFor="@id/passport" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/passport"
+                android:hint="@string/passport_hint"
+                android:inputType="text"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/neutered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:text="@string/neutered" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/allergies"
+            android:labelFor="@id/allergies" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/allergies"
+                android:hint="@string/allergies_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:importantForAutofill="no"
+                android:minLines="3"
+                android:gravity="top|start" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButton"
+            android:id="@+id/done"
+            android:text="@string/done" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

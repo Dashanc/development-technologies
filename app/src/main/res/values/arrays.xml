@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="language_russian" translatable="false">Русский</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_kazakh" translatable="false">Қазақша</string>
+    <string-array name="languages">
+        <item>@string/language_russian</item>
+        <item>@string/language_english</item>
+        <item>@string/language_kazakh</item>
+    </string-array>
+    <string-array name="theme_options">
+        <item>@string/system_theme</item>
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+    </string-array>
+    <string-array name="unit_options">
+        <item>@string/kg</item>
+        <item>@string/lb</item>
+    </string-array>
+    <string-array name="reminder_options">
+        <item>@string/day_one</item>
+        <item>@string/day_zero</item>
+        <item>@string/day_three</item>
+    </string-array>
+    <string-array name="record_options">
+        <item>@string/weight_record</item>
+        <item>@string/vaccination</item>
+        <item>@string/vet_record</item>
+    </string-array>
+    <string-array name="vaccine_options">
+        <item>@string/vaccine_hint</item>
+    </string-array>
+    <string-array name="breed_options">
+        <item>@string/breed_hint</item>
+    </string-array>
+</resources>

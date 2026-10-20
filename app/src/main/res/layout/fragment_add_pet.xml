@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/mp_screen_padding">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/back"
+                style="@style/MpIconButton"
+                app:srcCompat="@drawable/ic_back"
+                android:contentDescription="@string/back" />
+            <TextView
+                style="@style/MpTitle"
+                android:text="@string/new_pet"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarCatLarge" />
+            <androidx.appcompat.widget.AppCompatImageView
+                style="@style/MpPhotoBadge"
+                android:layout_gravity="bottom|end"
+                app:srcCompat="@drawable/ic_add" />
+        </FrameLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/add_photo"
+            android:gravity="center" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/pet_name"
+            android:labelFor="@id/pet_name" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/pet_name"
+                android:hint="@string/pet_name_hint"
+                android:inputType="textCapWords"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/species" />
+        <RadioGroup
+            android:id="@+id/species"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:checkedButton="@id/species_0">
+            <RadioButton
+                style="@style/MpRadio"
+                android:id="@+id/species_0"
+                android:text="@string/cat" />
+            <RadioButton
+                style="@style/MpRadio"
+                android:id="@+id/species_1"
+                android:text="@string/dog" />
+            <RadioButton
+                style="@style/MpRadio"
+                android:id="@+id/species_2"
+                android:text="@string/other" />
+        </RadioGroup>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/breed"
+            android:labelFor="@id/breed" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/MpSpinner"
+            android:id="@+id/breed"
+            android:entries="@array/breed_options" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/birth_or_age"
+            android:labelFor="@id/birth" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/MpField"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconTint="@color/mp_primary"
+            app:endIconCheckable="false">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/birth"
+                android:hint="@string/birth_hint"
+                android:inputType="text"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/sex" />
+        <RadioGroup
+            android:id="@+id/sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+            <RadioButton
+                style="@style/MpRadio"
+                android:id="@+id/sex_0"
+                android:text="@string/male" />
+            <RadioButton
+                style="@style/MpRadio"
+                android:id="@+id/sex_1"
+                android:text="@string/female" />
+        </RadioGroup>
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/extra"
+            android:text="@string/extra_data" />
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/extra_caption" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButton"
+            android:id="@+id/save"
+            android:text="@string/save_pet" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

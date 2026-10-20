@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style
+        name="MpText"
+        parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/mp_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style
+        name="MpTitle"
+        parent="MpText">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style
+        name="MpSection"
+        parent="MpText">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">@dimen/mp_space_large</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+    <style
+        name="MpCaption"
+        parent="MpText">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/mp_text_secondary</item>
+    </style>
+    <style
+        name="MpLabel"
+        parent="MpCaption">
+        <item name="android:layout_marginTop">@dimen/mp_space_medium</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+    <style
+        name="MpIcon"
+        parent="">
+        <item name="android:layout_width">@dimen/mp_icon_size</item>
+        <item name="android:layout_height">@dimen/mp_icon_size</item>
+        <item name="tint">@color/mp_primary</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+    <style
+        name="MpIconButton"
+        parent="MpIcon">
+        <item name="android:layout_width">@dimen/mp_touch_target</item>
+        <item name="android:layout_height">@dimen/mp_touch_target</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:importantForAccessibility">yes</item>
+    </style>
+    <style
+        name="MpIconSmall"
+        parent="MpIcon">
+        <item name="android:layout_width">@dimen/mp_icon_small</item>
+        <item name="android:layout_height">@dimen/mp_icon_small</item>
+    </style>
+    <style
+        name="MpAvatar"
+        parent="MpIcon">
+        <item name="android:background">@drawable/bg_circle</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_width">@dimen/mp_icon_avatar</item>
+        <item name="android:layout_height">@dimen/mp_icon_avatar</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+    <style
+        name="MpAvatarLarge"
+        parent="MpAvatar">
+        <item name="android:padding">@dimen/mp_space_large</item>
+        <item name="android:layout_width">@dimen/mp_icon_avatar_large</item>
+        <item name="android:layout_height">@dimen/mp_icon_avatar_large</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/mp_space_large</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+    <style
+        name="MpCard"
+        parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/mp_space_medium</item>
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+    <style
+        name="MpButton"
+        parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/mp_button_height</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/mp_control_radius</item>
+        <item name="iconSize">@dimen/mp_icon_size</item>
+    </style>
+    <style
+        name="MpButtonSoft"
+        parent="MpButton">
+        <item name="backgroundTint">@color/mp_primary_soft</item>
+        <item name="android:textColor">@color/mp_primary</item>
+        <item name="iconTint">@color/mp_primary</item>
+    </style>
+    <style
+        name="MpField"
+        parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundColor">@color/mp_card</item>
+        <item name="boxStrokeColor">@color/mp_outline</item>
+        <item name="boxCornerRadiusTopStart">@dimen/mp_control_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/mp_control_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/mp_control_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/mp_control_radius</item>
+        <item name="hintEnabled">false</item>
+    </style>
+    <style
+        name="MpInput"
+        parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/mp_text</item>
+        <item name="android:textColorHint">@color/mp_text_secondary</item>
+    </style>
+    <style
+        name="MpSpinner"
+        parent="Widget.AppCompat.Spinner">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">40dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:background">@drawable/bg_dropdown</item>
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
+    <style
+        name="MpRadio"
+        parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/bg_choice</item>
+        <item name="android:textColor">@color/choice_text</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/mp_space_small</item>
+        <item name="android:layout_margin">3dp</item>
+    </style>
+    <style
+        name="MpAvatarCat"
+        parent="MpAvatar">
+        <item name="srcCompat">@drawable/ic_cat</item>
+        <item name="tint">@color/mp_icon_ink</item>
+        <item name="backgroundTint">@color/mp_avatar_warm</item>
+    </style>
+    <style
+        name="MpAvatarCatCool"
+        parent="MpAvatarCat">
+        <item name="backgroundTint">@color/mp_avatar_cool</item>
+    </style>
+    <style
+        name="MpAvatarCatSmall"
+        parent="MpAvatarCat">
+        <item name="android:layout_width">@dimen/mp_icon_badge</item>
+        <item name="android:layout_height">@dimen/mp_icon_badge</item>
+        <item name="android:padding">@dimen/mp_space_small</item>
+    </style>
+    <style
+        name="MpAvatarCatSmallCool"
+        parent="MpAvatarCatSmall">
+        <item name="backgroundTint">@color/mp_avatar_cool</item>
+    </style>
+    <style
+        name="MpAvatarCatLarge"
+        parent="MpAvatarCat">
+        <item name="android:layout_width">@dimen/mp_icon_avatar_large</item>
+        <item name="android:layout_height">@dimen/mp_icon_avatar_large</item>
+        <item name="android:padding">@dimen/mp_space_large</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/mp_space_large</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+    <style
+        name="MpAvatarPersonLarge"
+        parent="MpAvatarLarge">
+        <item name="srcCompat">@drawable/ic_person</item>
+    </style>
+    <style
+        name="MpRecordBadge"
+        parent="MpAvatar">
+        <item name="android:layout_width">@dimen/mp_icon_badge</item>
+        <item name="android:layout_height">@dimen/mp_icon_badge</item>
+        <item name="android:padding">@dimen/mp_space_small</item>
+        <item name="backgroundTint">@color/mp_badge_neutral</item>
+        <item name="tint">@color/mp_icon_ink</item>
+    </style>
+    <style
+        name="MpVisitBadge"
+        parent="MpRecordBadge">
+        <item name="backgroundTint">@color/mp_primary_soft</item>
+        <item name="tint">@color/mp_icon_muted</item>
+    </style>
+    <style
+        name="MpPhotoBadge"
+        parent="MpRecordBadge">
+        <item name="backgroundTint">@color/mp_primary</item>
+        <item name="tint">@color/mp_on_primary</item>
+    </style>
+</resources>

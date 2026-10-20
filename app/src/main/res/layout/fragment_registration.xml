@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/mp_screen_padding">
+        <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarPersonLarge" />
+        <TextView
+            style="@style/MpTitle"
+            android:text="@string/create_account"
+            android:gravity="center" />
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/registration_caption"
+            android:gravity="center" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/name"
+            android:labelFor="@id/owner_name" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/owner_name"
+                android:hint="@string/name_hint"
+                android:inputType="textPersonName"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/email"
+            android:labelFor="@id/owner_email" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/owner_email"
+                android:hint="@string/email_hint"
+                android:inputType="textEmailAddress"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/phone"
+            android:labelFor="@id/owner_phone" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/owner_phone"
+                android:hint="@string/phone_hint"
+                android:inputType="phone"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/password"
+            android:labelFor="@id/password" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/MpField"
+            app:endIconMode="password_toggle">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/password"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:saveEnabled="false"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/language"
+            android:labelFor="@id/language" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/MpSpinner"
+            android:id="@+id/language"
+            android:entries="@array/languages" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/consent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/consent"
+            android:textSize="12sp"
+            android:checked="false" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/terms"
+            android:text="@string/terms" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/privacy"
+            android:text="@string/privacy" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButton"
+            android:id="@+id/register"
+            android:text="@string/create_account" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/sign_in"
+            android:text="@string/have_account" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

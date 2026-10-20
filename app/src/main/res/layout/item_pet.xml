@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MpCard"
+    android:id="@+id/pet_card"
+    android:layout_marginTop="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:gravity="center_vertical">
+        <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarCat" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="0dp">
+            <TextView
+                style="@style/MpText"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                tools:text="@string/pet_name"
+                android:id="@+id/pet_name" />
+            <TextView
+                style="@style/MpCaption"
+                tools:text="Кошка · 1 год"
+                android:id="@+id/pet_details" />
+            <TextView
+                style="@style/MpCaption"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="6dp"
+                android:background="@drawable/bg_accent"
+                android:textColor="@color/mp_primary"
+                android:id="@+id/pet_status"
+                tools:text="@string/status_healthy" />
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="@color/mp_outline" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:paddingTop="12dp">
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/last_weight"
+            android:layout_width="0dp"
+            android:layout_weight="1" />
+        <TextView
+            style="@style/MpText"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            tools:text="4,6 кг"
+            android:id="@+id/pet_weight" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:paddingTop="12dp">
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/next_event"
+            android:layout_width="0dp"
+            android:layout_weight="1" />
+        <TextView
+            style="@style/MpText"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            tools:text="Осмотр · 22 ноя"
+            android:id="@+id/pet_next_event" />
+    </LinearLayout>
+</LinearLayout>

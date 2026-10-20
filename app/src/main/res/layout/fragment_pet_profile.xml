@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/mp_screen_padding">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/back"
+                style="@style/MpIconButton"
+                app:srcCompat="@drawable/ic_back"
+                android:contentDescription="@string/back" />
+            <TextView
+                style="@style/MpTitle"
+                android:text="@string/pets"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/MpAvatarCatLarge"
+            android:id="@+id/pet_avatar" />
+        <TextView
+            style="@style/MpTitle"
+            android:gravity="center"
+            android:id="@+id/pet_name"
+            tools:text="@string/pet_name" />
+        <TextView
+            style="@style/MpCaption"
+            android:gravity="center"
+            tools:text="Кошка · домашняя короткошёрстная"
+            android:id="@+id/pet_breed" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_marginTop="20dp">
+            <LinearLayout
+                style="@style/MpCard"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp">
+                <TextView
+                    style="@style/MpCaption"
+                    android:text="@string/current_weight" />
+                <TextView
+                    style="@style/MpTitle"
+                    android:id="@+id/current_weight"
+                    tools:text="4,6 кг" />
+            </LinearLayout>
+            <LinearLayout
+                style="@style/MpCard"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp">
+                <TextView
+                    style="@style/MpCaption"
+                    android:text="@string/age" />
+                <TextView
+                    style="@style/MpTitle"
+                    android:id="@+id/age"
+                    tools:text="1 год" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            style="@style/MpSection"
+            android:id="@+id/upcoming_heading"
+            android:text="@string/upcoming" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/pet_upcoming_empty"
+            android:text="@string/no_upcoming_events"
+            tools:visibility="gone" />
+        <LinearLayout
+            style="@style/MpCard"
+            android:id="@+id/upcoming_event"
+            android:background="@drawable/bg_accent"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone"
+            tools:visibility="visible">
+            <TextView
+                style="@style/MpText"
+                android:textStyle="bold"
+                android:id="@+id/event_title"
+                tools:text="@string/planned_checkup" />
+            <TextView
+                style="@style/MpCaption"
+                tools:text="22 ноября 2026"
+                android:id="@+id/event_date" />
+        </LinearLayout>
+        <TextView
+            style="@style/MpSection"
+            android:text="@string/quick_actions" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButton"
+            android:id="@+id/log_weight"
+            android:text="@string/log_weight"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/add_event"
+            android:text="@string/add_event"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/history"
+            android:text="@string/all_history" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
