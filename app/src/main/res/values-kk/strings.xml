@@ -134,4 +134,8 @@
     <string name="no_pets">Әзірге жануарлар жоқ</string>
     <string name="no_health_records">Әзірге денсаулық жазбалары жоқ</string>
     <string name="no_upcoming_events">Жоспарланған оқиғалар жоқ</string>
+    <string name="saving_unavailable">Деректерді сақтау әлі қосылмаған.</string>
+    <string name="terms_unavailable">Пайдалану ережелерінің мәтіні әлі қосылмаған.</string>
+    <string name="privacy_unavailable">Құпиялылық туралы ақпарат әлі қосылмаған.</string>
+    <string name="about_description">МурПаспорт — жануарлар карточкалары мен денсаулық жазбаларын жүргізуге арналған қолданба. Ветеринар кеңесін алмастырмайды.</string>
 </resources>

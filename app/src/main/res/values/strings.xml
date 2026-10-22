@@ -134,4 +134,8 @@
     <string name="no_pets">Пока нет питомцев</string>
     <string name="no_health_records">Пока нет записей о здоровье</string>
     <string name="no_upcoming_events">Нет запланированных событий</string>
+    <string name="saving_unavailable">Сохранение данных ещё не подключено.</string>
+    <string name="terms_unavailable">Текст правил использования пока не добавлен.</string>
+    <string name="privacy_unavailable">Информация о конфиденциальности пока не добавлена.</string>
+    <string name="about_description">МурПаспорт — приложение для ведения карточек питомцев и записей об их здоровье. Не заменяет консультацию ветеринарного врача.</string>
 </resources>

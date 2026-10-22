@@ -134,4 +134,8 @@
     <string name="no_pets">No pets yet</string>
     <string name="no_health_records">No health records yet</string>
     <string name="no_upcoming_events">No scheduled events</string>
+    <string name="saving_unavailable">Saving data is not available yet.</string>
+    <string name="terms_unavailable">The terms of use have not been added yet.</string>
+    <string name="privacy_unavailable">Privacy information has not been added yet.</string>
+    <string name="about_description">MurPassport is an app for pet profiles and health records. It does not replace advice from a veterinarian.</string>
 </resources>
