@@ -48,7 +48,11 @@ class AppNavigator(
                 updateNavigation()
             }
         }, false)
-        if (firstLaunch) openRoot(Screen.REGISTRATION) else updateNavigation()
+        if (firstLaunch) {
+            commit(Screen.REGISTRATION, null, addToBackStack = false, resumeProfile = true)
+        } else {
+            updateNavigation()
+        }
     }
 
     override fun open(screen: Screen, petId: String?) {
@@ -95,12 +99,13 @@ class AppNavigator(
 
     private fun canNavigate(): Boolean = !navigationPending && !fragments.isStateSaved
 
-    private fun commit(screen: Screen, petId: String?, addToBackStack: Boolean) {
+    private fun commit(screen: Screen, petId: String?, addToBackStack: Boolean, resumeProfile: Boolean = false) {
         hideKeyboard()
         val fragment = createFragment(screen).apply {
             arguments = Bundle().apply {
                 putString(Screen.ARG_SCREEN, screen.name)
                 putString(Screen.ARG_PET_ID, petId)
+                putBoolean(Screen.ARG_RESUME_PROFILE, resumeProfile)
             }
         }
         navigationPending = true

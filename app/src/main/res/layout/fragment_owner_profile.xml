@@ -32,6 +32,17 @@
         </LinearLayout>
         <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarPersonLarge" />
         <TextView
+            style="@style/MpCaption"
+            android:id="@+id/profile_message"
+            android:gravity="center"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/profile_retry"
+            android:text="@string/retry"
+            android:visibility="gone" />
+        <TextView
             style="@style/MpSection"
             android:gravity="center"
             android:id="@+id/owner_name"
@@ -41,6 +52,12 @@
             android:gravity="center"
             android:id="@+id/owner_email"
             tools:text="name@example.com" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/owner_phone"
+            android:gravity="center"
+            android:textDirection="ltr"
+            android:visibility="gone" />
         <TextView
             style="@style/MpSection"
             android:text="@string/my_pets" />

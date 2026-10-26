@@ -26,7 +26,7 @@
     <string name="consent">Я ознакомился(лась) с правилами использования и политикой конфиденциальности.</string>
     <string name="terms">Правила использования</string>
     <string name="privacy">Конфиденциальность</string>
-    <string name="have_account">Уже есть аккаунт? Войти</string>
+    <string name="have_account">Открыть сохранённый профиль</string>
     <string name="save_changes">Сохранить изменения</string>
     <string name="application">Приложение</string>
     <string name="account">Аккаунт</string>
@@ -45,7 +45,7 @@
     <string name="kg">кг</string>
     <string name="lb">фунты</string>
     <string name="about">О приложении</string>
-    <string name="logout">Выйти из аккаунта</string>
+    <string name="logout">К экрану регистрации</string>
     <string name="done">Готово</string>
     <string name="status_healthy">Здоровье</string>
     <string name="status_empty">Есть записи</string>
@@ -135,7 +135,26 @@
     <string name="no_health_records">Пока нет записей о здоровье</string>
     <string name="no_upcoming_events">Нет запланированных событий</string>
     <string name="saving_unavailable">Сохранение данных ещё не подключено.</string>
-    <string name="terms_unavailable">Текст правил использования пока не добавлен.</string>
-    <string name="privacy_unavailable">Информация о конфиденциальности пока не добавлена.</string>
+    <string name="terms_unavailable">Заглушка: перед реальным выпуском текст требует юридической и фактической проверки. Приложение не ставит диагноз и не заменяет консультацию ветеринарного врача.</string>
+    <string name="privacy_unavailable">Заглушка: перед реальным выпуском текст требует юридической и фактической проверки. Сохранённые данные хранятся локально на устройстве и не отправляются на сервер. Пароль используется только для проверки формы и не сохраняется.</string>
     <string name="about_description">МурПаспорт — приложение для ведения карточек питомцев и записей об их здоровье. Не заменяет консультацию ветеринарного врача.</string>
+    <string name="error_name_required">Введите имя.</string>
+    <string name="error_email_required">Введите электронную почту.</string>
+    <string name="error_email_invalid">Проверьте адрес: например, name@example.com.</string>
+    <string name="error_phone_invalid">Введите 10 цифр после +7 или оставьте поле пустым.</string>
+    <string name="error_password_short">Пароль должен содержать не менее 8 символов и не состоять только из пробелов.</string>
+    <string name="error_consent_required">Для учебной регистрации подтвердите ознакомление с правилами.</string>
+    <string name="retry">Повторить</string>
+    <string name="profile_loading">Загружаем профиль…</string>
+    <string name="profile_saving">Сохраняем…</string>
+    <string name="profile_saved">Изменения профиля сохранены.</string>
+    <string name="open_local_profile">Открыть сохранённый профиль</string>
+    <string name="local_profile_exists">На этом устройстве уже сохранён профиль. Откройте его, чтобы посмотреть или изменить данные.</string>
+    <string name="local_profile_missing">На этом устройстве пока нет профиля. Заполните форму регистрации.</string>
+    <string name="error_profile_read">Не удалось прочитать локальные данные. Повторите попытку.</string>
+    <string name="error_profile_write">Не удалось сохранить данные на устройстве. Повторите попытку.</string>
+    <string name="error_local_data_corrupt">Локальные данные повреждены. Они не были удалены или заменены.</string>
+    <string name="error_local_schema">Данные созданы другой версией приложения. Обновите приложение, чтобы открыть их.</string>
+    <string name="error_profile_exists">На устройстве уже есть другой профиль. Откройте сохранённый профиль.</string>
+    <string name="error_profile_data">Не удалось сохранить профиль. Проверьте введённые данные.</string>
 </resources>

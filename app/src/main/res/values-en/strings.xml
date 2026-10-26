@@ -26,7 +26,7 @@
     <string name="consent">I have read the terms of use and privacy policy.</string>
     <string name="terms">Terms of use</string>
     <string name="privacy">Privacy</string>
-    <string name="have_account">Already have an account? Sign in</string>
+    <string name="have_account">Open saved profile</string>
     <string name="save_changes">Save changes</string>
     <string name="application">Application</string>
     <string name="account">Account</string>
@@ -45,7 +45,7 @@
     <string name="kg">kg</string>
     <string name="lb">lb</string>
     <string name="about">About</string>
-    <string name="logout">Sign out</string>
+    <string name="logout">Back to registration</string>
     <string name="done">Done</string>
     <string name="status_healthy">Healthy</string>
     <string name="status_empty">Records available</string>
@@ -135,7 +135,26 @@
     <string name="no_health_records">No health records yet</string>
     <string name="no_upcoming_events">No scheduled events</string>
     <string name="saving_unavailable">Saving data is not available yet.</string>
-    <string name="terms_unavailable">The terms of use have not been added yet.</string>
-    <string name="privacy_unavailable">Privacy information has not been added yet.</string>
+    <string name="terms_unavailable">Placeholder: this text needs legal and factual review before a real release. The app does not diagnose conditions or replace veterinary advice.</string>
+    <string name="privacy_unavailable">Placeholder: this text needs legal and factual review before a real release. Saved data stays locally on this device and is not sent to a server. The password is used only to validate the form and is not saved.</string>
     <string name="about_description">MurPassport is an app for pet profiles and health records. It does not replace advice from a veterinarian.</string>
+    <string name="error_name_required">Enter your name.</string>
+    <string name="error_email_required">Enter your email address.</string>
+    <string name="error_email_invalid">Check the address, for example: name@example.com.</string>
+    <string name="error_phone_invalid">Enter 10 digits after +7 or leave the field empty.</string>
+    <string name="error_password_short">Use at least 8 characters, not only spaces.</string>
+    <string name="error_consent_required">Confirm that you have read the terms for demo registration.</string>
+    <string name="retry">Retry</string>
+    <string name="profile_loading">Loading profile…</string>
+    <string name="profile_saving">Saving…</string>
+    <string name="profile_saved">Profile changes saved.</string>
+    <string name="open_local_profile">Open saved profile</string>
+    <string name="local_profile_exists">A profile is already saved on this device. Open it to view or edit your details.</string>
+    <string name="local_profile_missing">There is no profile on this device yet. Complete the registration form.</string>
+    <string name="error_profile_read">Could not read local data. Please retry.</string>
+    <string name="error_profile_write">Could not save data on this device. Please retry.</string>
+    <string name="error_local_data_corrupt">Local data is corrupted. It has not been deleted or replaced.</string>
+    <string name="error_local_schema">This data was created by a different app version. Update the app to open it.</string>
+    <string name="error_profile_exists">Another profile already exists on this device. Open the saved profile.</string>
+    <string name="error_profile_data">Could not save the profile. Check the entered details.</string>
 </resources>

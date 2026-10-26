@@ -35,7 +35,9 @@
             style="@style/MpLabel"
             android:text="@string/name"
             android:labelFor="@id/owner_name" />
-        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/owner_name_field"
+            style="@style/MpField">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/MpInput"
                 android:id="@+id/owner_name"
@@ -48,7 +50,9 @@
             style="@style/MpLabel"
             android:text="@string/email"
             android:labelFor="@id/owner_email" />
-        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/owner_email_field"
+            style="@style/MpField">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/MpInput"
                 android:id="@+id/owner_email"
@@ -61,15 +65,24 @@
             style="@style/MpLabel"
             android:text="@string/phone"
             android:labelFor="@id/owner_phone" />
-        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
-            <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/owner_phone_field"
+            style="@style/MpField">
+            <com.example.mobile.ui.common.PhoneInputEditText
                 style="@style/MpInput"
+                android:fontFamily="monospace"
                 android:id="@+id/owner_phone"
                 android:hint="@string/phone_hint"
                 android:inputType="phone"
                 android:importantForAutofill="no"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/form_message"
+            android:layout_marginTop="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
         <com.google.android.material.button.MaterialButton
             style="@style/MpButton"
             android:id="@+id/save"

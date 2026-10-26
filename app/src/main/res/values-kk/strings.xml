@@ -26,7 +26,7 @@
     <string name="consent">Пайдалану ережелерімен және құпиялылық саясатымен таныстым.</string>
     <string name="terms">Пайдалану ережелері</string>
     <string name="privacy">Құпиялылық</string>
-    <string name="have_account">Тіркелгі бар ма? Кіру</string>
+    <string name="have_account">Сақталған профильді ашу</string>
     <string name="save_changes">Өзгерістерді сақтау</string>
     <string name="application">Қолданба</string>
     <string name="account">Тіркелгі</string>
@@ -45,7 +45,7 @@
     <string name="kg">кг</string>
     <string name="lb">фунт</string>
     <string name="about">Қолданба туралы</string>
-    <string name="logout">Тіркелгіден шығу</string>
+    <string name="logout">Тіркелу экранына оралу</string>
     <string name="done">Дайын</string>
     <string name="status_healthy">Дені сау</string>
     <string name="status_empty">Жазбалар бар</string>
@@ -135,7 +135,26 @@
     <string name="no_health_records">Әзірге денсаулық жазбалары жоқ</string>
     <string name="no_upcoming_events">Жоспарланған оқиғалар жоқ</string>
     <string name="saving_unavailable">Деректерді сақтау әлі қосылмаған.</string>
-    <string name="terms_unavailable">Пайдалану ережелерінің мәтіні әлі қосылмаған.</string>
-    <string name="privacy_unavailable">Құпиялылық туралы ақпарат әлі қосылмаған.</string>
+    <string name="terms_unavailable">Уақытша мәтін: нақты шығарылымға дейін мәтін заңдық және деректік тексеруді қажет етеді. Қолданба диагноз қоймайды және ветеринар кеңесін алмастырмайды.</string>
+    <string name="privacy_unavailable">Уақытша мәтін: нақты шығарылымға дейін мәтін заңдық және деректік тексеруді қажет етеді. Сақталған деректер осы құрылғыда жергілікті сақталады және серверге жіберілмейді. Құпиясөз тек пішінді тексеру үшін қолданылады және сақталмайды.</string>
     <string name="about_description">МурПаспорт — жануарлар карточкалары мен денсаулық жазбаларын жүргізуге арналған қолданба. Ветеринар кеңесін алмастырмайды.</string>
+    <string name="error_name_required">Атыңызды енгізіңіз.</string>
+    <string name="error_email_required">Электрондық поштаңызды енгізіңіз.</string>
+    <string name="error_email_invalid">Мекенжайды тексеріңіз, мысалы: name@example.com.</string>
+    <string name="error_phone_invalid">+7 кодынан кейін 10 сан енгізіңіз немесе өрісті бос қалдырыңыз.</string>
+    <string name="error_password_short">Құпиясөз кемінде 8 таңбадан тұруы керек және тек бос орындардан тұрмауы тиіс.</string>
+    <string name="error_consent_required">Оқу тіркелуі үшін ережелермен танысқаныңызды растаңыз.</string>
+    <string name="retry">Қайталау</string>
+    <string name="profile_loading">Профиль жүктелуде…</string>
+    <string name="profile_saving">Сақталуда…</string>
+    <string name="profile_saved">Профиль өзгерістері сақталды.</string>
+    <string name="open_local_profile">Сақталған профильді ашу</string>
+    <string name="local_profile_exists">Бұл құрылғыда профиль сақталған. Деректерді көру немесе өзгерту үшін оны ашыңыз.</string>
+    <string name="local_profile_missing">Бұл құрылғыда әзірге профиль жоқ. Тіркелу пішінін толтырыңыз.</string>
+    <string name="error_profile_read">Жергілікті деректерді оқу мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="error_profile_write">Деректерді құрылғыға сақтау мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="error_local_data_corrupt">Жергілікті деректер бүлінген. Олар жойылған немесе ауыстырылған жоқ.</string>
+    <string name="error_local_schema">Деректер қолданбаның басқа нұсқасында жасалған. Оларды ашу үшін қолданбаны жаңартыңыз.</string>
+    <string name="error_profile_exists">Бұл құрылғыда басқа профиль бар. Сақталған профильді ашыңыз.</string>
+    <string name="error_profile_data">Профильді сақтау мүмкін болмады. Енгізілген деректерді тексеріңіз.</string>
 </resources>

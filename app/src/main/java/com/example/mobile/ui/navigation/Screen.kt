@@ -22,5 +22,6 @@ enum class Screen(@param:IdRes val tabId: Int = 0) {
     companion object {
         const val ARG_SCREEN = "screen"
         const val ARG_PET_ID = "pet_id"
+        const val ARG_RESUME_PROFILE = "resume_profile"
     }
 }
