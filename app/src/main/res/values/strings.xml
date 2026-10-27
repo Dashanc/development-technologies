@@ -88,7 +88,7 @@
     <string name="dog">Собака</string>
     <string name="other">Другое</string>
     <string name="breed">Порода · необязательно</string>
-    <string name="breed_hint">Выберите породу</string>
+    <string name="breed_hint">Введите породу</string>
     <string name="birth_or_age">Дата рождения или возраст</string>
     <string name="birth_hint">ДД.ММ.ГГГГ или, например, 1 год</string>
     <string name="sex">Пол</string>
@@ -157,4 +157,46 @@
     <string name="error_local_schema">Данные созданы другой версией приложения. Обновите приложение, чтобы открыть их.</string>
     <string name="error_profile_exists">На устройстве уже есть другой профиль. Откройте сохранённый профиль.</string>
     <string name="error_profile_data">Не удалось сохранить профиль. Проверьте введённые данные.</string>
+    <string name="pet_loading">Загружаем питомцев…</string>
+    <string name="pet_choose_birth">Выбрать дату рождения</string>
+    <string name="pet_remove_photo">Убрать фото</string>
+    <string name="pet_photo_loading">Открываем фото…</string>
+    <string name="pet_photo_unavailable">Фото недоступно. Показана типовая иллюстрация.</string>
+    <string name="pet_not_found">Питомец не найден. Вернитесь к списку.</string>
+    <string name="pet_back_to_list">К списку питомцев</string>
+    <string name="pet_age_unknown">Возраст не указан</string>
+    <string name="pet_unspecified">Не указано</string>
+    <string name="pet_yes">Да</string>
+    <string name="pet_no">Нет</string>
+    <string name="pet_no_value">—</string>
+    <string name="pet_detail_join">%1$s · %2$s</string>
+    <string name="pet_detail_line">%1$s: %2$s</string>
+    <string name="error_pet_name">Введите имя питомца.</string>
+    <string name="error_pet_birth_required">Укажите дату рождения или возраст.</string>
+    <string name="error_pet_birth_invalid">Введите дату ДД.ММ.ГГГГ или возраст, например 1 год или 6 месяцев.</string>
+    <string name="error_pet_birth_future">Дата рождения не может быть в будущем.</string>
+    <string name="error_pet_sex">Выберите пол питомца.</string>
+    <string name="error_pet_microchip">Номер микрочипа должен содержать 15 цифр. Можно оставить поле пустым.</string>
+    <string name="error_pet_read">Не удалось прочитать данные питомцев. Повторите попытку.</string>
+    <string name="error_pet_write">Не удалось сохранить питомца на устройстве. Повторите попытку.</string>
+    <string name="error_pet_data">Не удалось сохранить питомца. Проверьте введённые данные.</string>
+    <string name="error_pet_photo">Не удалось открыть или сохранить доступ к фото. Выберите другое изображение.</string>
+    <plurals name="pet_years">
+        <item quantity="one">%1$d год</item>
+        <item quantity="few">%1$d года</item>
+        <item quantity="many">%1$d лет</item>
+        <item quantity="other">%1$d года</item>
+    </plurals>
+    <plurals name="pet_months">
+        <item quantity="one">%1$d месяц</item>
+        <item quantity="few">%1$d месяца</item>
+        <item quantity="many">%1$d месяцев</item>
+        <item quantity="other">%1$d месяца</item>
+    </plurals>
+    <plurals name="pet_days">
+        <item quantity="one">%1$d день</item>
+        <item quantity="few">%1$d дня</item>
+        <item quantity="many">%1$d дней</item>
+        <item quantity="other">%1$d дня</item>
+    </plurals>
 </resources>

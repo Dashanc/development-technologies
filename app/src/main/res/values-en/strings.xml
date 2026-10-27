@@ -88,7 +88,7 @@
     <string name="dog">Dog</string>
     <string name="other">Other</string>
     <string name="breed">Breed · optional</string>
-    <string name="breed_hint">Choose breed</string>
+    <string name="breed_hint">Enter the breed</string>
     <string name="birth_or_age">Date of birth or age</string>
     <string name="birth_hint">DD.MM.YYYY or, for example, 1 year</string>
     <string name="sex">Sex</string>
@@ -157,4 +157,40 @@
     <string name="error_local_schema">This data was created by a different app version. Update the app to open it.</string>
     <string name="error_profile_exists">Another profile already exists on this device. Open the saved profile.</string>
     <string name="error_profile_data">Could not save the profile. Check the entered details.</string>
+    <string name="pet_loading">Loading pets…</string>
+    <string name="pet_choose_birth">Choose date of birth</string>
+    <string name="pet_remove_photo">Remove photo</string>
+    <string name="pet_photo_loading">Opening photo…</string>
+    <string name="pet_photo_unavailable">The photo is unavailable. Showing the default illustration.</string>
+    <string name="pet_not_found">Pet not found. Return to the pet list.</string>
+    <string name="pet_back_to_list">Back to pets</string>
+    <string name="pet_age_unknown">Age not specified</string>
+    <string name="pet_unspecified">Not specified</string>
+    <string name="pet_yes">Yes</string>
+    <string name="pet_no">No</string>
+    <string name="pet_no_value">—</string>
+    <string name="pet_detail_join">%1$s · %2$s</string>
+    <string name="pet_detail_line">%1$s: %2$s</string>
+    <string name="error_pet_name">Enter the pet’s name.</string>
+    <string name="error_pet_birth_required">Enter a date of birth or age.</string>
+    <string name="error_pet_birth_invalid">Enter a date as DD.MM.YYYY or an age, for example 1 year or 6 months.</string>
+    <string name="error_pet_birth_future">The date of birth cannot be in the future.</string>
+    <string name="error_pet_sex">Select the pet’s sex.</string>
+    <string name="error_pet_microchip">The microchip number must contain 15 digits. You may leave this field empty.</string>
+    <string name="error_pet_read">Could not read pet data. Please retry.</string>
+    <string name="error_pet_write">Could not save the pet on this device. Please retry.</string>
+    <string name="error_pet_data">Could not save the pet. Check the entered details.</string>
+    <string name="error_pet_photo">Could not open the photo or keep access to it. Choose another image.</string>
+    <plurals name="pet_years">
+        <item quantity="one">%1$d year</item>
+        <item quantity="other">%1$d years</item>
+    </plurals>
+    <plurals name="pet_months">
+        <item quantity="one">%1$d month</item>
+        <item quantity="other">%1$d months</item>
+    </plurals>
+    <plurals name="pet_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
 </resources>

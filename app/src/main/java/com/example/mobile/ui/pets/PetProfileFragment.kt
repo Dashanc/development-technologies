@@ -2,9 +2,18 @@ package com.example.mobile.ui.pets
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import com.example.mobile.data.local.LocalRepositories
+import com.example.mobile.presenter.pets.PetProfilePresenter
 import com.example.mobile.R
+import com.example.mobile.ui.common.renderState
+import com.example.mobile.ui.common.retainedPresenter
 import com.example.mobile.ui.common.ScreenFragment
 import com.example.mobile.ui.navigation.Screen
+import com.google.android.material.button.MaterialButton
 
 class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -13,5 +22,44 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
         view.link(R.id.add_event, Screen.VACCINATION_ENTRY)
         view.link(R.id.history, Screen.HEALTH_HISTORY)
         view.link(R.id.upcoming_event, Screen.VET_VISIT_ENTRY)
+        val repositories = LocalRepositories.get(requireContext())
+        val presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, petId, scope) }
+        val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
+        val text = PetText(requireContext())
+        val message = view.findViewById<TextView>(R.id.pet_profile_message)
+        val retry = view.findViewById<MaterialButton>(R.id.pet_profile_retry)
+        retry.setOnClickListener {
+            when {
+                presenter.state.value.error != null -> presenter.retry()
+                presenter.state.value.ownerMissing -> navigator.openRoot(Screen.REGISTRATION)
+                else -> navigator.openRoot(Screen.PET_LIST)
+            }
+        }
+        renderState(presenter.state) { state ->
+            val card = state.card
+            view.findViewById<View>(R.id.pet_profile_content).isVisible = card != null
+            val messageId = state.error?.petStringResource() ?: when {
+                state.loading -> R.string.pet_loading
+                state.ownerMissing -> R.string.local_profile_missing
+                card == null -> R.string.pet_not_found
+                else -> null
+            }
+            message.isVisible = messageId != null
+            message.text = messageId?.let(::getString)
+            retry.isVisible = !state.loading && card == null
+            retry.setText(when {
+                state.error != null -> R.string.retry
+                state.ownerMissing -> R.string.create_account
+                else -> R.string.pet_back_to_list
+            })
+            if (card != null) {
+                view.findViewById<TextView>(R.id.pet_name).text = card.pet.name
+                view.findViewById<TextView>(R.id.pet_breed).text = text.breed(card.pet)
+                view.findViewById<TextView>(R.id.age).text = text.age(card.age)
+                view.findViewById<TextView>(R.id.current_weight).setText(R.string.pet_no_value)
+                view.findViewById<TextView>(R.id.pet_extra_summary).text = text.extra(card.pet)
+                photos.show(view.findViewById<ImageView>(R.id.pet_avatar), card.pet.photoUri, card.pet.species)
+            }
+        }
     }
 }

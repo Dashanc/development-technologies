@@ -12,6 +12,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/mp_space_small">
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pet_avatar"
         style="@style/MpAvatarCat"
         android:layout_gravity="center_horizontal" />
     <TextView

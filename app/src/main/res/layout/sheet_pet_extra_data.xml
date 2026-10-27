@@ -39,7 +39,9 @@
             style="@style/MpLabel"
             android:text="@string/microchip"
             android:labelFor="@id/microchip" />
-        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/microchip_field"
+            style="@style/MpField">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/MpInput"
                 android:id="@+id/microchip"

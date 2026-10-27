@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.OwnerRepository
+import com.example.mobile.domain.repository.PetPhotoRepository
 import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.SettingsRepository
 
@@ -15,6 +16,7 @@ class LocalRepositories private constructor(context: Context) {
 
     val owner: OwnerRepository = LocalOwnerRepository(storage)
     val pets: PetRepository = LocalPetRepository(storage)
+    val petPhotos: PetPhotoRepository = LocalPetPhotoRepository(context.applicationContext.contentResolver)
     val medicalRecords: MedicalRecordRepository = LocalMedicalRecordRepository(storage)
     val settings: SettingsRepository = LocalSettingsRepository(preferences)
 

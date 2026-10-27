@@ -30,7 +30,4 @@
     <string-array name="vaccine_options">
         <item>@string/vaccine_hint</item>
     </string-array>
-    <string-array name="breed_options">
-        <item>@string/breed_hint</item>
-    </string-array>
 </resources>

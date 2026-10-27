@@ -31,10 +31,16 @@
                 android:layout_weight="1" />
         </LinearLayout>
         <FrameLayout
+            android:id="@+id/photo_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarCatLarge" />
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/add_photo">
+            <androidx.appcompat.widget.AppCompatImageView
+                style="@style/MpAvatarCatLarge"
+                android:id="@+id/pet_avatar" />
             <androidx.appcompat.widget.AppCompatImageView
                 style="@style/MpPhotoBadge"
                 android:layout_gravity="bottom|end"
@@ -42,13 +48,24 @@
         </FrameLayout>
         <TextView
             style="@style/MpCaption"
+            android:id="@+id/choose_photo"
+            android:minHeight="48dp"
+            android:clickable="true"
+            android:focusable="true"
             android:text="@string/add_photo"
             android:gravity="center" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/remove_photo"
+            android:text="@string/pet_remove_photo"
+            android:visibility="gone" />
         <TextView
             style="@style/MpLabel"
             android:text="@string/pet_name"
             android:labelFor="@id/pet_name" />
-        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pet_name_field"
+            style="@style/MpField">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/MpInput"
                 android:id="@+id/pet_name"
@@ -84,19 +101,26 @@
             style="@style/MpLabel"
             android:text="@string/breed"
             android:labelFor="@id/breed" />
-        <androidx.appcompat.widget.AppCompatSpinner
-            style="@style/MpSpinner"
-            android:id="@+id/breed"
-            android:entries="@array/breed_options" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/breed"
+                android:hint="@string/breed_hint"
+                android:inputType="textCapWords"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
         <TextView
             style="@style/MpLabel"
             android:text="@string/birth_or_age"
             android:labelFor="@id/birth" />
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pet_birth_field"
             style="@style/MpField"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_calendar"
             app:endIconTint="@color/mp_primary"
+            app:endIconContentDescription="@string/pet_choose_birth"
             app:endIconCheckable="false">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/MpInput"
@@ -124,6 +148,13 @@
                 android:id="@+id/sex_1"
                 android:text="@string/female" />
         </RadioGroup>
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/pet_sex_error"
+            android:text="@string/error_pet_sex"
+            android:textColor="?attr/colorError"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
         <com.google.android.material.button.MaterialButton
             style="@style/MpButtonSoft"
             android:id="@+id/extra"
@@ -131,6 +162,12 @@
         <TextView
             style="@style/MpCaption"
             android:text="@string/extra_caption" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/pet_form_message"
+            android:layout_marginTop="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
         <com.google.android.material.button.MaterialButton
             style="@style/MpButton"
             android:id="@+id/save"

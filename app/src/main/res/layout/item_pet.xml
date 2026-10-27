@@ -17,7 +17,9 @@
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:gravity="center_vertical">
-        <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarCat" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/pet_avatar"
+            style="@style/MpAvatarCat" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"

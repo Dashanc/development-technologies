@@ -88,7 +88,7 @@
     <string name="dog">Ит</string>
     <string name="other">Басқа</string>
     <string name="breed">Тұқымы · міндетті емес</string>
-    <string name="breed_hint">Тұқымын таңдаңыз</string>
+    <string name="breed_hint">Тұқымын енгізіңіз</string>
     <string name="birth_or_age">Туған күні немесе жасы</string>
     <string name="birth_hint">КК.АА.ЖЖЖЖ немесе, мысалы, 1 жас</string>
     <string name="sex">Жынысы</string>
@@ -157,4 +157,40 @@
     <string name="error_local_schema">Деректер қолданбаның басқа нұсқасында жасалған. Оларды ашу үшін қолданбаны жаңартыңыз.</string>
     <string name="error_profile_exists">Бұл құрылғыда басқа профиль бар. Сақталған профильді ашыңыз.</string>
     <string name="error_profile_data">Профильді сақтау мүмкін болмады. Енгізілген деректерді тексеріңіз.</string>
+    <string name="pet_loading">Жануарлар жүктелуде…</string>
+    <string name="pet_choose_birth">Туған күнін таңдау</string>
+    <string name="pet_remove_photo">Фотоны алып тастау</string>
+    <string name="pet_photo_loading">Фото ашылуда…</string>
+    <string name="pet_photo_unavailable">Фото қолжетімсіз. Әдепкі сурет көрсетілді.</string>
+    <string name="pet_not_found">Жануар табылмады. Тізімге оралыңыз.</string>
+    <string name="pet_back_to_list">Жануарлар тізіміне оралу</string>
+    <string name="pet_age_unknown">Жасы көрсетілмеген</string>
+    <string name="pet_unspecified">Көрсетілмеген</string>
+    <string name="pet_yes">Иә</string>
+    <string name="pet_no">Жоқ</string>
+    <string name="pet_no_value">—</string>
+    <string name="pet_detail_join">%1$s · %2$s</string>
+    <string name="pet_detail_line">%1$s: %2$s</string>
+    <string name="error_pet_name">Жануардың атын енгізіңіз.</string>
+    <string name="error_pet_birth_required">Туған күнін немесе жасын көрсетіңіз.</string>
+    <string name="error_pet_birth_invalid">КК.АА.ЖЖЖЖ пішіміндегі күнді немесе жасты енгізіңіз, мысалы 1 жыл немесе 6 ай.</string>
+    <string name="error_pet_birth_future">Туған күні болашақта болмауы керек.</string>
+    <string name="error_pet_sex">Жануардың жынысын таңдаңыз.</string>
+    <string name="error_pet_microchip">Микрочип нөмірі 15 саннан тұруы керек. Өрісті бос қалдыруға болады.</string>
+    <string name="error_pet_read">Жануарлар деректерін оқу мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="error_pet_write">Жануарды құрылғыға сақтау мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="error_pet_data">Жануарды сақтау мүмкін болмады. Енгізілген деректерді тексеріңіз.</string>
+    <string name="error_pet_photo">Фотоны ашу немесе оған қолжетімділікті сақтау мүмкін болмады. Басқа суретті таңдаңыз.</string>
+    <plurals name="pet_years">
+        <item quantity="one">%1$d жыл</item>
+        <item quantity="other">%1$d жыл</item>
+    </plurals>
+    <plurals name="pet_months">
+        <item quantity="one">%1$d ай</item>
+        <item quantity="other">%1$d ай</item>
+    </plurals>
+    <plurals name="pet_days">
+        <item quantity="one">%1$d күн</item>
+        <item quantity="other">%1$d күн</item>
+    </plurals>
 </resources>

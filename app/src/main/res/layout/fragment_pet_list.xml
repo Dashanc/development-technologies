@@ -33,6 +33,11 @@
         android:id="@+id/pets_empty"
         android:text="@string/no_pets"
         tools:visibility="gone" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButtonSoft"
+        android:id="@+id/pets_retry"
+        android:text="@string/retry"
+        android:visibility="gone" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pets_list"
         android:layout_width="match_parent"
