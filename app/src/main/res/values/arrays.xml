@@ -27,7 +27,4 @@
         <item>@string/vaccination</item>
         <item>@string/vet_record</item>
     </string-array>
-    <string-array name="vaccine_options">
-        <item>@string/vaccine_hint</item>
-    </string-array>
 </resources>

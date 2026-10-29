@@ -42,6 +42,12 @@
             android:id="@+id/pet_selector"
             android:prompt="@string/pet" />
         <TextView
+            style="@style/MpCaption"
+            android:id="@+id/medical_pet_error"
+            android:text="@string/medical_error_pet"
+            android:textColor="?attr/colorError"
+            android:visibility="gone" />
+        <TextView
             style="@style/MpLabel"
             android:text="@string/record_type"
             android:labelFor="@id/record_type" />
@@ -53,15 +59,23 @@
             style="@style/MpLabel"
             android:text="@string/vaccine"
             android:labelFor="@id/vaccine" />
-        <androidx.appcompat.widget.AppCompatSpinner
-            style="@style/MpSpinner"
-            android:id="@+id/vaccine"
-            android:entries="@array/vaccine_options" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/vaccine_field"
+            style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/vaccine"
+                android:hint="@string/vaccine_hint"
+                android:inputType="textCapSentences"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
         <TextView
             style="@style/MpLabel"
             android:text="@string/vaccine_date"
             android:labelFor="@id/vaccine_date" />
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/vaccine_date_field"
             style="@style/MpField"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_calendar"
@@ -80,6 +94,7 @@
             android:text="@string/next_vaccine_date"
             android:labelFor="@id/next_vaccine" />
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/next_vaccine_field"
             style="@style/MpField"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_calendar"
@@ -95,7 +110,7 @@
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
             style="@style/MpLabel"
-            android:text="@string/clinic_or_vet"
+            android:text="@string/clinic"
             android:labelFor="@id/clinic" />
         <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
             <com.google.android.material.textfield.TextInputEditText
@@ -103,6 +118,19 @@
                 android:id="@+id/clinic"
                 android:hint="@string/optional"
                 android:inputType="textCapSentences"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/medical_veterinarian"
+            android:labelFor="@id/veterinarian" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/veterinarian"
+                android:hint="@string/optional"
+                android:inputType="textPersonName"
                 android:importantForAutofill="no"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -120,6 +148,12 @@
                 android:minLines="3"
                 android:gravity="top|start" />
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/medical_message"
+            android:layout_marginTop="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
         <com.google.android.material.button.MaterialButton
             style="@style/MpButton"
             android:id="@+id/save"

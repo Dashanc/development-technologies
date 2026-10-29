@@ -12,6 +12,7 @@
     android:paddingBottom="16dp"
     android:id="@+id/health_record">
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/record_icon"
         style="@style/MpRecordBadge"
         app:srcCompat="@drawable/ic_weight" />
     <LinearLayout

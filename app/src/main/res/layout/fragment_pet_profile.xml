@@ -100,10 +100,12 @@
             <TextView
                 style="@style/MpSection"
                 android:id="@+id/upcoming_heading"
+                android:visibility="gone"
                 android:text="@string/upcoming" />
             <TextView
                 style="@style/MpCaption"
                 android:id="@+id/pet_upcoming_empty"
+                android:visibility="gone"
                 android:text="@string/no_upcoming_events"
                 tools:visibility="gone" />
             <LinearLayout

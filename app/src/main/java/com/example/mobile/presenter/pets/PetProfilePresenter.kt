@@ -2,6 +2,8 @@ package com.example.mobile.presenter.pets
 
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.PetRepository
+import com.example.mobile.domain.repository.MedicalRecordRepository
+import com.example.mobile.domain.model.WeightRecord
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
 import kotlinx.coroutines.CoroutineScope
@@ -16,11 +18,14 @@ data class PetProfileState(
     val loading: Boolean = true,
     val ownerMissing: Boolean = false,
     val error: RepositoryError? = null,
+    val lastWeightKg: Double? = null,
+    val recordCount: Int? = null,
 )
 
 class PetProfilePresenter(
     private val owners: OwnerRepository,
     private val pets: PetRepository,
+    private val records: MedicalRecordRepository,
     private val petId: String?,
     private val scope: CoroutineScope,
 ) {
@@ -46,12 +51,22 @@ class PetProfilePresenter(
                     is RepositoryResult.Success -> {
                         val owner = result.value
                         if (owner == null) mutableState.value = PetProfileState(loading = false, ownerMissing = true)
-                        else pets.observePet(petId).collect { petResult ->
-                            mutableState.value = when (petResult) {
-                                is RepositoryResult.Failure -> PetProfileState(loading = false, error = petResult.error)
-                                is RepositoryResult.Success -> PetProfileState(
-                                    card = petResult.value?.takeIf { it.ownerId == owner.id }?.toCard(), loading = false,
-                                )
+                        else pets.observePet(petId).collectLatest { petResult ->
+                            when (petResult) {
+                                is RepositoryResult.Failure -> mutableState.value = PetProfileState(loading = false, error = petResult.error)
+                                is RepositoryResult.Success -> {
+                                    val card = petResult.value?.takeIf { it.ownerId == owner.id }?.toCard()
+                                    mutableState.value = PetProfileState(card = card, loading = false)
+                                    if (card != null) records.observeRecords(card.pet.id).collect { recordResult ->
+                                        mutableState.value = when (recordResult) {
+                                            is RepositoryResult.Failure -> state.value.copy(error = recordResult.error)
+                                            is RepositoryResult.Success -> state.value.copy(
+                                                lastWeightKg = recordResult.value.asReversed().filterIsInstance<WeightRecord>().maxByOrNull { it.date }?.weightKg,
+                                                recordCount = recordResult.value.size, error = null,
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

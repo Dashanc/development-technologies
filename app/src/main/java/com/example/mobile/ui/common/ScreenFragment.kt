@@ -2,7 +2,6 @@ package com.example.mobile.ui.common
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
@@ -21,16 +20,5 @@ abstract class ScreenFragment(@LayoutRes layout: Int) : Fragment(layout) {
 
     protected fun View.link(@IdRes id: Int, screen: Screen) {
         findViewById<View>(id).setOnClickListener { navigator.open(screen, petId) }
-    }
-
-    protected fun View.returnWithoutSaving(@IdRes id: Int) {
-        findViewById<View>(id).setOnClickListener {
-            showSavingUnavailable()
-            navigator.back()
-        }
-    }
-
-    protected fun showSavingUnavailable() {
-        Toast.makeText(requireContext(), R.string.saving_unavailable, Toast.LENGTH_SHORT).show()
     }
 }

@@ -14,6 +14,7 @@ import com.example.mobile.ui.common.retainedPresenter
 import com.example.mobile.ui.common.ScreenFragment
 import com.example.mobile.ui.navigation.Screen
 import com.google.android.material.button.MaterialButton
+import com.example.mobile.ui.health.MedicalText
 
 class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -23,9 +24,10 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
         view.link(R.id.history, Screen.HEALTH_HISTORY)
         view.link(R.id.upcoming_event, Screen.VET_VISIT_ENTRY)
         val repositories = LocalRepositories.get(requireContext())
-        val presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, petId, scope) }
+        val presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val text = PetText(requireContext())
+        val medicalText = MedicalText(requireContext())
         val message = view.findViewById<TextView>(R.id.pet_profile_message)
         val retry = view.findViewById<MaterialButton>(R.id.pet_profile_retry)
         retry.setOnClickListener {
@@ -46,7 +48,7 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
             }
             message.isVisible = messageId != null
             message.text = messageId?.let(::getString)
-            retry.isVisible = !state.loading && card == null
+            retry.isVisible = !state.loading && (card == null || state.error != null)
             retry.setText(when {
                 state.error != null -> R.string.retry
                 state.ownerMissing -> R.string.create_account
@@ -56,7 +58,10 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
                 view.findViewById<TextView>(R.id.pet_name).text = card.pet.name
                 view.findViewById<TextView>(R.id.pet_breed).text = text.breed(card.pet)
                 view.findViewById<TextView>(R.id.age).text = text.age(card.age)
-                view.findViewById<TextView>(R.id.current_weight).setText(R.string.pet_no_value)
+                view.findViewById<TextView>(R.id.current_weight).text = state.lastWeightKg?.let(medicalText::weight) ?: getString(R.string.pet_no_value)
+                view.findViewById<TextView>(R.id.history).text = state.recordCount?.let {
+                    getString(R.string.medical_history_count, resources.getQuantityString(R.plurals.medical_record_count, it, it))
+                } ?: getString(R.string.all_history)
                 view.findViewById<TextView>(R.id.pet_extra_summary).text = text.extra(card.pet)
                 photos.show(view.findViewById<ImageView>(R.id.pet_avatar), card.pet.photoUri, card.pet.species)
             }

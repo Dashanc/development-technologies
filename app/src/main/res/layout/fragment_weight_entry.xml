@@ -39,6 +39,12 @@
             android:id="@+id/pet_selector"
             android:prompt="@string/pet" />
         <TextView
+            style="@style/MpCaption"
+            android:id="@+id/medical_pet_error"
+            android:text="@string/medical_error_pet"
+            android:textColor="?attr/colorError"
+            android:visibility="gone" />
+        <TextView
             style="@style/MpLabel"
             android:text="@string/record_type"
             android:labelFor="@id/record_type" />
@@ -51,6 +57,7 @@
             android:text="@string/date"
             android:labelFor="@id/record_date" />
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/record_date_field"
             style="@style/MpField"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_calendar"
@@ -68,7 +75,9 @@
             style="@style/MpLabel"
             android:text="@string/weight"
             android:labelFor="@id/record_weight" />
-        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/record_weight_field"
+            style="@style/MpField">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/MpInput"
                 android:id="@+id/record_weight"
@@ -94,6 +103,12 @@
                 android:minLines="3"
                 android:gravity="top|start" />
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/medical_message"
+            android:layout_marginTop="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
         <com.google.android.material.button.MaterialButton
             style="@style/MpButton"
             android:id="@+id/save"

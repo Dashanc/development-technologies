@@ -37,7 +37,7 @@ internal class PetCardAdapter(
         if (ownerCards) holder.itemView.findViewById<TextView>(R.id.pet_age).text = text.age(card.age)
         else {
             holder.itemView.findViewById<TextView>(R.id.pet_details).text = text.description(card)
-            holder.itemView.findViewById<TextView>(R.id.pet_status).setText(R.string.no_health_records)
+            holder.itemView.findViewById<TextView>(R.id.pet_status).setText(R.string.medical_records_in_profile)
             holder.itemView.findViewById<TextView>(R.id.pet_weight).setText(R.string.pet_no_value)
             holder.itemView.findViewById<TextView>(R.id.pet_next_event).setText(R.string.pet_no_value)
         }

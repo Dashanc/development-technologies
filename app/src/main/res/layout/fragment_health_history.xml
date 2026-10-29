@@ -35,6 +35,8 @@
         tools:text="3 записи" />
     <RadioGroup
         android:id="@+id/filters"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -62,6 +64,11 @@
         android:id="@+id/records_empty"
         android:text="@string/no_health_records"
         tools:visibility="gone" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButtonSoft"
+        android:id="@+id/medical_history_retry"
+        android:text="@string/retry"
+        android:visibility="gone" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/health_records"
         android:layout_width="match_parent"
