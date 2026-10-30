@@ -127,7 +127,6 @@
     <string name="diagnosis_hint">Қабылдаудан кейін толтырыңыз</string>
     <string name="save_visit">Қабылдауды сақтау</string>
     <string name="health_caption">Жануарлар туралы жалпы мәлімет</string>
-    <string name="all_calm">Бәрі тыныш</string>
     <string name="upcoming_events">Алдағы оқиғалар</string>
     <string name="all_records">Барлық жазбалар</string>
     <string name="no_pets">Әзірге жануарлар жоқ</string>
@@ -219,5 +218,16 @@
     <plurals name="medical_record_count">
         <item quantity="one">%1$d жазба</item>
         <item quantity="other">%1$d жазба</item>
+    </plurals>
+    <string name="health_summary_title">Жазбалар жиынтығы</string>
+    <string name="health_summary_separator">\u0020·\u0020</string>
+    <string name="history_no_matching_records">Бұл түрдегі жазбалар жоқ.</string>
+    <plurals name="health_pet_count">
+        <item quantity="one">%1$d жануар</item>
+        <item quantity="other">%1$d жануар</item>
+    </plurals>
+    <plurals name="health_event_count">
+        <item quantity="one">Алда %1$d оқиға</item>
+        <item quantity="other">Алда %1$d оқиға</item>
     </plurals>
 </resources>

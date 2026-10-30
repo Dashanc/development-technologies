@@ -127,7 +127,6 @@
     <string name="diagnosis_hint">Fill in after the appointment</string>
     <string name="save_visit">Save visit</string>
     <string name="health_caption">An overview of your pets</string>
-    <string name="all_calm">All looks calm</string>
     <string name="upcoming_events">Upcoming events</string>
     <string name="all_records">All records</string>
     <string name="no_pets">No pets yet</string>
@@ -219,5 +218,16 @@
     <plurals name="medical_record_count">
         <item quantity="one">%1$d record</item>
         <item quantity="other">%1$d records</item>
+    </plurals>
+    <string name="health_summary_title">Record overview</string>
+    <string name="health_summary_separator">\u0020·\u0020</string>
+    <string name="history_no_matching_records">No records of this type.</string>
+    <plurals name="health_pet_count">
+        <item quantity="one">%1$d pet</item>
+        <item quantity="other">%1$d pets</item>
+    </plurals>
+    <plurals name="health_event_count">
+        <item quantity="one">%1$d upcoming event</item>
+        <item quantity="other">%1$d upcoming events</item>
     </plurals>
 </resources>

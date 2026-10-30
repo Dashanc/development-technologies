@@ -2,12 +2,14 @@ package com.example.mobile.ui.health
 
 import android.os.Bundle
 import android.view.View
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.R
 import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.health.HealthHistoryPresenter
+import com.example.mobile.presenter.health.MedicalHistoryFilter
 import com.example.mobile.ui.common.ScreenFragment
 import com.example.mobile.ui.common.renderState
 import com.example.mobile.ui.common.retainedPresenter
@@ -25,6 +27,15 @@ class HealthHistoryFragment : ScreenFragment(R.layout.fragment_health_history) {
         val message = view.findViewById<TextView>(R.id.records_empty)
         val retry = view.findViewById<View>(R.id.medical_history_retry)
         val add = view.findViewById<MaterialButton>(R.id.add_record)
+        val filters = view.findViewById<RadioGroup>(R.id.filters)
+        filters.setOnCheckedChangeListener { _, checkedId ->
+            presenter.selectFilter(when (checkedId) {
+                R.id.filters_1 -> MedicalHistoryFilter.WEIGHT
+                R.id.filters_2 -> MedicalHistoryFilter.VACCINATION
+                R.id.filters_3 -> MedicalHistoryFilter.VET_VISIT
+                else -> MedicalHistoryFilter.ALL
+            })
+        }
         retry.setOnClickListener { presenter.retry() }
         add.setOnClickListener {
             val state = presenter.state.value
@@ -39,10 +50,19 @@ class HealthHistoryFragment : ScreenFragment(R.layout.fragment_health_history) {
             adapter.submitList(state.items)
             view.findViewById<TextView>(R.id.pet_name).text = state.petName ?: getString(R.string.medical_all_pets)
             view.findViewById<TextView>(R.id.history_summary).text = resources.getQuantityString(R.plurals.medical_record_count, state.items.size, state.items.size)
+            filters.isVisible = !state.loading && state.error == null && !state.ownerMissing && !state.noPets && !state.petMissing
+            filters.check(when (state.filter) {
+                MedicalHistoryFilter.ALL -> R.id.filters_0
+                MedicalHistoryFilter.WEIGHT -> R.id.filters_1
+                MedicalHistoryFilter.VACCINATION -> R.id.filters_2
+                MedicalHistoryFilter.VET_VISIT -> R.id.filters_3
+            })
             val messageId = state.error?.medicalStringResource() ?: when {
                 state.loading -> R.string.medical_loading
                 state.ownerMissing -> R.string.local_profile_missing
                 state.petMissing -> R.string.pet_not_found
+                state.noPets -> R.string.medical_no_pets
+                state.items.isEmpty() && state.filter != MedicalHistoryFilter.ALL -> R.string.history_no_matching_records
                 state.items.isEmpty() -> R.string.no_health_records
                 else -> null
             }

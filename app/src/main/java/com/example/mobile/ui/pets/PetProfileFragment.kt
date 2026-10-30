@@ -17,14 +17,16 @@ import com.google.android.material.button.MaterialButton
 import com.example.mobile.ui.health.MedicalText
 
 class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
+    private lateinit var presenter: PetProfilePresenter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.link(R.id.log_weight, Screen.WEIGHT_ENTRY)
         view.link(R.id.add_event, Screen.VACCINATION_ENTRY)
         view.link(R.id.history, Screen.HEALTH_HISTORY)
-        view.link(R.id.upcoming_event, Screen.VET_VISIT_ENTRY)
+        view.link(R.id.upcoming_event, Screen.HEALTH_HISTORY)
         val repositories = LocalRepositories.get(requireContext())
-        val presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope) }
+        presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val text = PetText(requireContext())
         val medicalText = MedicalText(requireContext())
@@ -63,8 +65,20 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
                     getString(R.string.medical_history_count, resources.getQuantityString(R.plurals.medical_record_count, it, it))
                 } ?: getString(R.string.all_history)
                 view.findViewById<TextView>(R.id.pet_extra_summary).text = text.extra(card.pet)
+                val event = state.upcomingEvents.firstOrNull()
+                val eventsReady = state.recordCount != null && state.error == null
+                view.findViewById<View>(R.id.upcoming_heading).isVisible = eventsReady
+                view.findViewById<View>(R.id.pet_upcoming_empty).isVisible = eventsReady && event == null
+                view.findViewById<View>(R.id.upcoming_event).isVisible = eventsReady && event != null
+                view.findViewById<TextView>(R.id.event_title).text = event?.let(medicalText::eventTitle)
+                view.findViewById<TextView>(R.id.event_date).text = event?.let(medicalText::eventDescription)
                 photos.show(view.findViewById<ImageView>(R.id.pet_avatar), card.pet.photoUri, card.pet.species)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.refresh()
     }
 }

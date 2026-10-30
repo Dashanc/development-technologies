@@ -28,6 +28,16 @@
         <TextView
             style="@style/MpCaption"
             android:text="@string/health_caption" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/health_message"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/health_action"
+            android:text="@string/retry"
+            android:visibility="gone" />
         <LinearLayout
             style="@style/MpCard"
             android:background="@drawable/bg_accent"
@@ -42,7 +52,7 @@
                 style="@style/MpSection"
                 android:textColor="@color/mp_primary"
                 android:id="@+id/health_status"
-                tools:text="@string/all_calm" />
+                android:text="@string/health_summary_title" />
             <TextView
                 style="@style/MpCaption"
                 android:id="@+id/health_summary"
@@ -50,32 +60,24 @@
         </LinearLayout>
         <TextView
             style="@style/MpSection"
+            android:id="@+id/upcoming_heading"
             android:text="@string/upcoming_events" />
         <TextView
             style="@style/MpCaption"
             android:id="@+id/upcoming_empty"
             android:text="@string/no_upcoming_events"
             tools:visibility="gone" />
-        <LinearLayout
-            style="@style/MpCard"
-            android:id="@+id/upcoming_event"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:visibility="gone"
-            tools:visibility="visible">
-            <TextView
-                style="@style/MpText"
-                android:textStyle="bold"
-                tools:text="Питомец · событие"
-                android:id="@+id/event_title" />
-            <TextView
-                style="@style/MpCaption"
-                tools:text="22 ноября 2026"
-                android:id="@+id/event_date" />
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upcoming_events_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_upcoming_event"
+            tools:itemCount="2" />
         <TextView
             style="@style/MpSection"
+            android:id="@+id/health_pets_heading"
             android:text="@string/my_pets" />
         <TextView
             style="@style/MpCaption"

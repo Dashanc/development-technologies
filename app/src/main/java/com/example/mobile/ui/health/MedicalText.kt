@@ -7,7 +7,10 @@ import com.example.mobile.domain.model.VaccinationRecord
 import com.example.mobile.domain.model.VetVisitRecord
 import com.example.mobile.domain.model.WeightRecord
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.presenter.health.HealthEventType
 import com.example.mobile.presenter.health.MedicalInputError
+import com.example.mobile.presenter.health.PetHealthSummary
+import com.example.mobile.presenter.health.UpcomingHealthEvent
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -33,6 +36,22 @@ internal fun RepositoryError.medicalStringResource() = when (this) {
 }
 
 internal class MedicalText(private val context: Context) {
+    fun eventTitle(event: UpcomingHealthEvent): String = context.getString(when (event.type) {
+        HealthEventType.VACCINATION -> R.string.vaccination
+        HealthEventType.VET_VISIT -> R.string.vet_record
+    })
+
+    fun eventDescription(event: UpcomingHealthEvent): String = context.getString(
+        R.string.pet_detail_join, inputDate(event.date), event.description,
+    )
+
+    fun petSummary(summary: PetHealthSummary): String {
+        val parts = mutableListOf(context.resources.getQuantityString(R.plurals.medical_record_count, summary.recordCount, summary.recordCount))
+        summary.lastWeightKg?.let { parts += weight(it) }
+        summary.nextEvent?.let { parts += context.getString(R.string.pet_detail_join, eventTitle(it), inputDate(it.date)) }
+        return parts.joinToString(context.getString(R.string.health_summary_separator))
+    }
+
     fun weight(kg: Double): String = context.getString(
         R.string.medical_weight_value,
         NumberFormat.getNumberInstance(context.resources.configuration.locales[0]).apply { maximumFractionDigits = 3 }.format(kg),

@@ -127,7 +127,6 @@
     <string name="diagnosis_hint">Заполните после приёма</string>
     <string name="save_visit">Сохранить визит</string>
     <string name="health_caption">Общая сводка по питомцам</string>
-    <string name="all_calm">Всё спокойно</string>
     <string name="upcoming_events">Ближайшие события</string>
     <string name="all_records">Все записи</string>
     <string name="no_pets">Пока нет питомцев</string>
@@ -227,5 +226,20 @@
         <item quantity="few">%1$d записи</item>
         <item quantity="many">%1$d записей</item>
         <item quantity="other">%1$d записи</item>
+    </plurals>
+    <string name="health_summary_title">Сводка записей</string>
+    <string name="health_summary_separator">\u0020·\u0020</string>
+    <string name="history_no_matching_records">Нет записей выбранного типа.</string>
+    <plurals name="health_pet_count">
+        <item quantity="one">%1$d питомец</item>
+        <item quantity="few">%1$d питомца</item>
+        <item quantity="many">%1$d питомцев</item>
+        <item quantity="other">%1$d питомца</item>
+    </plurals>
+    <plurals name="health_event_count">
+        <item quantity="one">%1$d событие впереди</item>
+        <item quantity="few">%1$d события впереди</item>
+        <item quantity="many">%1$d событий впереди</item>
+        <item quantity="other">%1$d события впереди</item>
     </plurals>
 </resources>
