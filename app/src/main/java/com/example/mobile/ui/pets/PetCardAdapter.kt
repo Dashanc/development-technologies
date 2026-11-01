@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.presenter.pets.PetCard
 import com.example.mobile.R
+import com.example.mobile.domain.model.WeightUnit
+import com.example.mobile.ui.health.MedicalText
 
 internal class PetCardAdapter(
     private val photos: PetAvatarLoader,
@@ -19,6 +21,13 @@ internal class PetCardAdapter(
     override fun areItemsTheSame(oldItem: PetCard, newItem: PetCard) = oldItem.pet.id == newItem.pet.id
     override fun areContentsTheSame(oldItem: PetCard, newItem: PetCard) = oldItem == newItem
 }) {
+    var weightUnit = WeightUnit.KILOGRAM
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
     internal class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val avatar: ImageView = view.findViewById(R.id.pet_avatar)
         val name: TextView = view.findViewById(R.id.pet_name)
@@ -38,7 +47,9 @@ internal class PetCardAdapter(
         else {
             holder.itemView.findViewById<TextView>(R.id.pet_details).text = text.description(card)
             holder.itemView.findViewById<TextView>(R.id.pet_status).setText(R.string.medical_records_in_profile)
-            holder.itemView.findViewById<TextView>(R.id.pet_weight).setText(R.string.pet_no_value)
+            holder.itemView.findViewById<TextView>(R.id.pet_weight).text = card.lastWeightKg?.let {
+                MedicalText(holder.itemView.context, weightUnit).weight(it)
+            } ?: holder.itemView.context.getString(R.string.pet_no_value)
             holder.itemView.findViewById<TextView>(R.id.pet_next_event).setText(R.string.pet_no_value)
         }
     }

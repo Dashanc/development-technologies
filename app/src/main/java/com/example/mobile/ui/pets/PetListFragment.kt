@@ -19,7 +19,9 @@ class PetListFragment : ScreenFragment(R.layout.fragment_pet_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val repositories = LocalRepositories.get(requireContext())
-        val presenter = retainedPresenter { scope -> PetListPresenter(repositories.owner, repositories.pets, scope) }
+        val presenter = retainedPresenter { scope ->
+            PetListPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, repositories.settings, scope)
+        }
         val list = view.findViewById<RecyclerView>(R.id.pets_list)
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val adapter = PetCardAdapter(photos) { navigator.open(Screen.PET_PROFILE, it) }
@@ -35,6 +37,7 @@ class PetListFragment : ScreenFragment(R.layout.fragment_pet_list) {
         addTop.setOnClickListener(addAction)
         retry.setOnClickListener { presenter.retry() }
         renderState(presenter.state) { state ->
+            adapter.weightUnit = state.weightUnit
             adapter.submitList(state.pets)
             list.isVisible = state.pets.isNotEmpty()
             val messageId = state.error?.petStringResource() ?: when {

@@ -33,7 +33,7 @@ data class PetInputErrors(
 
 data class PetAge(val years: Int, val months: Int, val days: Int)
 
-data class PetCard(val pet: Pet, val age: PetAge?)
+data class PetCard(val pet: Pet, val age: PetAge?, val lastWeightKg: Double? = null)
 
 internal fun Pet.toCard(today: LocalDate = LocalDate.now()): PetCard {
     val age = birthDate?.takeUnless { it.isAfter(today) }?.let {
