@@ -33,6 +33,16 @@
         <TextView
             style="@style/MpSection"
             android:text="@string/application" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/settings_message"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/settings_retry"
+            android:text="@string/retry"
+            android:visibility="gone" />
         <LinearLayout style="@style/MpCard">
             <TextView
                 style="@style/MpLabel"
@@ -60,6 +70,16 @@
             <TextView
                 style="@style/MpCaption"
                 android:text="@string/reminders_caption" />
+            <TextView
+                style="@style/MpCaption"
+                android:id="@+id/reminder_permission_message"
+                android:text="@string/reminder_permission_blocked"
+                android:visibility="gone" />
+            <com.google.android.material.button.MaterialButton
+                style="@style/MpButtonSoft"
+                android:id="@+id/notification_settings"
+                android:text="@string/reminder_open_device_settings"
+                android:visibility="gone" />
             <TextView
                 style="@style/MpLabel"
                 android:text="@string/reminder_time"

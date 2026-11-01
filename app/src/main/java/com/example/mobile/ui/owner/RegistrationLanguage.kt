@@ -8,12 +8,7 @@ internal object RegistrationLanguage {
     val options = listOf(AppLanguage.RUSSIAN, AppLanguage.ENGLISH, AppLanguage.KAZAKH)
 
     fun apply(language: AppLanguage) {
-        val tag = when (language) {
-            AppLanguage.RUSSIAN -> "ru"
-            AppLanguage.ENGLISH -> "en"
-            AppLanguage.KAZAKH -> "kk"
-        }
-        val locales = LocaleListCompat.forLanguageTags(tag)
+        val locales = LocaleListCompat.forLanguageTags(language.languageTag)
         if (AppCompatDelegate.getApplicationLocales() == locales) return
         AppCompatDelegate.setApplicationLocales(locales)
     }

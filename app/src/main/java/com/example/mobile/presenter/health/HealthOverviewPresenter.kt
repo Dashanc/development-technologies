@@ -2,6 +2,9 @@ package com.example.mobile.presenter.health
 
 import com.example.mobile.domain.model.Pet
 import com.example.mobile.domain.model.WeightRecord
+import com.example.mobile.domain.model.WeightUnit
+import com.example.mobile.domain.repository.SettingsRepository
+import com.example.mobile.domain.repository.RepositoryResult
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.PetRepository
@@ -12,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 data class PetHealthSummary(
@@ -27,6 +31,7 @@ data class HealthOverviewState(
     val loading: Boolean = true,
     val ownerMissing: Boolean = false,
     val error: RepositoryError? = null,
+    val weightUnit: WeightUnit = WeightUnit.KILOGRAM,
 )
 
 class HealthOverviewPresenter(
@@ -34,6 +39,7 @@ class HealthOverviewPresenter(
     private val pets: PetRepository,
     private val records: MedicalRecordRepository,
     private val scope: CoroutineScope,
+    private val settings: SettingsRepository,
     private val clock: Clock = Clock.systemDefaultZone(),
 ) {
     private val mutableState = MutableStateFlow(HealthOverviewState())
@@ -50,7 +56,12 @@ class HealthOverviewPresenter(
         data = null
         mutableState.value = HealthOverviewState()
         observation = scope.launch {
-            observeHealthData(owners, pets, records).collect {
+            observeHealthData(owners, pets, records).combine(settings.observeSettings()) { data, result ->
+                when (result) {
+                    is RepositoryResult.Success -> data.copy(settings = result.value)
+                    is RepositoryResult.Failure -> data.copy(items = emptyList(), error = data.error ?: result.error)
+                }
+            }.collect {
                 data = it
                 refresh()
             }
@@ -71,6 +82,7 @@ class HealthOverviewPresenter(
         }
         mutableState.value = HealthOverviewState(
             pets = summaries, events = events, loading = false, ownerMissing = data.ownerMissing, error = data.error,
+            weightUnit = data.settings.weightUnit,
         )
     }
 }

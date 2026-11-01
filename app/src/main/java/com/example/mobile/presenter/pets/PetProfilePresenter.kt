@@ -1,6 +1,8 @@
 package com.example.mobile.presenter.pets
 
 import com.example.mobile.domain.model.WeightRecord
+import com.example.mobile.domain.model.WeightUnit
+import com.example.mobile.domain.repository.SettingsRepository
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.PetRepository
@@ -16,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 data class PetProfileState(
@@ -26,6 +29,7 @@ data class PetProfileState(
     val lastWeightKg: Double? = null,
     val recordCount: Int? = null,
     val upcomingEvents: List<UpcomingHealthEvent> = emptyList(),
+    val weightUnit: WeightUnit = WeightUnit.KILOGRAM,
 )
 
 class PetProfilePresenter(
@@ -34,6 +38,7 @@ class PetProfilePresenter(
     private val records: MedicalRecordRepository,
     private val petId: String?,
     private val scope: CoroutineScope,
+    private val settings: SettingsRepository,
     private val clock: Clock = Clock.systemDefaultZone(),
 ) {
     private val mutableState = MutableStateFlow(PetProfileState())
@@ -64,7 +69,14 @@ class PetProfilePresenter(
                                 is RepositoryResult.Success -> {
                                     val card = petResult.value?.takeIf { it.ownerId == owner.id }?.toCard()
                                     mutableState.value = PetProfileState(card = card, loading = false)
-                                    if (card != null) records.observeRecords(card.pet.id).collect { recordResult ->
+                                    if (card != null) records.observeRecords(card.pet.id).combine(settings.observeSettings()) { recordResult, settingsResult ->
+                                        recordResult to settingsResult
+                                    }.collect { (recordResult, settingsResult) ->
+                                        if (settingsResult is RepositoryResult.Failure) {
+                                            mutableState.value = state.value.copy(error = settingsResult.error, lastWeightKg = null, recordCount = null, upcomingEvents = emptyList())
+                                            return@collect
+                                        }
+                                        val weightUnit = (settingsResult as RepositoryResult.Success).value.weightUnit
                                         mutableState.value = when (recordResult) {
                                             is RepositoryResult.Failure -> state.value.copy(
                                                 error = recordResult.error, lastWeightKg = null, recordCount = null, upcomingEvents = emptyList(),
@@ -72,6 +84,7 @@ class PetProfilePresenter(
                                             is RepositoryResult.Success -> state.value.copy(
                                                 lastWeightKg = recordResult.value.asReversed().filterIsInstance<WeightRecord>().maxByOrNull { it.date }?.weightKg,
                                                 recordCount = recordResult.value.size, error = null,
+                                                weightUnit = weightUnit,
                                                 upcomingEvents = recordResult.value.map { MedicalHistoryItem(it, card.pet.name) }
                                                     .upcomingEvents(LocalDate.now(clock)),
                                             )

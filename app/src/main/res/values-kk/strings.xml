@@ -40,7 +40,7 @@
     <string name="day_zero">Оқиға күні</string>
     <string name="day_one">1 күн бұрын</string>
     <string name="day_three">3 күн бұрын</string>
-    <string name="reminder_note">Жергілікті уақытпен 09:00.</string>
+    <string name="reminder_note">Жергілікті уақытпен 09:00-ге жоспарланады. Android хабарландыруды кешірек жеткізуі мүмкін.</string>
     <string name="weight_units">Салмақ бірліктері</string>
     <string name="kg">кг</string>
     <string name="lb">фунт</string>
@@ -133,7 +133,7 @@
     <string name="no_health_records">Әзірге денсаулық жазбалары жоқ</string>
     <string name="no_upcoming_events">Жоспарланған оқиғалар жоқ</string>
     <string name="terms_unavailable">Уақытша мәтін: нақты шығарылымға дейін мәтін заңдық және деректік тексеруді қажет етеді. Қолданба диагноз қоймайды және ветеринар кеңесін алмастырмайды.</string>
-    <string name="privacy_unavailable">Уақытша мәтін: нақты шығарылымға дейін мәтін заңдық және деректік тексеруді қажет етеді. Сақталған деректер осы құрылғыда жергілікті сақталады және серверге жіберілмейді. Құпиясөз тек пішінді тексеру үшін қолданылады және сақталмайды.</string>
+    <string name="privacy_unavailable">Уақытша мәтін: нақты шығарылымға дейін мәтін заңдық және деректік тексеруді қажет етеді. Сақталған деректер осы құрылғыда жергілікті сақталады және серверге жіберілмейді. Құпиясөз тек пішінді тексеру үшін қолданылады және сақталмайды. Еске салулар — серверсіз және push қызметінсіз жергілікті құрылғы хабарландырулары.</string>
     <string name="about_description">МурПаспорт — жануарлар карточкалары мен денсаулық жазбаларын жүргізуге арналған қолданба. Ветеринар кеңесін алмастырмайды.</string>
     <string name="error_name_required">Атыңызды енгізіңіз.</string>
     <string name="error_email_required">Электрондық поштаңызды енгізіңіз.</string>
@@ -230,4 +230,13 @@
         <item quantity="one">Алда %1$d оқиға</item>
         <item quantity="other">Алда %1$d оқиға</item>
     </plurals>
+    <string name="settings_loading">Баптаулар жүктелуде…</string>
+    <string name="settings_error">Баптауларды оқу немесе сақтау мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="reminder_schedule_error">Еске салу кестесін жаңарту мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="reminder_permission_blocked">Жүйе хабарландыруларға тыйым салған. Құрылғы баптауларында рұқсат беріңіз, содан кейін еске салу өшірулі болса, оны қайта қосыңыз.</string>
+    <string name="reminder_open_device_settings">Құрылғыдағы хабарландыру баптаулары</string>
+    <string name="reminder_channel">Жануарлардың оқиғалары</string>
+    <string name="reminder_channel_description">Жоспарланған екпелер мен ветеринар қабылдаулары туралы еске салулар</string>
+    <string name="reminder_title">Жоспарланған оқиға</string>
+    <string name="reminder_body">%1$s · %2$s\nКүні: %3$s · %4$s\nБұл жоспарланған оқиға туралы еске салу, медициналық кеңес емес.</string>
 </resources>

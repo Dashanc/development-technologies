@@ -2,6 +2,7 @@ package com.example.mobile.presenter.health
 
 import com.example.mobile.domain.model.MedicalRecord
 import com.example.mobile.domain.model.Pet
+import com.example.mobile.domain.model.AppSettings
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.PetRepository
@@ -22,6 +23,7 @@ internal data class HealthData(
     val noPets: Boolean = false,
     val petMissing: Boolean = false,
     val error: RepositoryError? = null,
+    val settings: AppSettings = AppSettings(),
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)

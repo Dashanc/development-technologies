@@ -6,6 +6,7 @@ import com.example.mobile.domain.model.MedicalRecord
 import com.example.mobile.domain.model.VaccinationRecord
 import com.example.mobile.domain.model.VetVisitRecord
 import com.example.mobile.domain.model.WeightRecord
+import com.example.mobile.domain.model.WeightUnit
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.presenter.health.HealthEventType
 import com.example.mobile.presenter.health.MedicalInputError
@@ -35,7 +36,7 @@ internal fun RepositoryError.medicalStringResource() = when (this) {
     RepositoryError.IDENTITY_CONFLICT, RepositoryError.INVALID_DATA -> R.string.medical_error_data
 }
 
-internal class MedicalText(private val context: Context) {
+internal class MedicalText(private val context: Context, private val weightUnit: WeightUnit = WeightUnit.KILOGRAM) {
     fun eventTitle(event: UpcomingHealthEvent): String = context.getString(when (event.type) {
         HealthEventType.VACCINATION -> R.string.vaccination
         HealthEventType.VET_VISIT -> R.string.vet_record
@@ -54,8 +55,8 @@ internal class MedicalText(private val context: Context) {
 
     fun weight(kg: Double): String = context.getString(
         R.string.medical_weight_value,
-        NumberFormat.getNumberInstance(context.resources.configuration.locales[0]).apply { maximumFractionDigits = 3 }.format(kg),
-        context.getString(R.string.kg),
+        NumberFormat.getNumberInstance(context.resources.configuration.locales[0]).apply { maximumFractionDigits = 3 }.format(weightUnit.fromKilograms(kg)),
+        context.getString(if (weightUnit == WeightUnit.POUND) R.string.lb else R.string.kg),
     )
 
     fun title(record: MedicalRecord): String = when (record) {

@@ -23,7 +23,7 @@ class HealthOverviewFragment : ScreenFragment(R.layout.fragment_health_overview)
         super.onViewCreated(view, savedInstanceState)
         view.link(R.id.all_records, Screen.HEALTH_HISTORY)
         val repositories = LocalRepositories.get(requireContext())
-        presenter = retainedPresenter { scope -> HealthOverviewPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, scope) }
+        presenter = retainedPresenter { scope -> HealthOverviewPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, scope, repositories.settings) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val pets = HealthPetAdapter(photos) { navigator.open(Screen.PET_PROFILE, it) }
         val events = UpcomingEventAdapter { navigator.open(Screen.HEALTH_HISTORY, it) }
@@ -39,6 +39,7 @@ class HealthOverviewFragment : ScreenFragment(R.layout.fragment_health_overview)
             }
         }
         renderState(presenter.state) { state ->
+            pets.weightUnit = state.weightUnit
             pets.submitList(state.pets)
             events.submitList(state.events)
             val ready = !state.loading && state.error == null && !state.ownerMissing

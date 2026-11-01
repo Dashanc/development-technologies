@@ -33,4 +33,9 @@ class MainActivity : AppCompatActivity(), NavigationHost {
         appNavigator = AppNavigator(this, findViewById(R.id.bottom_navigation))
         appNavigator.attach(savedInstanceState == null)
     }
+
+    override fun onResume() {
+        super.onResume()
+        (application as MurPassportApplication).refreshSettings()
+    }
 }

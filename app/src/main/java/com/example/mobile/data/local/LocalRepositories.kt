@@ -19,6 +19,7 @@ class LocalRepositories private constructor(context: Context) {
     val petPhotos: PetPhotoRepository = LocalPetPhotoRepository(context.applicationContext.contentResolver)
     val medicalRecords: MedicalRecordRepository = LocalMedicalRecordRepository(storage)
     val settings: SettingsRepository = LocalSettingsRepository(preferences)
+    internal val reminderStorage = LocalReminderStorage(preferences)
 
     companion object {
         @Volatile

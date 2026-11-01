@@ -1,11 +1,14 @@
 package com.example.mobile.presenter.health
 
 import com.example.mobile.domain.model.Pet
+import com.example.mobile.domain.model.AppSettings
+import com.example.mobile.domain.model.WeightUnit
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
+import com.example.mobile.domain.repository.SettingsRepository
 import java.time.LocalDate
 import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +16,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 enum class MedicalDestination { REGISTRATION, ADD_PET }
@@ -29,6 +34,7 @@ data class MedicalEntryState<I>(
     val error: RepositoryError? = null,
     val savedPetId: String? = null,
     val destination: MedicalDestination? = null,
+    val weightUnit: WeightUnit = WeightUnit.KILOGRAM,
 ) {
     val editable get() = !loading && !saving && !loadFailed && !ownerMissing && pets.isNotEmpty()
 }
@@ -40,6 +46,7 @@ abstract class MedicalEntryPresenter<I>(
     private val records: MedicalRecordRepository,
     private val initialPetId: String?,
     private val scope: CoroutineScope,
+    private val settings: SettingsRepository? = null,
 ) {
     private val mutableState = MutableStateFlow(MedicalEntryState(initial))
     val state = mutableState.asStateFlow()
@@ -56,7 +63,14 @@ abstract class MedicalEntryPresenter<I>(
         observation?.cancel()
         mutableState.value = state.value.copy(loading = true, loadFailed = false, error = null)
         observation = scope.launch {
-            owners.observeOwner().collectLatest { ownerResult ->
+            val preferences = settings?.observeSettings() ?: flowOf(RepositoryResult.Success(AppSettings()))
+            owners.observeOwner().combine(preferences) { owner, settings -> owner to settings }.collectLatest { (ownerResult, settingsResult) ->
+                if (settingsResult is RepositoryResult.Failure) {
+                    failLoading(settingsResult.error)
+                    return@collectLatest
+                }
+                val unit = (settingsResult as RepositoryResult.Success).value.weightUnit
+                mutableState.value = state.value.copy(input = unitChanged(state.value.input, state.value.weightUnit, unit), weightUnit = unit)
                 when (ownerResult) {
                     is RepositoryResult.Failure -> failLoading(ownerResult.error)
                     is RepositoryResult.Success -> {
@@ -135,6 +149,7 @@ abstract class MedicalEntryPresenter<I>(
 
     protected abstract fun prepare(id: String, petId: String, input: I): PreparedMedicalRecord
     protected abstract fun dateText(input: I, field: MedicalField): String
+    protected open fun unitChanged(input: I, from: WeightUnit, to: WeightUnit): I = input
 
     private fun failLoading(error: RepositoryError) {
         mutableState.value = state.value.copy(loading = false, loadFailed = true, error = error)

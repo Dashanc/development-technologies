@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.R
+import com.example.mobile.domain.model.WeightUnit
 import com.example.mobile.presenter.health.PetHealthSummary
 import com.example.mobile.ui.pets.PetAvatarLoader
 
@@ -17,6 +18,13 @@ internal class HealthPetAdapter(private val photos: PetAvatarLoader, private val
         override fun areItemsTheSame(oldItem: PetHealthSummary, newItem: PetHealthSummary) = oldItem.pet.id == newItem.pet.id
         override fun areContentsTheSame(oldItem: PetHealthSummary, newItem: PetHealthSummary) = oldItem == newItem
     }) {
+    var weightUnit = WeightUnit.KILOGRAM
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
     internal class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val avatar: ImageView = view.findViewById(R.id.pet_avatar)
         val name: TextView = view.findViewById(R.id.pet_name)
@@ -30,7 +38,7 @@ internal class HealthPetAdapter(private val photos: PetAvatarLoader, private val
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = getItem(position)
         holder.name.text = item.pet.name
-        holder.summary.text = MedicalText(holder.itemView.context).petSummary(item)
+        holder.summary.text = MedicalText(holder.itemView.context, weightUnit).petSummary(item)
         photos.show(holder.avatar, item.pet.photoUri, item.pet.species)
         holder.itemView.setOnClickListener { openProfile(item.pet.id) }
     }

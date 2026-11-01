@@ -20,7 +20,7 @@ class HealthHistoryFragment : ScreenFragment(R.layout.fragment_health_history) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val repositories = LocalRepositories.get(requireContext())
-        val presenter = retainedPresenter { scope -> HealthHistoryPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope) }
+        val presenter = retainedPresenter { scope -> HealthHistoryPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope, repositories.settings) }
         val adapter = MedicalHistoryAdapter()
         val list = view.findViewById<RecyclerView>(R.id.health_records)
         list.adapter = adapter
@@ -47,6 +47,7 @@ class HealthHistoryFragment : ScreenFragment(R.layout.fragment_health_history) {
             }
         }
         renderState(presenter.state) { state ->
+            adapter.weightUnit = state.weightUnit
             adapter.submitList(state.items)
             view.findViewById<TextView>(R.id.pet_name).text = state.petName ?: getString(R.string.medical_all_pets)
             view.findViewById<TextView>(R.id.history_summary).text = resources.getQuantityString(R.plurals.medical_record_count, state.items.size, state.items.size)

@@ -40,7 +40,7 @@
     <string name="day_zero">В день события</string>
     <string name="day_one">За 1 день</string>
     <string name="day_three">За 3 дня</string>
-    <string name="reminder_note">Время — 09:00 по местному времени.</string>
+    <string name="reminder_note">Расчётное время — 09:00 по местному времени. Android может доставить уведомление позже.</string>
     <string name="weight_units">Единицы веса</string>
     <string name="kg">кг</string>
     <string name="lb">фунты</string>
@@ -133,7 +133,7 @@
     <string name="no_health_records">Пока нет записей о здоровье</string>
     <string name="no_upcoming_events">Нет запланированных событий</string>
     <string name="terms_unavailable">Заглушка: перед реальным выпуском текст требует юридической и фактической проверки. Приложение не ставит диагноз и не заменяет консультацию ветеринарного врача.</string>
-    <string name="privacy_unavailable">Заглушка: перед реальным выпуском текст требует юридической и фактической проверки. Сохранённые данные хранятся локально на устройстве и не отправляются на сервер. Пароль используется только для проверки формы и не сохраняется.</string>
+    <string name="privacy_unavailable">Заглушка: перед реальным выпуском текст требует юридической и фактической проверки. Сохранённые данные хранятся локально на устройстве и не отправляются на сервер. Пароль используется только для проверки формы и не сохраняется. Напоминания — локальные уведомления устройства, без push и сервера.</string>
     <string name="about_description">МурПаспорт — приложение для ведения карточек питомцев и записей об их здоровье. Не заменяет консультацию ветеринарного врача.</string>
     <string name="error_name_required">Введите имя.</string>
     <string name="error_email_required">Введите электронную почту.</string>
@@ -242,4 +242,13 @@
         <item quantity="many">%1$d событий впереди</item>
         <item quantity="other">%1$d события впереди</item>
     </plurals>
+    <string name="settings_loading">Загружаем настройки…</string>
+    <string name="settings_error">Не удалось прочитать или сохранить настройки. Повторите попытку.</string>
+    <string name="reminder_schedule_error">Не удалось обновить расписание напоминаний. Повторите попытку.</string>
+    <string name="reminder_permission_blocked">Уведомления запрещены системой. Разрешите их в настройках устройства и снова включите напоминания, если переключатель выключен.</string>
+    <string name="reminder_open_device_settings">Уведомления в настройках устройства</string>
+    <string name="reminder_channel">События питомцев</string>
+    <string name="reminder_channel_description">Напоминания о запланированных прививках и визитах</string>
+    <string name="reminder_title">Запланированное событие</string>
+    <string name="reminder_body">%1$s · %2$s\nДата: %3$s · %4$s\nЭто напоминание о записи, а не медицинская рекомендация.</string>
 </resources>

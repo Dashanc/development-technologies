@@ -26,10 +26,9 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
         view.link(R.id.history, Screen.HEALTH_HISTORY)
         view.link(R.id.upcoming_event, Screen.HEALTH_HISTORY)
         val repositories = LocalRepositories.get(requireContext())
-        presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope) }
+        presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope, repositories.settings) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val text = PetText(requireContext())
-        val medicalText = MedicalText(requireContext())
         val message = view.findViewById<TextView>(R.id.pet_profile_message)
         val retry = view.findViewById<MaterialButton>(R.id.pet_profile_retry)
         retry.setOnClickListener {
@@ -40,6 +39,7 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
             }
         }
         renderState(presenter.state) { state ->
+            val medicalText = MedicalText(requireContext(), state.weightUnit)
             val card = state.card
             view.findViewById<View>(R.id.pet_profile_content).isVisible = card != null
             val messageId = state.error?.petStringResource() ?: when {

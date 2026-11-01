@@ -3,6 +3,9 @@ package com.example.mobile.presenter.health
 import com.example.mobile.domain.model.VaccinationRecord
 import com.example.mobile.domain.model.VetVisitRecord
 import com.example.mobile.domain.model.WeightRecord
+import com.example.mobile.domain.model.WeightUnit
+import com.example.mobile.domain.repository.SettingsRepository
+import com.example.mobile.domain.repository.RepositoryResult
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.PetRepository
@@ -11,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 enum class MedicalHistoryFilter { ALL, WEIGHT, VACCINATION, VET_VISIT }
@@ -24,6 +28,7 @@ data class HealthHistoryState(
     val noPets: Boolean = false,
     val petMissing: Boolean = false,
     val error: RepositoryError? = null,
+    val weightUnit: WeightUnit = WeightUnit.KILOGRAM,
 )
 
 class HealthHistoryPresenter(
@@ -32,6 +37,7 @@ class HealthHistoryPresenter(
     private val records: MedicalRecordRepository,
     private val petId: String?,
     private val scope: CoroutineScope,
+    private val settings: SettingsRepository,
 ) {
     private val mutableState = MutableStateFlow(HealthHistoryState())
     val state = mutableState.asStateFlow()
@@ -47,7 +53,12 @@ class HealthHistoryPresenter(
         data = null
         mutableState.value = HealthHistoryState(filter = state.value.filter)
         observation = scope.launch {
-            observeHealthData(owners, pets, records, petId).collect {
+            observeHealthData(owners, pets, records, petId).combine(settings.observeSettings()) { data, result ->
+                when (result) {
+                    is RepositoryResult.Success -> data.copy(settings = result.value)
+                    is RepositoryResult.Failure -> data.copy(items = emptyList(), error = data.error ?: result.error)
+                }
+            }.collect {
                 data = it
                 render()
             }
@@ -75,6 +86,7 @@ class HealthHistoryPresenter(
             items = items, petName = data.pets.singleOrNull()?.name.takeIf { petId != null },
             filter = filter, loading = false, ownerMissing = data.ownerMissing,
             noPets = data.noPets, petMissing = data.petMissing, error = data.error,
+            weightUnit = data.settings.weightUnit,
         )
     }
 }
