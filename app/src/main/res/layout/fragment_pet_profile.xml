@@ -58,6 +58,12 @@
                 android:gravity="center"
                 tools:text="Кошка · домашняя короткошёрстная"
                 android:id="@+id/pet_breed" />
+            <com.google.android.material.button.MaterialButton
+                style="@style/MpButtonSoft"
+                android:id="@+id/edit_pet"
+                android:text="@string/pet_edit"
+                app:icon="@drawable/ic_edit"
+                app:iconGravity="textStart" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -146,6 +152,11 @@
                 style="@style/MpButtonSoft"
                 android:id="@+id/history"
                 android:text="@string/all_history" />
+            <com.google.android.material.button.MaterialButton
+                style="@style/MpButtonDanger"
+                android:id="@+id/delete_pet"
+                android:layout_marginTop="24dp"
+                android:text="@string/pet_delete" />
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

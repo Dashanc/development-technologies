@@ -21,7 +21,7 @@ class PetExtraDataSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val presenter = (requireParentFragment() as AddPetFragment).presenter
+        val host = requireParentFragment() as PetExtraDataHost
         val coat = view.findViewById<EditText>(R.id.coat)
         val microchip = view.findViewById<EditText>(R.id.microchip)
         val passport = view.findViewById<EditText>(R.id.passport)
@@ -30,7 +30,7 @@ class PetExtraDataSheet : BottomSheetDialogFragment() {
         val microchipField = view.findViewById<TextInputLayout>(R.id.microchip_field)
         var rendering = false
         fun changed() {
-            if (!rendering) presenter.changeExtra(PetExtraData(
+            if (!rendering) host.changeExtra(PetExtraData(
                 coat = coat.text.toString(), microchip = microchip.text.toString(),
                 passportNumber = passport.text.toString(), neutered = neutered.isChecked,
                 allergies = allergies.text.toString(),
@@ -39,11 +39,11 @@ class PetExtraDataSheet : BottomSheetDialogFragment() {
         listOf(coat, microchip, passport, allergies).forEach { it.doAfterTextChanged { changed() } }
         neutered.setOnCheckedChangeListener { _, _ -> changed() }
         view.findViewById<View>(R.id.done).setOnClickListener {
-            if (presenter.validateExtra()) dismiss() else microchip.requestFocus()
+            if (host.confirmExtra()) dismiss() else microchip.requestFocus()
         }
-        renderState(presenter.state) { state ->
+        renderState(host.extraDataState) { state ->
             rendering = true
-            val values = state.input.extra
+            val values = state.extra
             listOf(coat to values.coat, microchip to values.microchip, passport to values.passportNumber, allergies to values.allergies)
                 .forEach { (field, value) ->
                     if (field.text.toString() != value.orEmpty()) field.setText(value.orEmpty())
@@ -51,7 +51,7 @@ class PetExtraDataSheet : BottomSheetDialogFragment() {
                 }
             neutered.isChecked = values.neutered
             neutered.isEnabled = state.editable
-            microchipField.error = state.errors.microchip?.let { getString(it.stringResource()) }
+            microchipField.error = state.microchipError?.let { getString(it.stringResource()) }
             rendering = false
         }
     }

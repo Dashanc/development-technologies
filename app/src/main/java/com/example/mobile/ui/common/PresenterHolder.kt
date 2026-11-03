@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 private class PresenterHolder(create: (CoroutineScope) -> Any) : ViewModel() {
@@ -24,7 +24,7 @@ internal fun <P : Any> Fragment.retainedPresenter(create: (CoroutineScope) -> P)
     return ViewModelProvider(this, factory)[PresenterHolder::class.java].presenter as P
 }
 
-internal fun <T> Fragment.renderState(state: StateFlow<T>, render: (T) -> Unit) {
+internal fun <T> Fragment.renderState(state: Flow<T>, render: (T) -> Unit) {
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             state.collect { render(it) }

@@ -239,4 +239,13 @@
     <string name="reminder_channel_description">Reminders for scheduled vaccinations and vet visits</string>
     <string name="reminder_title">Scheduled event</string>
     <string name="reminder_body">%1$s · %2$s\nDate: %3$s · %4$s\nThis is a reminder about a scheduled event, not medical advice.</string>
+    <string name="cancel">Cancel</string>
+    <string name="pet_edit">Edit pet profile</string>
+    <string name="edit_pet_title">Edit pet</string>
+    <string name="pet_edit_extra">Edit additional details</string>
+    <string name="pet_replace_photo">Replace photo</string>
+    <string name="pet_delete">Delete pet profile</string>
+    <string name="pet_delete_title">Delete pet profile?</string>
+    <string name="pet_delete_message">The profile for “%1$s”, all its medical records and reminders will be deleted. This action cannot be undone.</string>
+    <string name="pet_delete_confirm">Delete</string>
 </resources>

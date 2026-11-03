@@ -11,6 +11,7 @@ enum class Screen(@param:IdRes val tabId: Int = 0) {
     EDIT_PROFILE,
     SETTINGS,
     ADD_PET,
+    EDIT_PET,
     PET_PROFILE,
     HEALTH_HISTORY,
     WEIGHT_ENTRY,

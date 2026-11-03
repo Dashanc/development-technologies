@@ -26,6 +26,7 @@
                 android:contentDescription="@string/back" />
             <TextView
                 style="@style/MpTitle"
+                android:id="@+id/pet_form_title"
                 android:text="@string/new_pet"
                 android:layout_width="0dp"
                 android:layout_weight="1" />
@@ -43,6 +44,7 @@
                 android:id="@+id/pet_avatar" />
             <androidx.appcompat.widget.AppCompatImageView
                 style="@style/MpPhotoBadge"
+                android:id="@+id/photo_badge"
                 android:layout_gravity="bottom|end"
                 app:srcCompat="@drawable/ic_add" />
         </FrameLayout>
@@ -172,5 +174,10 @@
             style="@style/MpButton"
             android:id="@+id/save"
             android:text="@string/save_pet" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/cancel_edit"
+            android:text="@string/cancel"
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

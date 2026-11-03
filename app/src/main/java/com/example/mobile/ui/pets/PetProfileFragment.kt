@@ -31,6 +31,12 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
         val text = PetText(requireContext())
         val message = view.findViewById<TextView>(R.id.pet_profile_message)
         val retry = view.findViewById<MaterialButton>(R.id.pet_profile_retry)
+        view.findViewById<View>(R.id.edit_pet).setOnClickListener {
+            presenter.state.value.card?.pet?.let(navigator::editPet)
+        }
+        view.findViewById<View>(R.id.delete_pet).setOnClickListener {
+            presenter.state.value.card?.pet?.let { DeletePetDialog.show(this, it.id, it.name) }
+        }
         retry.setOnClickListener {
             when {
                 presenter.state.value.error != null -> presenter.retry()

@@ -109,6 +109,12 @@
         <item name="iconTint">@color/mp_primary</item>
     </style>
     <style
+        name="MpButtonDanger"
+        parent="MpButtonSoft">
+        <item name="android:textColor">?attr/colorError</item>
+        <item name="iconTint">?attr/colorError</item>
+    </style>
+    <style
         name="MpField"
         parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>

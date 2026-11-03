@@ -239,4 +239,13 @@
     <string name="reminder_channel_description">Жоспарланған екпелер мен ветеринар қабылдаулары туралы еске салулар</string>
     <string name="reminder_title">Жоспарланған оқиға</string>
     <string name="reminder_body">%1$s · %2$s\nКүні: %3$s · %4$s\nБұл жоспарланған оқиға туралы еске салу, медициналық кеңес емес.</string>
+    <string name="cancel">Бас тарту</string>
+    <string name="pet_edit">Жануардың профилін өңдеу</string>
+    <string name="edit_pet_title">Жануарды өңдеу</string>
+    <string name="pet_edit_extra">Қосымша мәліметтерді өңдеу</string>
+    <string name="pet_replace_photo">Фотосуретті ауыстыру</string>
+    <string name="pet_delete">Жануардың профилін жою</string>
+    <string name="pet_delete_title">Жануардың профилін жою керек пе?</string>
+    <string name="pet_delete_message">«%1$s» жануарының профилі, оның барлық медициналық жазбалары мен еске салғыштары жойылады. Бұл әрекетті болдырмау мүмкін емес.</string>
+    <string name="pet_delete_confirm">Жою</string>
 </resources>

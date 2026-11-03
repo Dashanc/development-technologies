@@ -10,6 +10,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.mobile.data.local.LocalRepositories
+import com.example.mobile.domain.model.PetExtraData
 import com.example.mobile.presenter.pets.AddPetPresenter
 import com.example.mobile.R
 import com.example.mobile.ui.common.renderState
@@ -19,10 +20,19 @@ import com.example.mobile.ui.common.whenResumed
 import com.example.mobile.ui.navigation.Screen
 import com.google.android.material.button.MaterialButton
 import java.time.LocalDate
+import kotlinx.coroutines.flow.map
 
-class AddPetFragment : ScreenFragment(R.layout.fragment_add_pet) {
+class AddPetFragment : ScreenFragment(R.layout.fragment_add_pet), PetExtraDataHost {
     internal lateinit var presenter: AddPetPresenter
         private set
+
+    override val extraDataState get() = presenter.state.map {
+        PetExtraDataState(it.input.extra, it.errors.microchip, it.editable)
+    }
+
+    override fun changeExtra(extra: PetExtraData) = presenter.changeExtra(extra)
+
+    override fun confirmExtra() = presenter.validateExtra()
 
     private val photoPicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) presenter.selectPhoto(uri.toString())
