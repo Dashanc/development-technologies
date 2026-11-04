@@ -9,7 +9,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mobile.R
-import com.example.mobile.domain.model.Pet
 import com.example.mobile.ui.health.HealthHistoryFragment
 import com.example.mobile.ui.health.HealthOverviewFragment
 import com.example.mobile.ui.health.VaccinationEntryFragment
@@ -21,7 +20,6 @@ import com.example.mobile.ui.owner.RegistrationFragment
 import com.example.mobile.ui.owner.SettingsFragment
 import com.example.mobile.ui.pets.AddPetFragment
 import com.example.mobile.ui.pets.EditPetFragment
-import com.example.mobile.ui.pets.PetEditArguments
 import com.example.mobile.ui.pets.PetListFragment
 import com.example.mobile.ui.pets.PetProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -69,11 +67,6 @@ class AppNavigator(
         commit(screen, petId, addToBackStack = true)
     }
 
-    override fun editPet(pet: Pet) {
-        if (!canNavigate() || currentScreen() == Screen.EDIT_PET) return
-        commit(Screen.EDIT_PET, pet.id, addToBackStack = true, petDraft = PetEditArguments.fromPet(pet))
-    }
-
     override fun replace(screen: Screen, petId: String?) {
         if (screen.isTab || screen == Screen.REGISTRATION) {
             openRoot(screen)
@@ -112,7 +105,6 @@ class AppNavigator(
         petId: String?,
         addToBackStack: Boolean,
         resumeProfile: Boolean = false,
-        petDraft: Bundle? = null,
     ) {
         hideKeyboard()
         val fragment = createFragment(screen).apply {
@@ -120,7 +112,6 @@ class AppNavigator(
                 putString(Screen.ARG_SCREEN, screen.name)
                 putString(Screen.ARG_PET_ID, petId)
                 putBoolean(Screen.ARG_RESUME_PROFILE, resumeProfile)
-                if (petDraft != null) putBundle(PetEditArguments.DRAFT, petDraft)
             }
         }
         navigationPending = true

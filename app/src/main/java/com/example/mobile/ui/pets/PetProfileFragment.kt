@@ -25,15 +25,13 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
         view.link(R.id.add_event, Screen.VACCINATION_ENTRY)
         view.link(R.id.history, Screen.HEALTH_HISTORY)
         view.link(R.id.upcoming_event, Screen.HEALTH_HISTORY)
+        view.link(R.id.edit_pet, Screen.EDIT_PET)
         val repositories = LocalRepositories.get(requireContext())
         presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope, repositories.settings) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val text = PetText(requireContext())
         val message = view.findViewById<TextView>(R.id.pet_profile_message)
         val retry = view.findViewById<MaterialButton>(R.id.pet_profile_retry)
-        view.findViewById<View>(R.id.edit_pet).setOnClickListener {
-            presenter.state.value.card?.pet?.let(navigator::editPet)
-        }
         view.findViewById<View>(R.id.delete_pet).setOnClickListener {
             presenter.state.value.card?.pet?.let { DeletePetDialog.show(this, it.id, it.name) }
         }

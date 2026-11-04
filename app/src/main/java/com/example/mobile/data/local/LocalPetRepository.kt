@@ -13,11 +13,18 @@ internal class LocalPetRepository(private val storage: PassportStorage) : PetRep
         data.pets.find { it.id == petId }?.toDomain()
     }
 
-    override suspend fun save(pet: Pet) = storage.update { data ->
+    override suspend fun save(pet: Pet) = write(pet, requireExisting = false)
+
+    override suspend fun update(pet: Pet) = write(pet, requireExisting = true)
+
+    private suspend fun write(pet: Pet, requireExisting: Boolean) = storage.update { data ->
         if (data.owner == null || data.owner.id != pet.ownerId) {
             throw LocalDataException(RepositoryError.INVALID_REFERENCE)
         }
         val existing = data.pets.find { it.id == pet.id }
+        if (requireExisting && existing == null) {
+            throw LocalDataException(RepositoryError.INVALID_REFERENCE)
+        }
         if (existing != null && existing.ownerId != pet.ownerId) {
             throw LocalDataException(RepositoryError.IDENTITY_CONFLICT)
         }

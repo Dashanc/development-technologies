@@ -29,7 +29,24 @@ data class PetInputErrors(
     val microchip: PetFieldError? = null,
 ) {
     val isEmpty get() = name == null && birth == null && sex == null && microchip == null
+
+    fun clearChanged(previous: PetInput, current: PetInput) = copy(
+        name = name.takeIf { previous.name == current.name },
+        birth = birth.takeIf { previous.birth == current.birth },
+        sex = sex.takeIf { previous.sex == current.sex },
+        microchip = microchip.takeIf { previous.extra.microchip == current.extra.microchip },
+    )
 }
+
+internal fun Pet.toInput() = PetInput(
+    name = name,
+    species = species,
+    breed = breed.orEmpty(),
+    birth = birthDate?.format(DateTimeFormatter.ofPattern("dd.MM.uuuu")).orEmpty(),
+    sex = sex,
+    photoUri = photoUri,
+    extra = extra,
+)
 
 data class PetAge(val years: Int, val months: Int, val days: Int)
 
