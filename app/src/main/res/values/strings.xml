@@ -260,4 +260,8 @@
     <string name="pet_delete_title">Удалить карточку питомца?</string>
     <string name="pet_delete_message">Карточка питомца «%1$s», все его медицинские записи и напоминания будут удалены. Это действие нельзя отменить.</string>
     <string name="pet_delete_confirm">Удалить</string>
+    <string name="pet_deleting">Удаляем карточку…</string>
+    <string name="pet_deleted">Карточка питомца удалена.</string>
+    <string name="error_pet_delete">Не удалось удалить карточку питомца. Повторите попытку.</string>
+    <string name="pet_delete_cleanup_error">Карточка удалена, но очистку напоминаний или доступа к фото завершить не удалось. Повторите очистку.</string>
 </resources>

@@ -9,9 +9,13 @@ import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
 import java.io.IOException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-internal class LocalPetPhotoRepository(private val resolver: ContentResolver) : PetPhotoRepository {
+internal class LocalPetPhotoRepository(
+    private val resolver: ContentResolver,
+    private val storage: PassportStorage,
+) : PetPhotoRepository {
     override suspend fun retain(uri: String): RepositoryResult<String> = withContext(Dispatchers.IO) {
         try {
             val photo = uri.toUri()
@@ -29,6 +33,25 @@ internal class LocalPetPhotoRepository(private val resolver: ContentResolver) : 
             RepositoryResult.Failure(RepositoryError.READ_FAILED)
         } catch (_: IllegalArgumentException) {
             RepositoryResult.Failure(RepositoryError.INVALID_DATA)
+        }
+    }
+
+    override suspend fun releaseIfUnused(uri: String): RepositoryResult<Unit> = withContext(Dispatchers.IO) {
+        when (val result = storage.observe { data -> data.pets.any { it.photoUri == uri } }.first()) {
+            is RepositoryResult.Failure -> result
+            is RepositoryResult.Success -> {
+                if (result.value) return@withContext RepositoryResult.Success(Unit)
+                try {
+                    val photo = uri.toUri()
+                    val grant = resolver.persistedUriPermissions.find { it.uri == photo && it.isReadPermission }
+                    if (grant != null) resolver.releasePersistableUriPermission(photo, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    RepositoryResult.Success(Unit)
+                } catch (_: SecurityException) {
+                    RepositoryResult.Failure(RepositoryError.WRITE_FAILED)
+                } catch (_: IllegalArgumentException) {
+                    RepositoryResult.Failure(RepositoryError.INVALID_DATA)
+                }
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.data.local.ReminderLedger
 import com.example.mobile.domain.model.AppSettings
 import com.example.mobile.domain.repository.RepositoryResult
+import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.domain.repository.ReminderScheduleRepository
 import com.example.mobile.presenter.health.HealthData
 import com.example.mobile.presenter.health.observeHealthData
 import com.example.mobile.presenter.owner.ReminderStatus
@@ -12,6 +14,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal class ReminderCoordinator(context: Context, private val repositories: LocalRepositories, private val scope: CoroutineScope) {
+internal class ReminderCoordinator(context: Context, private val repositories: LocalRepositories, private val scope: CoroutineScope) : ReminderScheduleRepository {
     private val alarms = ReminderAlarms(context)
     private val notifications = ReminderNotifications(context)
     private val storage = repositories.reminderStorage
@@ -32,7 +35,7 @@ internal class ReminderCoordinator(context: Context, private val repositories: L
 
     fun start() {
         observation?.cancel()
-        observation = scope.launch { snapshots().collect { snapshot -> mutex.withLock { reconcile(snapshot) } } }
+        observation = scope.launch { snapshots().collect { mutex.withLock { reconcile(snapshots().first()) } } }
     }
 
     fun refresh() {
@@ -41,6 +44,25 @@ internal class ReminderCoordinator(context: Context, private val repositories: L
 
     suspend fun rebuild(reset: Boolean = false) {
         mutex.withLock { reconcile(snapshots().first(), reset) }
+    }
+
+    override suspend fun refreshSchedule(): RepositoryResult<Unit> = mutex.withLock {
+        try {
+            reconcile(snapshots().first())
+        } catch (error: CancellationException) {
+            throw error
+        } catch (_: SecurityException) {
+            mutableStatus.value = ReminderStatus.SCHEDULE_FAILED
+        } catch (_: IllegalArgumentException) {
+            mutableStatus.value = ReminderStatus.SCHEDULE_FAILED
+        } catch (_: IllegalStateException) {
+            mutableStatus.value = ReminderStatus.SCHEDULE_FAILED
+        }
+        when (mutableStatus.value) {
+            ReminderStatus.READY -> RepositoryResult.Success(Unit)
+            ReminderStatus.READ_FAILED -> RepositoryResult.Failure(RepositoryError.READ_FAILED)
+            ReminderStatus.WRITE_FAILED, ReminderStatus.SCHEDULE_FAILED -> RepositoryResult.Failure(RepositoryError.WRITE_FAILED)
+        }
     }
 
     suspend fun deliver(identity: String, triggerAt: Long) {

@@ -248,4 +248,8 @@
     <string name="pet_delete_title">Delete pet profile?</string>
     <string name="pet_delete_message">The profile for “%1$s”, all its medical records and reminders will be deleted. This action cannot be undone.</string>
     <string name="pet_delete_confirm">Delete</string>
+    <string name="pet_deleting">Deleting pet profile…</string>
+    <string name="pet_deleted">Pet profile deleted.</string>
+    <string name="error_pet_delete">Could not delete the pet profile. Please try again.</string>
+    <string name="pet_delete_cleanup_error">The profile was deleted, but reminders or photo access could not be fully cleared. Please retry cleanup.</string>
 </resources>
