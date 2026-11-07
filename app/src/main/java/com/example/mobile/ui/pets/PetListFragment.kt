@@ -16,10 +16,12 @@ import com.example.mobile.ui.navigation.Screen
 import com.google.android.material.button.MaterialButton
 
 class PetListFragment : ScreenFragment(R.layout.fragment_pet_list) {
+    private lateinit var presenter: PetListPresenter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val repositories = LocalRepositories.get(requireContext())
-        val presenter = retainedPresenter { scope ->
+        presenter = retainedPresenter { scope ->
             PetListPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, repositories.settings, scope)
         }
         val list = view.findViewById<RecyclerView>(R.id.pets_list)
@@ -53,6 +55,11 @@ class PetListFragment : ScreenFragment(R.layout.fragment_pet_list) {
             addTop.isEnabled = add.isEnabled
             add.setText(if (state.ownerMissing) R.string.create_account else R.string.add_pet)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.refresh()
     }
 
     override fun onDestroyView() {

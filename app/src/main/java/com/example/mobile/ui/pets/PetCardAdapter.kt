@@ -45,12 +45,15 @@ internal class PetCardAdapter(
         holder.itemView.setOnClickListener { openPet(card.pet.id) }
         if (ownerCards) holder.itemView.findViewById<TextView>(R.id.pet_age).text = text.age(card.age)
         else {
+            val medicalText = MedicalText(holder.itemView.context, weightUnit)
             holder.itemView.findViewById<TextView>(R.id.pet_details).text = text.description(card)
             holder.itemView.findViewById<TextView>(R.id.pet_status).setText(R.string.medical_records_in_profile)
             holder.itemView.findViewById<TextView>(R.id.pet_weight).text = card.lastWeightKg?.let {
-                MedicalText(holder.itemView.context, weightUnit).weight(it)
+                medicalText.weight(it)
             } ?: holder.itemView.context.getString(R.string.pet_no_value)
-            holder.itemView.findViewById<TextView>(R.id.pet_next_event).setText(R.string.pet_no_value)
+            holder.itemView.findViewById<TextView>(R.id.pet_next_event).text = card.nextEvent?.let {
+                holder.itemView.context.getString(R.string.pet_detail_join, medicalText.eventTitle(it), MedicalText.inputDate(it.date))
+            } ?: holder.itemView.context.getString(R.string.pet_no_value)
         }
     }
 

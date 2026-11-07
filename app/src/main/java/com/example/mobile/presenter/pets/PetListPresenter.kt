@@ -8,7 +8,11 @@ import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
 import com.example.mobile.domain.repository.SettingsRepository
+import com.example.mobile.presenter.health.HealthData
 import com.example.mobile.presenter.health.observeHealthData
+import com.example.mobile.presenter.health.upcomingEvents
+import java.time.Clock
+import java.time.LocalDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -30,10 +34,12 @@ class PetListPresenter(
     private val records: MedicalRecordRepository,
     private val settings: SettingsRepository,
     private val scope: CoroutineScope,
+    private val clock: Clock = Clock.systemDefaultZone(),
 ) {
     private val mutableState = MutableStateFlow(PetListState())
     val state = mutableState.asStateFlow()
     private var observation: Job? = null
+    private var data: HealthData? = null
 
     init {
         retry()
@@ -41,18 +47,33 @@ class PetListPresenter(
 
     fun retry() {
         observation?.cancel()
+        data = null
         mutableState.value = PetListState()
         observation = scope.launch {
             observeHealthData(owners, pets, records).combine(settings.observeSettings()) { data, preferences ->
-                val error = data.error ?: (preferences as? RepositoryResult.Failure)?.error
-                val unit = (preferences as? RepositoryResult.Success)?.value?.weightUnit ?: WeightUnit.KILOGRAM
-                val itemsByPet = data.items.groupBy { it.record.petId }
-                val cards = if (error != null) emptyList() else data.pets.map { pet ->
-                    val weight = itemsByPet[pet.id].orEmpty().firstNotNullOfOrNull { (it.record as? WeightRecord)?.weightKg }
-                    pet.toCard().copy(lastWeightKg = weight)
+                when (preferences) {
+                    is RepositoryResult.Success -> data.copy(settings = preferences.value)
+                    is RepositoryResult.Failure -> data.copy(items = emptyList(), error = data.error ?: preferences.error)
                 }
-                PetListState(pets = cards, loading = false, ownerMissing = data.ownerMissing, error = error, weightUnit = unit)
-            }.collect { mutableState.value = it }
+            }.collect {
+                data = it
+                refresh()
+            }
         }
+    }
+
+    fun refresh() {
+        val data = data ?: return
+        val today = LocalDate.now(clock)
+        val itemsByPet = data.items.groupBy { it.record.petId }
+        val eventsByPet = data.items.upcomingEvents(today).groupBy { it.petId }
+        val cards = if (data.error != null) emptyList() else data.pets.map { pet ->
+            val weight = itemsByPet[pet.id].orEmpty().firstNotNullOfOrNull { (it.record as? WeightRecord)?.weightKg }
+            pet.toCard(today).copy(lastWeightKg = weight, nextEvent = eventsByPet[pet.id]?.firstOrNull())
+        }
+        mutableState.value = PetListState(
+            pets = cards, loading = false, ownerMissing = data.ownerMissing, error = data.error,
+            weightUnit = data.settings.weightUnit,
+        )
     }
 }
