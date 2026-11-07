@@ -1,0 +1,10 @@
+**/.git
+.env*
+!.env
+vendor/
+var/
+config/reference.php
+config/secrets/
+public/bundles/
+compose*.yaml
+Dockerfile
