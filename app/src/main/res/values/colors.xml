@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="mp_primary">#7554A1</color>
+    <color name="mp_primary_soft">#F2EDF7</color>
+    <color name="mp_on_primary">#FFFFFF</color>
+    <color name="mp_surface">#FFFFFF</color>
+    <color name="mp_card">#FBFAFC</color>
+    <color name="mp_text">#332B3B</color>
+    <color name="mp_text_secondary">#77717E</color>
+    <color name="mp_outline">#EDECEF</color>
+    <color name="mp_icon_muted">#B9B2C2</color>
+    <color name="mp_icon_ink">#332B3B</color>
+    <color name="mp_avatar_warm">#FFF0E3</color>
+    <color name="mp_avatar_cool">#ECEEF2</color>
+    <color name="mp_badge_neutral">#F0EFF2</color>
 </resources>

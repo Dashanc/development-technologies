@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mp_icon_size">24dp</dimen>
+    <dimen name="mp_icon_small">18dp</dimen>
+    <dimen name="mp_icon_badge">40dp</dimen>
+    <dimen name="mp_icon_avatar">64dp</dimen>
+    <dimen name="mp_icon_avatar_large">112dp</dimen>
+    <dimen name="mp_touch_target">48dp</dimen>
+    <dimen name="mp_screen_padding">24dp</dimen>
+    <dimen name="mp_space_small">8dp</dimen>
+    <dimen name="mp_space_medium">16dp</dimen>
+    <dimen name="mp_space_large">24dp</dimen>
+    <dimen name="mp_card_radius">22dp</dimen>
+    <dimen name="mp_control_radius">14dp</dimen>
+    <dimen name="mp_button_height">52dp</dimen>
+    <dimen name="mp_owner_pet_list_height">160dp</dimen>
+    <dimen name="mp_owner_pet_card_width">128dp</dimen>
+</resources>

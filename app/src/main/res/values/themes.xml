@@ -1,9 +1,24 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Mobile" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style
+        name="Base.Theme.Mobile"
+        parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/mp_primary</item>
+        <item name="colorOnPrimary">@color/mp_on_primary</item>
+        <item name="colorSurface">@color/mp_surface</item>
+        <item name="colorOnSurface">@color/mp_text</item>
+        <item name="colorOnSurfaceVariant">@color/mp_text_secondary</item>
+        <item name="colorOutline">@color/mp_outline</item>
+        <item name="android:colorBackground">@color/mp_surface</item>
+        <item name="android:windowBackground">@color/mp_surface</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/mp_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="materialButtonStyle">@style/MpButton</item>
     </style>
-
-    <style name="Theme.Mobile" parent="Base.Theme.Mobile" />
+    <style
+        name="Theme.Mobile"
+        parent="Base.Theme.Mobile" />
 </resources>

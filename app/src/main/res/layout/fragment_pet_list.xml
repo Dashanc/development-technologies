@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/mp_screen_padding">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+        <TextView
+            style="@style/MpTitle"
+            android:text="@string/my_pets"
+            android:layout_width="0dp"
+            android:layout_weight="1" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            style="@style/MpIconButton"
+            android:id="@+id/add_top"
+            app:srcCompat="@drawable/ic_add"
+            android:contentDescription="@string/add_pet" />
+    </LinearLayout>
+    <TextView
+        style="@style/MpCaption"
+        android:text="@string/pet_list_caption" />
+    <TextView
+        style="@style/MpCaption"
+        android:id="@+id/pets_empty"
+        android:text="@string/no_pets"
+        tools:visibility="gone" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButtonSoft"
+        android:id="@+id/pets_retry"
+        android:text="@string/retry"
+        android:visibility="gone" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pets_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_pet"
+        tools:itemCount="2" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButton"
+        android:id="@+id/add_pet"
+        android:text="@string/add_pet"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="textStart" />
+</LinearLayout>

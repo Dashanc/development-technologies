@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MpCard"
+    android:id="@+id/pet_card"
+    android:layout_width="@dimen/mp_owner_pet_card_width"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/mp_space_small">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pet_avatar"
+        style="@style/MpAvatarCat"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        style="@style/MpText"
+        android:gravity="center"
+        android:textStyle="bold"
+        tools:text="@string/pet_name"
+        android:id="@+id/pet_name" />
+    <TextView
+        style="@style/MpCaption"
+        android:gravity="center"
+        tools:text="1 год"
+        android:id="@+id/pet_age" />
+</LinearLayout>
