@@ -40,7 +40,7 @@ final class AuthService
                 return new AuthenticationResult($owner, $this->sessions->issue($account));
             });
         } catch (UniqueConstraintViolationException) {
-            throw new ApiError(409, 'EMAIL_ALREADY_USED', 'This email address is already in use.', ['email' => 'Choose another email address.']);
+            throw new ApiError(409, 'EMAIL_ALREADY_USED', 'error.email_already_used', ['email' => 'validation.email_already_used']);
         }
     }
 
@@ -50,10 +50,10 @@ final class AuthService
         $account = $this->accounts->findByEmail($data['email']);
         if ($account === null) {
             $this->passwordHasher->hashPassword(new Account($data['email']), $data['password']);
-            throw new ApiError(401, 'INVALID_CREDENTIALS', 'The email address or password is incorrect.');
+            throw new ApiError(401, 'INVALID_CREDENTIALS', 'error.invalid_credentials');
         }
         if (!$this->passwordHasher->isPasswordValid($account, $data['password'])) {
-            throw new ApiError(401, 'INVALID_CREDENTIALS', 'The email address or password is incorrect.');
+            throw new ApiError(401, 'INVALID_CREDENTIALS', 'error.invalid_credentials');
         }
 
         $owner = $this->profiles->get($account);

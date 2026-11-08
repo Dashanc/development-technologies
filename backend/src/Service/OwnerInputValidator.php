@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Owner;
 use App\Exception\ApiError;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -39,7 +40,7 @@ final class OwnerInputValidator
     {
         $errors = $this->unknownFields($input, ['name', 'email', 'phone']);
         if ($input === []) {
-            $errors['_request'] = 'Provide at least one profile field to update.';
+            $errors['_request'] = 'validation.profile_field_required';
         }
         $data = $this->profileFields($input, $owner, $errors);
         $this->check($errors);
@@ -50,7 +51,7 @@ final class OwnerInputValidator
     private function profileFields(#[\SensitiveParameter] array $input, ?Owner $owner, array &$errors): array
     {
         $name = $this->text(array_key_exists('name', $input) ? $input['name'] : ($owner?->getName() ?? ''), 'name', $errors);
-        $this->validate($name, 'name', [new Assert\NotBlank(message: 'Enter your name.')], $errors);
+        $this->validate($name, 'name', [new Assert\NotBlank(message: 'validation.name_required')], $errors);
         $email = $this->email(array_key_exists('email', $input) ? $input['email'] : ($owner?->getAccount()->getEmail() ?? ''), $errors);
         $phone = $this->phone(array_key_exists('phone', $input) ? $input['phone'] : $owner?->getPhone(), $errors);
 
@@ -61,9 +62,9 @@ final class OwnerInputValidator
     {
         $email = strtolower($this->text($value, 'email', $errors));
         $this->validate($email, 'email', [
-            new Assert\NotBlank(message: 'Enter your email address.'),
-            new Assert\Length(max: 254),
-            new Assert\Email(message: 'Enter a valid email address.'),
+            new Assert\NotBlank(message: 'validation.email_required'),
+            new Assert\Length(max: 254, maxMessage: 'validation.too_long', charsetMessage: 'validation.invalid_characters'),
+            new Assert\Email(message: 'validation.email_invalid'),
         ], $errors);
 
         return $email;
@@ -72,7 +73,7 @@ final class OwnerInputValidator
     private function text(mixed $value, string $field, array &$errors): string
     {
         if (!is_string($value)) {
-            $errors[$field] = 'This field must be a string.';
+            $errors[$field] = 'validation.string_required';
 
             return '';
         }
@@ -83,12 +84,18 @@ final class OwnerInputValidator
     private function password(#[\SensitiveParameter] mixed $value, int $minimum, array &$errors): string
     {
         if (!is_string($value)) {
-            $errors['password'] = 'Enter a password.';
+            $errors['password'] = 'validation.password_required';
 
             return '';
         }
 
-        $this->validate($value, 'password', [new Assert\Length(min: $minimum, max: 128)], $errors);
+        $this->validate($value, 'password', [new Assert\Length(
+            min: $minimum,
+            max: 128,
+            minMessage: 'validation.too_short',
+            maxMessage: 'validation.too_long',
+            charsetMessage: 'validation.invalid_characters',
+        )], $errors);
 
         return $value;
     }
@@ -110,7 +117,7 @@ final class OwnerInputValidator
             }
         }
 
-        $errors['phone'] = 'Enter a valid +7 phone number or leave this field empty.';
+        $errors['phone'] = 'validation.phone_invalid';
 
         return null;
     }
@@ -119,7 +126,7 @@ final class OwnerInputValidator
     {
         $errors = [];
         foreach (array_diff(array_keys($input), $allowed) as $field) {
-            $errors[$field] = 'This field is not supported.';
+            $errors[$field] = 'validation.field_not_supported';
         }
 
         return $errors;
@@ -128,14 +135,18 @@ final class OwnerInputValidator
     private function validate(#[\SensitiveParameter] string $value, string $field, array $constraints, array &$errors): void
     {
         foreach ($this->validator->validate($value, $constraints) as $violation) {
-            $errors[$field] ??= $violation->getMessage();
+            $errors[$field] ??= new TranslatableMessage(
+                $violation->getMessageTemplate(),
+                array_intersect_key($violation->getParameters(), ['{{ limit }}' => true]),
+                'api',
+            );
         }
     }
 
     private function check(array $errors): void
     {
         if ($errors !== []) {
-            throw new ApiError(422, 'VALIDATION_FAILED', 'Please check the highlighted fields.', $errors);
+            throw new ApiError(422, 'VALIDATION_FAILED', 'error.validation_failed', $errors);
         }
     }
 }

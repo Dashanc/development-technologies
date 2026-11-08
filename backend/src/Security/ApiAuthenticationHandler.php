@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Http\ApiResponse;
+use App\Http\ApiErrorResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -15,24 +15,28 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 final class ApiAuthenticationHandler implements AuthenticationEntryPointInterface, AuthenticationFailureHandlerInterface, AccessDeniedHandlerInterface
 {
+    public function __construct(private readonly ApiErrorResponse $responses)
+    {
+    }
+
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        return $this->unauthorized('AUTHENTICATION_REQUIRED', 'Sign in to access this resource.');
+        return $this->unauthorized('AUTHENTICATION_REQUIRED', 'error.authentication_required');
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
-        return $this->unauthorized('INVALID_SESSION', 'The session is invalid or has expired. Please sign in again.');
+        return $this->unauthorized('INVALID_SESSION', 'error.invalid_session');
     }
 
     public function handle(Request $request, AccessDeniedException $accessDeniedException): ?Response
     {
-        return ApiResponse::error(403, 'ACCESS_DENIED', 'You do not have access to this resource.');
+        return $this->responses->create(403, 'ACCESS_DENIED', 'error.access_denied');
     }
 
-    private function unauthorized(string $code, string $message): Response
+    private function unauthorized(string $code, string $messageKey): Response
     {
-        $response = ApiResponse::error(401, $code, $message);
+        $response = $this->responses->create(401, $code, $messageKey);
         $response->headers->set('WWW-Authenticate', 'Bearer');
 
         return $response;

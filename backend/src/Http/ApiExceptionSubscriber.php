@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 final class ApiExceptionSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private readonly LoggerInterface $logger, private readonly ApiErrorResponse $responses)
     {
     }
 
@@ -35,15 +35,15 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface
             return;
         }
         if ($exception instanceof ApiError) {
-            $response = ApiResponse::error($exception->status, $exception->errorCode, $exception->getMessage(), $exception->fields);
+            $response = $this->responses->create($exception->status, $exception->errorCode, $exception->messageKey, $exception->fields);
         } elseif ($exception instanceof HttpExceptionInterface) {
             $status = $exception->getStatusCode();
             $message = match ($status) {
-                404 => 'The requested resource was not found.',
-                405 => 'This HTTP method is not allowed.',
-                default => 'The request could not be processed.',
+                404 => 'error.not_found',
+                405 => 'error.method_not_allowed',
+                default => 'error.request_failed',
             };
-            $response = ApiResponse::error($status, 'HTTP_'.$status, $message);
+            $response = $this->responses->create($status, 'HTTP_'.$status, $message);
             foreach (['Allow', 'WWW-Authenticate', 'Retry-After'] as $header) {
                 if (isset($exception->getHeaders()[$header])) {
                     $response->headers->set($header, $exception->getHeaders()[$header]);
@@ -55,7 +55,7 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface
                 'exception_file' => $exception->getFile(),
                 'exception_line' => $exception->getLine(),
             ]);
-            $response = ApiResponse::error(500, 'INTERNAL_ERROR', 'The server could not complete the request. Please try again.');
+            $response = $this->responses->create(500, 'INTERNAL_ERROR', 'error.internal_error');
         }
 
         $event->setResponse($response);

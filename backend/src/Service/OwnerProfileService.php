@@ -36,7 +36,7 @@ final class OwnerProfileService
                 $owner->update($data['name'], $data['phone']);
             });
         } catch (UniqueConstraintViolationException) {
-            throw new ApiError(409, 'EMAIL_ALREADY_USED', 'This email address is already in use.', ['email' => 'Choose another email address.']);
+            throw new ApiError(409, 'EMAIL_ALREADY_USED', 'error.email_already_used', ['email' => 'validation.email_already_used']);
         }
 
         return $owner;

@@ -9,9 +9,9 @@ final class ApiError extends \RuntimeException
     public function __construct(
         public readonly int $status,
         public readonly string $errorCode,
-        string $message,
+        public readonly string $messageKey,
         public readonly array $fields = [],
     ) {
-        parent::__construct($message);
+        parent::__construct($messageKey);
     }
 }
