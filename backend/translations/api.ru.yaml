@@ -1,4 +1,5 @@
 error:
+    pet_not_found: 'Питомец не найден.'
     email_already_used: 'Этот адрес электронной почты уже используется.'
     invalid_credentials: 'Неверный адрес электронной почты или пароль.'
     validation_failed: 'Проверьте заполнение отмеченных полей.'
@@ -14,6 +15,15 @@ error:
     internal_error: 'Не удалось выполнить запрос на сервере. Повторите попытку.'
 
 validation:
+    pet_field_required: 'Укажите хотя бы одно поле питомца для изменения.'
+    pet_name_required: 'Введите имя питомца.'
+    species_invalid: 'Выберите вид питомца: CAT, DOG или OTHER.'
+    sex_invalid: 'Выберите пол питомца: FEMALE, MALE или UNKNOWN.'
+    birth_date_invalid: 'Укажите существующую дату рождения в формате ГГГГ-ММ-ДД.'
+    birth_date_future: 'Дата рождения не может быть в будущем.'
+    microchip_invalid: 'Микрочип должен содержать ровно 15 цифр или быть пустым.'
+    object_required: 'Это поле должно содержать объект JSON.'
+    boolean_required: 'Это поле должно содержать true или false.'
     profile_field_required: 'Укажите хотя бы одно поле профиля для изменения.'
     name_required: 'Введите имя.'
     email_required: 'Введите адрес электронной почты.'

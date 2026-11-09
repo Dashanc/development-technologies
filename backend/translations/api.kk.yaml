@@ -1,4 +1,5 @@
 error:
+    pet_not_found: 'Үй жануары табылмады.'
     email_already_used: 'Бұл электрондық пошта мекенжайы қолданыста.'
     invalid_credentials: 'Электрондық пошта мекенжайы немесе құпиясөз қате.'
     validation_failed: 'Белгіленген өрістерді тексеріңіз.'
@@ -14,6 +15,15 @@ error:
     internal_error: 'Сервер сұрауды орындай алмады. Әрекетті қайталаңыз.'
 
 validation:
+    pet_field_required: 'Өзгерту үшін үй жануарының кемінде бір өрісін көрсетіңіз.'
+    pet_name_required: 'Үй жануарының атын енгізіңіз.'
+    species_invalid: 'Үй жануарының түрін таңдаңыз: CAT, DOG немесе OTHER.'
+    sex_invalid: 'Үй жануарының жынысын таңдаңыз: FEMALE, MALE немесе UNKNOWN.'
+    birth_date_invalid: 'Туған күнін ЖЖЖЖ-АА-КК пішімінде дұрыс енгізіңіз.'
+    birth_date_future: 'Туған күні болашақта болмауы керек.'
+    microchip_invalid: 'Микрочип дәл 15 цифрдан тұруы немесе бос болуы керек.'
+    object_required: 'Бұл өрісте JSON нысаны болуы керек.'
+    boolean_required: 'Бұл өрісте true немесе false болуы керек.'
     profile_field_required: 'Өзгерту үшін кемінде бір профиль өрісін көрсетіңіз.'
     name_required: 'Есіміңізді енгізіңіз.'
     email_required: 'Электрондық пошта мекенжайын енгізіңіз.'

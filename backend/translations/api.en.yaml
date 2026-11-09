@@ -1,4 +1,5 @@
 error:
+    pet_not_found: 'Pet not found.'
     email_already_used: 'This email address is already in use.'
     invalid_credentials: 'The email address or password is incorrect.'
     validation_failed: 'Please check the highlighted fields.'
@@ -14,6 +15,15 @@ error:
     internal_error: 'The server could not complete the request. Please try again.'
 
 validation:
+    pet_field_required: 'Provide at least one pet field to update.'
+    pet_name_required: 'Enter the pet name.'
+    species_invalid: 'Choose a pet species: CAT, DOG or OTHER.'
+    sex_invalid: 'Choose a pet sex: FEMALE, MALE or UNKNOWN.'
+    birth_date_invalid: 'Enter a valid birth date in YYYY-MM-DD format.'
+    birth_date_future: 'The birth date cannot be in the future.'
+    microchip_invalid: 'The microchip must contain exactly 15 digits or be empty.'
+    object_required: 'This field must contain a JSON object.'
+    boolean_required: 'This field must contain true or false.'
     profile_field_required: 'Provide at least one profile field to update.'
     name_required: 'Enter your name.'
     email_required: 'Enter your email address.'
