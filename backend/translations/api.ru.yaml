@@ -1,4 +1,5 @@
 error:
+    record_not_found: 'Медицинская запись не найдена.'
     pet_not_found: 'Питомец не найден.'
     email_already_used: 'Этот адрес электронной почты уже используется.'
     invalid_credentials: 'Неверный адрес электронной почты или пароль.'
@@ -15,6 +16,15 @@ error:
     internal_error: 'Не удалось выполнить запрос на сервере. Повторите попытку.'
 
 validation:
+    record_field_required: 'Укажите хотя бы одно поле записи для изменения.'
+    record_date_future: 'Дата взвешивания или вакцинации не может быть в будущем.'
+    weight_invalid: 'Введите вес от 0.001 до 99999.999 кг, не более трёх знаков после точки.'
+    next_vaccination_after: 'Следующая вакцинация должна быть позже даты вакцинации.'
+    appointment_not_before: 'Дата приёма не может быть раньше даты визита.'
+    record_type_invalid: 'Выберите тип записи: WEIGHT, VACCINATION или VET_VISIT.'
+    date_range_invalid: 'Конец периода не может быть раньше его начала.'
+    date_invalid: 'Укажите существующую дату в формате ГГГГ-ММ-ДД.'
+    record_text_required: 'Заполните это обязательное поле.'
     pet_field_required: 'Укажите хотя бы одно поле питомца для изменения.'
     pet_name_required: 'Введите имя питомца.'
     species_invalid: 'Выберите вид питомца: CAT, DOG или OTHER.'

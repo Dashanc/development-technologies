@@ -1,4 +1,5 @@
 error:
+    record_not_found: 'Medical record not found.'
     pet_not_found: 'Pet not found.'
     email_already_used: 'This email address is already in use.'
     invalid_credentials: 'The email address or password is incorrect.'
@@ -15,6 +16,15 @@ error:
     internal_error: 'The server could not complete the request. Please try again.'
 
 validation:
+    record_field_required: 'Provide at least one record field to update.'
+    record_date_future: 'A weight or vaccination date cannot be in the future.'
+    weight_invalid: 'Enter a weight from 0.001 to 99999.999 kg with at most three decimal places.'
+    next_vaccination_after: 'The next vaccination must be after the vaccination date.'
+    appointment_not_before: 'The appointment date cannot be before the visit date.'
+    record_type_invalid: 'Choose a record type: WEIGHT, VACCINATION or VET_VISIT.'
+    date_range_invalid: 'The end date cannot be before the start date.'
+    date_invalid: 'Enter a valid date in YYYY-MM-DD format.'
+    record_text_required: 'Complete this required field.'
     pet_field_required: 'Provide at least one pet field to update.'
     pet_name_required: 'Enter the pet name.'
     species_invalid: 'Choose a pet species: CAT, DOG or OTHER.'
