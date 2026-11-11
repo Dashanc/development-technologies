@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Account;
 use App\Entity\Pet;
 use App\Exception\ApiError;
+use App\Model\ResourceVersion;
 use App\Repository\PetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -25,9 +26,9 @@ final class PetService
         return $this->pets->listForOwner($this->profiles->get($account));
     }
 
-    public function get(Account $account, string $id): Pet
+    public function get(Account $account, string $id, bool $forUpdate = false): Pet
     {
-        return $this->pets->findForOwner($this->profiles->get($account), $id)
+        return $this->pets->findForOwner($this->profiles->get($account), $id, $forUpdate)
             ?? throw new ApiError(404, 'PET_NOT_FOUND', 'error.pet_not_found');
     }
 
@@ -41,21 +42,22 @@ final class PetService
         return $pet;
     }
 
-    public function update(Account $account, string $id, array $input): Pet
+    public function update(Account $account, string $id, array $input, ?string $ifMatch): Pet
     {
-        $pet = $this->get($account, $id);
-        $data = $this->validator->validate($input, $pet);
-        $this->entityManager->wrapInTransaction(function () use ($pet, $data): void {
-            $pet->update($data);
-        });
+        return $this->entityManager->wrapInTransaction(function () use ($account, $id, $input, $ifMatch): Pet {
+            $pet = $this->get($account, $id, true);
+            ResourceVersion::requireMatch($pet, $ifMatch);
+            $pet->update($this->validator->validate($input, $pet));
 
-        return $pet;
+            return $pet;
+        });
     }
 
-    public function delete(Account $account, string $id): void
+    public function delete(Account $account, string $id, ?string $ifMatch): void
     {
-        $pet = $this->get($account, $id);
-        $this->entityManager->wrapInTransaction(function () use ($pet): void {
+        $this->entityManager->wrapInTransaction(function () use ($account, $id, $ifMatch): void {
+            $pet = $this->get($account, $id, true);
+            ResourceVersion::requireMatch($pet, $ifMatch);
             $this->entityManager->remove($pet);
         });
     }

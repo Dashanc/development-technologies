@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\VersionedResource;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -11,8 +12,11 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity]
 #[ORM\Table(name: 'pets')]
 #[ORM\Index(name: 'idx_pets_owner_id', columns: ['owner_id'])]
-class Pet
+class Pet implements VersionedResource
 {
+    #[ORM\Column(options: ['default' => 1])]
+    private int $revision = 0;
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     private Uuid $id;
@@ -63,6 +67,11 @@ class Pet
         return $this->id;
     }
 
+    public function getRevision(): int
+    {
+        return $this->revision;
+    }
+
     public function getOwner(): Owner
     {
         return $this->owner;
@@ -106,6 +115,7 @@ class Pet
 
     public function update(array $data): void
     {
+        ++$this->revision;
         $this->name = $data['name'];
         $this->species = $data['species'];
         $this->breed = $data['breed'];

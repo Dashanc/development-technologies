@@ -1,4 +1,9 @@
 error:
+    precondition_required: 'Сначала загрузите текущие данные и передайте их ETag в заголовке If-Match.'
+    version_conflict: 'Данные уже изменены. Загрузите актуальную версию и повторите действие.'
+    idempotency_key_required: 'Для создания передайте уникальный ключ в заголовке Idempotency-Key.'
+    idempotency_key_invalid: 'Idempotency-Key должен содержать от 1 до 128 печатных символов ASCII без пробелов.'
+    idempotency_conflict: 'Этот ключ уже использован для другого запроса. Используйте новый ключ.'
     record_not_found: 'Медицинская запись не найдена.'
     pet_not_found: 'Питомец не найден.'
     email_already_used: 'Этот адрес электронной почты уже используется.'

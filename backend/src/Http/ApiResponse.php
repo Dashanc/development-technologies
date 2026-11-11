@@ -6,6 +6,8 @@ namespace App\Http;
 
 use App\Entity\Owner;
 use App\Model\AuthenticationResult;
+use App\Model\ResourceVersion;
+use App\Model\VersionedResource;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class ApiResponse
@@ -18,6 +20,14 @@ final class ApiResponse
     public static function error(int $status, string $code, string $message, array $fields = []): JsonResponse
     {
         return self::json(['error' => ['code' => $code, 'message' => $message, 'fields' => (object) $fields]], $status);
+    }
+
+    public static function resource(array $data, VersionedResource $resource, int $status = 200): JsonResponse
+    {
+        $response = self::json($data, $status);
+        $response->setEtag(ResourceVersion::tag($resource));
+
+        return $response;
     }
 
     public static function ownerData(Owner $owner): array

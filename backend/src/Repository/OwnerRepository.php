@@ -7,6 +7,8 @@ namespace App\Repository;
 use App\Entity\Account;
 use App\Entity\Owner;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class OwnerRepository extends ServiceEntityRepository
@@ -16,8 +18,14 @@ final class OwnerRepository extends ServiceEntityRepository
         parent::__construct($registry, Owner::class);
     }
 
-    public function findForAccount(Account $account): ?Owner
+    public function findForAccount(Account $account, bool $forUpdate = false): ?Owner
     {
-        return $this->findOneBy(['account' => $account]);
+        $query = $this->createQueryBuilder('owner')->addSelect('account')->join('owner.account', 'account')
+            ->where('owner.account = :account')->setParameter('account', $account)->getQuery();
+        if ($forUpdate) {
+            $query->setHint(Query::HINT_REFRESH, true)->setLockMode(LockMode::PESSIMISTIC_WRITE);
+        }
+
+        return $query->getOneOrNullResult();
     }
 }

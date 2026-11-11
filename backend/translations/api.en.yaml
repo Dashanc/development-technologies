@@ -1,4 +1,9 @@
 error:
+    precondition_required: 'Load the current resource and send its ETag in the If-Match header.'
+    version_conflict: 'The data has already changed. Load the latest version and try again.'
+    idempotency_key_required: 'Send a unique key in the Idempotency-Key header when creating a resource.'
+    idempotency_key_invalid: 'Idempotency-Key must contain 1 to 128 printable ASCII characters without spaces.'
+    idempotency_conflict: 'This key was already used for a different request. Use a new key.'
     record_not_found: 'Medical record not found.'
     pet_not_found: 'Pet not found.'
     email_already_used: 'This email address is already in use.'

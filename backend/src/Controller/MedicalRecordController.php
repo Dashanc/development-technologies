@@ -10,6 +10,7 @@ use App\Http\ApiResponse;
 use App\Http\JsonInput;
 use App\Http\MedicalRecordResponse;
 use App\Model\MedicalRecordType;
+use App\Service\IdempotencyService;
 use App\Service\MedicalRecordService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +25,10 @@ final class MedicalRecordController
 {
     private const COLLECTIONS = 'weight-records|vaccination-records|vet-visits';
 
-    public function __construct(private readonly MedicalRecordService $records)
-    {
+    public function __construct(
+        private readonly MedicalRecordService $records,
+        private readonly IdempotencyService $idempotency,
+    ) {
     }
 
     #[Route('/records', name: 'api_records_history', methods: ['GET'])]
@@ -52,25 +55,44 @@ final class MedicalRecordController
     #[Route('/{collection}', name: 'api_records_create', requirements: ['collection' => self::COLLECTIONS], methods: ['POST'])]
     public function create(string $petId, string $collection, Request $request, #[CurrentUser] Account $account): JsonResponse
     {
-        return ApiResponse::json(MedicalRecordResponse::data($this->records->create($account, $petId, MedicalRecordType::fromCollection($collection), JsonInput::read($request))), 201);
+        $input = JsonInput::read($request);
+
+        return $this->idempotency->create(
+            $account,
+            $request->headers->get('Idempotency-Key'),
+            $request->getPathInfo(),
+            $input,
+            function () use ($account, $petId, $collection, $input): JsonResponse {
+                $record = $this->records->create($account, $petId, MedicalRecordType::fromCollection($collection), $input);
+
+                return ApiResponse::resource(MedicalRecordResponse::data($record), $record, 201);
+            },
+        );
     }
 
     #[Route('/{collection}/{id}', name: 'api_records_get', requirements: ['collection' => self::COLLECTIONS], methods: ['GET'])]
     public function get(string $petId, string $collection, string $id, #[CurrentUser] Account $account): JsonResponse
     {
-        return ApiResponse::json(MedicalRecordResponse::data($this->records->get($account, $petId, MedicalRecordType::fromCollection($collection), $id)));
+        $record = $this->records->get($account, $petId, MedicalRecordType::fromCollection($collection), $id);
+
+        return ApiResponse::resource(MedicalRecordResponse::data($record), $record);
     }
 
     #[Route('/{collection}/{id}', name: 'api_records_update', requirements: ['collection' => self::COLLECTIONS], methods: ['PATCH'])]
     public function update(string $petId, string $collection, string $id, Request $request, #[CurrentUser] Account $account): JsonResponse
     {
-        return ApiResponse::json(MedicalRecordResponse::data($this->records->update($account, $petId, MedicalRecordType::fromCollection($collection), $id, JsonInput::read($request))));
+        $record = $this->records->update(
+            $account, $petId, MedicalRecordType::fromCollection($collection), $id,
+            JsonInput::read($request), $request->headers->get('If-Match'),
+        );
+
+        return ApiResponse::resource(MedicalRecordResponse::data($record), $record);
     }
 
     #[Route('/{collection}/{id}', name: 'api_records_delete', requirements: ['collection' => self::COLLECTIONS], methods: ['DELETE'])]
-    public function delete(string $petId, string $collection, string $id, #[CurrentUser] Account $account): Response
+    public function delete(string $petId, string $collection, string $id, Request $request, #[CurrentUser] Account $account): Response
     {
-        $this->records->delete($account, $petId, MedicalRecordType::fromCollection($collection), $id);
+        $this->records->delete($account, $petId, MedicalRecordType::fromCollection($collection), $id, $request->headers->get('If-Match'));
 
         return new Response(null, 204, ['Cache-Control' => 'no-store', 'Pragma' => 'no-cache']);
     }

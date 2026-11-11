@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\VersionedResource;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\MappedSuperclass]
-abstract class MedicalRecord
+abstract class MedicalRecord implements VersionedResource
 {
+    #[ORM\Column(options: ['default' => 1])]
+    private int $revision = 0;
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     private Uuid $id;
@@ -37,6 +41,11 @@ abstract class MedicalRecord
         return $this->id;
     }
 
+    public function getRevision(): int
+    {
+        return $this->revision;
+    }
+
     public function getPet(): Pet
     {
         return $this->pet;
@@ -54,6 +63,7 @@ abstract class MedicalRecord
 
     protected function updateCommon(array $data): void
     {
+        ++$this->revision;
         $this->date = $data['date'];
         $this->note = $data['note'];
     }

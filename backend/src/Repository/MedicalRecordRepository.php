@@ -11,8 +11,10 @@ use App\Entity\VetVisitRecord;
 use App\Entity\WeightRecord;
 use App\Model\MedicalRecordFilter;
 use App\Model\MedicalRecordType;
+use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Uid\Uuid;
 
@@ -22,13 +24,19 @@ final class MedicalRecordRepository
     {
     }
 
-    public function findForPet(Pet $pet, MedicalRecordType $type, string $id): ?MedicalRecord
+    public function findForPet(Pet $pet, MedicalRecordType $type, string $id, bool $forUpdate = false): ?MedicalRecord
     {
         if (!Uuid::isValid($id)) {
             return null;
         }
 
-        return $this->entityManager->getRepository($type->entityClass())->findOneBy(['pet' => $pet, 'id' => Uuid::fromString($id)]);
+        $query = $this->query($pet, $type->entityClass())->andWhere('r.id = :id')
+            ->setParameter('id', Uuid::fromString($id), 'uuid')->getQuery();
+        if ($forUpdate) {
+            $query->setHint(Query::HINT_REFRESH, true)->setLockMode(LockMode::PESSIMISTIC_WRITE);
+        }
+
+        return $query->getOneOrNullResult();
     }
 
     public function listForPet(Pet $pet, MedicalRecordType $type, MedicalRecordFilter $filter): array

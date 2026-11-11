@@ -25,12 +25,16 @@ final class OwnerController
     #[Route('', name: 'api_owner_get', methods: ['GET'])]
     public function get(#[CurrentUser] Account $account): JsonResponse
     {
-        return ApiResponse::json(ApiResponse::ownerData($this->profiles->get($account)));
+        $owner = $this->profiles->get($account);
+
+        return ApiResponse::resource(ApiResponse::ownerData($owner), $owner);
     }
 
     #[Route('', name: 'api_owner_update', methods: ['PATCH'])]
     public function update(Request $request, #[CurrentUser] Account $account): JsonResponse
     {
-        return ApiResponse::json(ApiResponse::ownerData($this->profiles->update($account, JsonInput::read($request))));
+        $owner = $this->profiles->update($account, JsonInput::read($request), $request->headers->get('If-Match'));
+
+        return ApiResponse::resource(ApiResponse::ownerData($owner), $owner);
     }
 }

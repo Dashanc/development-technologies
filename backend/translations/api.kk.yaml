@@ -1,4 +1,9 @@
 error:
+    precondition_required: 'Алдымен ағымдағы деректерді жүктеп, олардың ETag мәнін If-Match тақырыбында жіберіңіз.'
+    version_conflict: 'Деректер өзгертілген. Соңғы нұсқасын жүктеп, әрекетті қайталаңыз.'
+    idempotency_key_required: 'Жаңа дерек жасау үшін Idempotency-Key тақырыбында бірегей кілт жіберіңіз.'
+    idempotency_key_invalid: 'Idempotency-Key бос орынсыз 1–128 басып шығарылатын ASCII таңбасынан тұруы керек.'
+    idempotency_conflict: 'Бұл кілт басқа сұрау үшін қолданылған. Жаңа кілтті пайдаланыңыз.'
     record_not_found: 'Медициналық жазба табылмады.'
     pet_not_found: 'Үй жануары табылмады.'
     email_already_used: 'Бұл электрондық пошта мекенжайы қолданыста.'

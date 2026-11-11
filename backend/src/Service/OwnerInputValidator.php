@@ -78,7 +78,12 @@ final class OwnerInputValidator
             return '';
         }
 
-        return preg_replace('/^[\s\p{Z}]+|[\s\p{Z}]+$/u', '', $value) ?? '';
+        $value = preg_replace('/^[\s\p{Z}]+|[\s\p{Z}]+$/u', '', $value) ?? '';
+        if (str_contains($value, "\0")) {
+            $errors[$field] = 'validation.invalid_characters';
+        }
+
+        return $value;
     }
 
     private function password(#[\SensitiveParameter] mixed $value, int $minimum, array &$errors): string
@@ -87,6 +92,10 @@ final class OwnerInputValidator
             $errors['password'] = 'validation.password_required';
 
             return '';
+        }
+
+        if (str_contains($value, "\0")) {
+            $errors['password'] = 'validation.invalid_characters';
         }
 
         $this->validate($value, 'password', [new Assert\Length(

@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\VersionedResource;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'owners')]
-class Owner
+class Owner implements VersionedResource
 {
+    #[ORM\Column(options: ['default' => 1])]
+    private int $revision = 1;
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     private Uuid $id;
@@ -39,6 +43,11 @@ class Owner
         return $this->id;
     }
 
+    public function getRevision(): int
+    {
+        return $this->revision;
+    }
+
     public function getAccount(): Account
     {
         return $this->account;
@@ -56,6 +65,7 @@ class Owner
 
     public function update(string $name, ?string $phone): void
     {
+        ++$this->revision;
         $this->name = $name;
         $this->phone = $phone;
     }
