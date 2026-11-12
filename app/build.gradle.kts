@@ -1,7 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.serialization)
 }
+
+val localConfiguration = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.isFile) file.inputStream().use { load(it) }
+}
+val apiUrl = providers.gradleProperty("murpassport.apiUrl")
+    .orElse(providers.environmentVariable("MURPASSPORT_API_URL"))
+    .orElse(localConfiguration.getProperty("murpassport.apiUrl", ""))
+    .get()
+val quotedApiUrl = "\"" + apiUrl.replace("\\", "\\\\").replace("\"", "\\\"")
+    .replace("\n", "\\n").replace("\r", "\\r") + "\""
 
 android {
     namespace = "com.example.mobile"
@@ -11,12 +24,17 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mobile"
+        buildConfigField("String", "API_BASE_URL", quotedApiUrl)
         minSdk = 33
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -38,6 +56,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.okhttp)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)

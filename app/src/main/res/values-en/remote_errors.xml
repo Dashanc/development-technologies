@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="remote_error_network">Cannot connect to the server. Check your connection.</string>
+    <string name="remote_error_timeout">The server did not respond in time. Try again.</string>
+    <string name="remote_error_authentication">Sign in to your account again.</string>
+    <string name="remote_error_access">You do not have access to this data.</string>
+    <string name="remote_error_conflict">The request conflicts with saved data. Refresh the data.</string>
+    <string name="remote_error_version">The data has already changed. Load the latest version.</string>
+    <string name="remote_error_rate">Too many requests. Try again later.</string>
+    <string name="remote_error_server">The server is temporarily unavailable. Try again later.</string>
+    <string name="remote_error_response">Could not read the server response.</string>
+    <string name="remote_error_configuration">The server connection is not configured.</string>
+</resources>

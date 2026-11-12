@@ -128,7 +128,7 @@ class RegistrationPresenter(
             when (val result = owners.save(newOwner)) {
                 is RepositoryResult.Failure -> failSaving(result.error)
                 is RepositoryResult.Success -> {
-                    owner = newOwner
+                    owner = result.value
                     mutableState.value = state.value.copy(saving = false, hasOwner = true, openProfile = true)
                 }
             }

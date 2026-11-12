@@ -163,7 +163,7 @@ class EditPetPresenter(
         val errors = PetFormValidator.validate(current.input, today)
         mutableState.value = current.copy(errors = errors, error = null)
         if (!errors.isEmpty) return
-        val updated = PetFormValidator.pet(source.id, source.ownerId, current.input, today)
+        val updated = PetFormValidator.pet(source.id, source.ownerId, current.input, today).copy(revision = source.revision)
         mutableState.value = state.value.copy(saving = true)
         scope.launch {
             if (updated.photoUri != null && updated.photoUri != source.photoUri && photos.retain(updated.photoUri) is RepositoryResult.Failure) {
@@ -177,7 +177,7 @@ class EditPetPresenter(
                     petMissing = result.error == RepositoryError.INVALID_REFERENCE,
                 )
                 is RepositoryResult.Success -> {
-                    original = updated
+                    original = result.value
                     mutableState.value = state.value.copy(saving = false, saved = true, destination = EditPetDestination.SAVED)
                 }
             }

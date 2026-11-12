@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="remote_error_network">Нет соединения с сервером. Проверьте подключение.</string>
+    <string name="remote_error_timeout">Сервер не ответил вовремя. Повторите попытку.</string>
+    <string name="remote_error_authentication">Войдите в аккаунт повторно.</string>
+    <string name="remote_error_access">Нет доступа к этим данным.</string>
+    <string name="remote_error_conflict">Запрос конфликтует с сохранёнными данными. Обновите данные.</string>
+    <string name="remote_error_version">Данные уже изменены. Загрузите актуальную версию.</string>
+    <string name="remote_error_rate">Слишком много запросов. Повторите позже.</string>
+    <string name="remote_error_server">Сервер временно недоступен. Повторите позже.</string>
+    <string name="remote_error_response">Не удалось прочитать ответ сервера.</string>
+    <string name="remote_error_configuration">Подключение к серверу не настроено.</string>
+</resources>

@@ -76,7 +76,7 @@ class DeletePetPresenter(
         mutableState.value = current.copy(deleting = true, error = null, cleanupFailed = false)
         scope.launch {
             if (!current.deleted) {
-                when (val result = pets.delete(pet.id)) {
+                when (val result = pets.delete(pet.id, pet.revision)) {
                     is RepositoryResult.Failure -> {
                         mutableState.value = state.value.copy(deleting = false, error = result.error)
                         return@launch

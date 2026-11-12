@@ -2,6 +2,7 @@ package com.example.mobile.ui.owner
 
 import com.example.mobile.R
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.ui.common.remoteStringResource
 
 internal fun RepositoryError.stringResource(): Int = when (this) {
     RepositoryError.READ_FAILED -> R.string.error_profile_read
@@ -10,4 +11,5 @@ internal fun RepositoryError.stringResource(): Int = when (this) {
     RepositoryError.UNSUPPORTED_SCHEMA -> R.string.error_local_schema
     RepositoryError.IDENTITY_CONFLICT -> R.string.error_profile_exists
     RepositoryError.INVALID_DATA, RepositoryError.INVALID_REFERENCE -> R.string.error_profile_data
+    else -> remoteStringResource()
 }

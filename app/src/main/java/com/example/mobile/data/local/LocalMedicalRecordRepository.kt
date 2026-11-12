@@ -3,6 +3,7 @@ package com.example.mobile.data.local
 import com.example.mobile.domain.model.MedicalRecord
 import com.example.mobile.domain.repository.MedicalRecordRepository
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.domain.repository.map
 
 internal class LocalMedicalRecordRepository(private val storage: PassportStorage) : MedicalRecordRepository {
     override fun observeRecords(petId: String) = storage.observe { data ->
@@ -25,9 +26,9 @@ internal class LocalMedicalRecordRepository(private val storage: PassportStorage
         data.copy(records = if (existing == null) data.records + local else data.records.map {
             if (it.id == record.id) local else it
         })
-    }
+    }.map { record }
 
-    override suspend fun delete(recordId: String) = storage.update { data ->
+    override suspend fun delete(recordId: String, revision: String?) = storage.update { data ->
         data.copy(records = data.records.filterNot { it.id == recordId })
     }
 }

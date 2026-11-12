@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface OwnerRepository {
     fun observeOwner(): Flow<RepositoryResult<Owner?>>
 
-    suspend fun save(owner: Owner): RepositoryResult<Unit>
+    suspend fun save(owner: Owner): RepositoryResult<Owner>
 }

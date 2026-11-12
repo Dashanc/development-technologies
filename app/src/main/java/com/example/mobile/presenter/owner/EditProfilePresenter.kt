@@ -77,7 +77,7 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
         val errors = OwnerFormValidator.validate(current.input)
         mutableState.value = current.copy(errors = errors, repositoryError = null)
         if (!errors.isEmpty) return
-        val updatedOwner = OwnerFormValidator.owner(original.id, current.input)
+        val updatedOwner = OwnerFormValidator.owner(original.id, current.input).copy(revision = original.revision)
         mutableState.value = state.value.copy(saving = true)
         scope.launch {
             when (val result = owners.save(updatedOwner)) {
@@ -85,7 +85,7 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
                     saving = false, repositoryError = result.error,
                 )
                 is RepositoryResult.Success -> {
-                    owner = updatedOwner
+                    owner = result.value
                     mutableState.value = state.value.copy(saving = false, saved = true)
                 }
             }

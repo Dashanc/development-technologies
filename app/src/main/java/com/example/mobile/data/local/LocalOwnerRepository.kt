@@ -3,6 +3,7 @@ package com.example.mobile.data.local
 import com.example.mobile.domain.model.Owner
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.domain.repository.map
 
 internal class LocalOwnerRepository(private val storage: PassportStorage) : OwnerRepository {
     override fun observeOwner() = storage.observe { it.owner?.toDomain() }
@@ -12,5 +13,5 @@ internal class LocalOwnerRepository(private val storage: PassportStorage) : Owne
             throw LocalDataException(RepositoryError.IDENTITY_CONFLICT)
         }
         data.copy(owner = owner.toLocal())
-    }
+    }.map { owner }
 }

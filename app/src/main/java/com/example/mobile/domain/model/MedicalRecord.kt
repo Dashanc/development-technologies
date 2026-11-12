@@ -7,6 +7,7 @@ sealed interface MedicalRecord {
     val petId: String
     val date: LocalDate
     val note: String?
+    val revision: String?
 }
 
 data class WeightRecord(
@@ -15,6 +16,7 @@ data class WeightRecord(
     override val date: LocalDate,
     val weightKg: Double,
     override val note: String? = null,
+    override val revision: String? = null,
 ) : MedicalRecord
 
 data class VaccinationRecord(
@@ -26,6 +28,7 @@ data class VaccinationRecord(
     val clinic: String? = null,
     val veterinarian: String? = null,
     override val note: String? = null,
+    override val revision: String? = null,
 ) : MedicalRecord
 
 data class VetVisitRecord(
@@ -39,4 +42,5 @@ data class VetVisitRecord(
     val recommendations: String? = null,
     val appointmentDate: LocalDate? = null,
     override val note: String? = null,
+    override val revision: String? = null,
 ) : MedicalRecord
