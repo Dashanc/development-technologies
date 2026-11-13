@@ -5,9 +5,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.mobile.domain.model.AccountMode
 import com.example.mobile.ui.navigation.AppNavigator
 import com.example.mobile.ui.navigation.NavigationHost
 import com.example.mobile.ui.navigation.ScreenNavigator
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), NavigationHost {
     private lateinit var appNavigator: AppNavigator
@@ -32,6 +37,18 @@ class MainActivity : AppCompatActivity(), NavigationHost {
         }
         appNavigator = AppNavigator(this, findViewById(R.id.bottom_navigation))
         appNavigator.attach(savedInstanceState == null)
+        val container = findViewById<android.view.View>(R.id.screen_container)
+        val authentication = (application as MurPassportApplication).repositories.authentication
+        if (authentication.session.value.mode == AccountMode.RESTORING) container.visibility = android.view.View.INVISIBLE
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                authentication.session.collect { session ->
+                    if (session.mode == AccountMode.SIGNED_OUT) appNavigator.requireAuthentication()
+                    if (session.mode == AccountMode.RESTORING) appNavigator.requireAuthentication(resumeProfile = true)
+                    container.visibility = android.view.View.VISIBLE
+                }
+            }
+        }
     }
 
     override fun onResume() {

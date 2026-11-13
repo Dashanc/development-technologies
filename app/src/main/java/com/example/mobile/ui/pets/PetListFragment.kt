@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.pets.PetListPresenter
 import com.example.mobile.R
 import com.example.mobile.ui.common.renderState
@@ -20,7 +19,6 @@ class PetListFragment : ScreenFragment(R.layout.fragment_pet_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repositories = LocalRepositories.get(requireContext())
         presenter = retainedPresenter { scope ->
             PetListPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, repositories.settings, scope)
         }
@@ -44,7 +42,7 @@ class PetListFragment : ScreenFragment(R.layout.fragment_pet_list) {
             list.isVisible = state.pets.isNotEmpty()
             val messageId = state.error?.petStringResource() ?: when {
                 state.loading -> R.string.pet_loading
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 state.pets.isEmpty() -> R.string.no_pets
                 else -> null
             }

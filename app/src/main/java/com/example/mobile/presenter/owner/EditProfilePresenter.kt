@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 data class EditProfileState(
     val input: OwnerInput = OwnerInput(),
     val errors: OwnerInputErrors = OwnerInputErrors(),
+    val serverErrors: Map<String, String> = emptyMap(),
     val loading: Boolean = true,
     val saving: Boolean = false,
     val hasOwner: Boolean = false,
@@ -59,6 +60,7 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
             input = input,
             errors = state.value.errors.clearChanged(state.value.input, input),
             repositoryError = null,
+            serverErrors = emptyMap(),
         )
     }
 
@@ -82,7 +84,7 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
         scope.launch {
             when (val result = owners.save(updatedOwner)) {
                 is RepositoryResult.Failure -> mutableState.value = state.value.copy(
-                    saving = false, repositoryError = result.error,
+                    saving = false, repositoryError = result.error, serverErrors = result.fieldErrors,
                 )
                 is RepositoryResult.Success -> {
                     owner = result.value

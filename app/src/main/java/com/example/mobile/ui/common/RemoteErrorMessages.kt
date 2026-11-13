@@ -13,5 +13,7 @@ internal fun RepositoryError.remoteStringResource(): Int = when (this) {
     RepositoryError.RATE_LIMITED -> R.string.remote_error_rate
     RepositoryError.SERVER_UNAVAILABLE -> R.string.remote_error_server
     RepositoryError.NOT_CONFIGURED -> R.string.remote_error_configuration
+    RepositoryError.SECURE_STORAGE_FAILED -> R.string.auth_error_storage
+    RepositoryError.INVALID_CREDENTIALS -> R.string.auth_error_credentials
     else -> R.string.remote_error_response
 }

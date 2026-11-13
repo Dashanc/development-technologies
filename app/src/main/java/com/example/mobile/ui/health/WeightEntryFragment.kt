@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.example.mobile.R
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.domain.model.WeightUnit
 import com.example.mobile.presenter.health.MedicalField
 import com.example.mobile.presenter.health.WeightEntryPresenter
@@ -13,7 +12,6 @@ import com.example.mobile.ui.common.retainedPresenter
 class WeightEntryFragment : MedicalEntryFragment(R.layout.fragment_weight_entry, 0) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repositories = LocalRepositories.get(requireContext())
         val presenter = retainedPresenter { scope -> WeightEntryPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope, repositories.settings) }
         val date = MedicalTextInput(view, R.id.record_date, R.id.record_date_field) {
             presenter.changeInput(presenter.state.value.input.copy(date = it), MedicalField.DATE)

@@ -1,85 +1,76 @@
 package com.example.mobile.presenter.owner
 
+import com.example.mobile.domain.model.AccountMode
 import com.example.mobile.domain.model.AppLanguage
-import com.example.mobile.domain.model.Owner
+import com.example.mobile.domain.repository.AuthenticationRepository
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
 import com.example.mobile.domain.repository.SettingsRepository
-import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-enum class RegistrationMessage { EXISTING_PROFILE, NO_PROFILE }
-
 data class RegistrationState(
     val input: OwnerInput = OwnerInput(),
     val errors: OwnerInputErrors = OwnerInputErrors(),
+    val serverErrors: Map<String, String> = emptyMap(),
     val language: AppLanguage = AppLanguage.RUSSIAN,
+    val login: Boolean = false,
     val consent: Boolean = false,
-    val passwordTooShort: Boolean = false,
+    val passwordInvalid: Boolean = false,
     val consentRequired: Boolean = false,
     val loading: Boolean = true,
     val saving: Boolean = false,
     val loadFailed: Boolean = false,
     val repositoryError: RepositoryError? = null,
-    val message: RegistrationMessage? = null,
+    val hasLocalProfile: Boolean = false,
     val hasOwner: Boolean = false,
     val openProfile: Boolean = false,
 )
 
 class RegistrationPresenter(
-    private val owners: OwnerRepository,
+    private val authentication: AuthenticationRepository,
+    private val localOwners: OwnerRepository,
     private val settings: SettingsRepository,
     private val scope: CoroutineScope,
     private val resumeProfile: Boolean,
 ) {
     private val mutableState = MutableStateFlow(RegistrationState())
     val state = mutableState.asStateFlow()
-    private var owner: Owner? = null
-    private val newOwnerId = UUID.randomUUID().toString()
     private var loadJob: Job? = null
 
-    init {
-        retry()
-    }
+    init { retry() }
 
     fun retry() {
         if (loadJob?.isActive == true || state.value.saving) return
         mutableState.value = state.value.copy(loading = true, loadFailed = false, repositoryError = null)
         loadJob = scope.launch {
-            when (val result = owners.observeOwner().first()) {
-                is RepositoryResult.Failure -> {
-                    failLoading(result.error)
-                    return@launch
-                }
-                is RepositoryResult.Success -> owner = result.value
-            }
-            when (val result = settings.observeSettings().first()) {
-                is RepositoryResult.Failure -> failLoading(result.error)
-                is RepositoryResult.Success -> mutableState.value = state.value.copy(
-                    loading = false,
-                    language = result.value.language,
-                    hasOwner = owner != null,
-                    message = if (owner != null) RegistrationMessage.EXISTING_PROFILE else null,
-                    openProfile = resumeProfile && owner != null,
-                )
-            }
+            val result = if (authentication.session.value.mode == AccountMode.RESTORING) {
+                val restored = authentication.session.first { it.mode != AccountMode.RESTORING }
+                restored.restoreError?.let { RepositoryResult.Failure(it) } ?: RepositoryResult.Success(Unit)
+            } else authentication.restore()
+            val preferences = settings.observeSettings().first()
+            val local = localOwners.observeOwner().first()
+            val active = authentication.session.value.mode in setOf(AccountMode.SERVER, AccountMode.LOCAL)
+            val error = (result as? RepositoryResult.Failure)?.error ?: (preferences as? RepositoryResult.Failure)?.error
+            mutableState.value = state.value.copy(
+                loading = false, loadFailed = error != null, repositoryError = error,
+                language = (preferences as? RepositoryResult.Success)?.value?.language ?: state.value.language,
+                hasLocalProfile = (local as? RepositoryResult.Success)?.value != null,
+                hasOwner = active, openProfile = resumeProfile && active,
+            )
         }
     }
 
     fun changeInput(input: OwnerInput) {
         if (!canEdit()) return
-        mutableState.value = state.value.copy(
-            input = input,
-            errors = state.value.errors.clearChanged(state.value.input, input),
-            repositoryError = null,
-            message = null,
-        )
+        mutableState.value = state.value.copy(input = input, errors = state.value.errors.clearChanged(state.value.input, input),
+            serverErrors = emptyMap(), repositoryError = null)
     }
 
     fun changeLanguage(language: AppLanguage) {
@@ -91,58 +82,78 @@ class RegistrationPresenter(
     }
 
     fun passwordChanged() {
-        if (state.value.passwordTooShort) mutableState.value = state.value.copy(passwordTooShort = false)
+        mutableState.value = state.value.copy(passwordInvalid = false, serverErrors = state.value.serverErrors - "password")
     }
 
-    fun submit(password: CharSequence) {
-        if (state.value.loading || state.value.saving) return
-        if (state.value.loadFailed) {
-            retry()
-            return
-        }
-        if (owner != null) {
-            openExistingProfile()
-            return
-        }
+    fun toggleLogin() {
+        if (!canEdit()) return
+        mutableState.value = state.value.copy(login = !state.value.login, errors = OwnerInputErrors(), serverErrors = emptyMap(),
+            passwordInvalid = false, consentRequired = false, repositoryError = null)
+    }
+
+    fun submit(password: CharArray): Boolean {
         val current = state.value
-        val errors = OwnerFormValidator.validate(current.input)
-        val passwordTooShort = password.length < 8 || password.isBlank()
-        mutableState.value = current.copy(
-            errors = errors,
-            passwordTooShort = passwordTooShort,
-            consentRequired = !current.consent,
-            repositoryError = null,
-            message = null,
-        )
-        if (!errors.isEmpty || passwordTooShort || !current.consent) return
-        val newOwner = OwnerFormValidator.owner(newOwnerId, current.input)
+        if (current.hasOwner) {
+            password.fill('\u0000')
+            mutableState.value = current.copy(openProfile = true)
+            return false
+        }
+        if (!canEdit()) {
+            password.fill('\u0000')
+            if (current.loadFailed) retry()
+            return false
+        }
+        val allErrors = OwnerFormValidator.validate(current.input)
+        val errors = if (current.login) OwnerInputErrors(email = allErrors.email) else allErrors
+        val length = password.concatToString().let { it.codePointCount(0, it.length) }
+        val invalid = if (current.login) length !in 1..128 else length !in 8..128
+        val consentRequired = !current.login && !current.consent
+        mutableState.value = current.copy(errors = errors, passwordInvalid = invalid, consentRequired = consentRequired,
+            repositoryError = null, serverErrors = emptyMap())
+        if (!errors.isEmpty || invalid || consentRequired) {
+            password.fill('\u0000')
+            return false
+        }
         mutableState.value = state.value.copy(saving = true)
-        scope.launch {
-            when (val result = settings.setLanguage(current.language)) {
-                is RepositoryResult.Failure -> {
-                    failSaving(result.error)
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            try {
+                val preferenceResult = settings.setLanguage(current.language)
+                if (preferenceResult is RepositoryResult.Failure) {
+                    fail(preferenceResult)
                     return@launch
                 }
-                is RepositoryResult.Success -> Unit
-            }
-            when (val result = owners.save(newOwner)) {
-                is RepositoryResult.Failure -> failSaving(result.error)
-                is RepositoryResult.Success -> {
-                    owner = result.value
-                    mutableState.value = state.value.copy(saving = false, hasOwner = true, openProfile = true)
+                val result = if (current.login) authentication.login(current.input.email.trim(), password) else {
+                    val owner = OwnerFormValidator.owner("", current.input)
+                    authentication.register(owner.name, owner.email, owner.phone, password)
                 }
+                when (result) {
+                    is RepositoryResult.Failure -> fail(result)
+                    is RepositoryResult.Success -> mutableState.value = state.value.copy(saving = false, hasOwner = true, openProfile = true)
+                }
+            } finally { password.fill('\u0000') }
+        }
+        return true
+    }
+
+    fun openLocalProfile() {
+        if (state.value.loading || state.value.saving || !state.value.hasLocalProfile) return
+        mutableState.value = state.value.copy(saving = true)
+        scope.launch {
+            when (val result = authentication.openLocalProfile()) {
+                is RepositoryResult.Failure -> fail(result)
+                is RepositoryResult.Success -> mutableState.value = state.value.copy(saving = false, openProfile = true)
             }
         }
     }
 
-    fun openExistingProfile() {
+    fun forgetSession() {
         if (state.value.loading || state.value.saving) return
-        if (state.value.loadFailed) {
-            retry()
-        } else if (owner != null) {
-            mutableState.value = state.value.copy(openProfile = true)
-        } else {
-            mutableState.value = state.value.copy(message = RegistrationMessage.NO_PROFILE)
+        mutableState.value = state.value.copy(saving = true)
+        scope.launch {
+            when (val result = authentication.logout()) {
+                is RepositoryResult.Failure -> fail(result)
+                is RepositoryResult.Success -> { mutableState.value = state.value.copy(saving = false); retry() }
+            }
         }
     }
 
@@ -152,14 +163,8 @@ class RegistrationPresenter(
         return true
     }
 
-    private fun canEdit() = !state.value.loading && !state.value.saving && !state.value.loadFailed && owner == null
-
-    private fun failLoading(error: RepositoryError) {
-        mutableState.value = state.value.copy(loading = false, loadFailed = true, repositoryError = error)
-    }
-
-    private fun failSaving(error: RepositoryError) {
-        mutableState.value = state.value.copy(saving = false, repositoryError = error)
-        if (error == RepositoryError.IDENTITY_CONFLICT) retry()
+    private fun canEdit() = !state.value.loading && !state.value.saving && !state.value.loadFailed && !state.value.hasOwner
+    private fun fail(failure: RepositoryResult.Failure) {
+        mutableState.value = state.value.copy(saving = false, repositoryError = failure.error, serverErrors = failure.fieldErrors)
     }
 }

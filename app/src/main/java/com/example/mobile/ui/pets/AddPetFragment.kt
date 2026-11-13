@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.domain.model.PetExtraData
 import com.example.mobile.presenter.pets.AddPetPresenter
 import com.example.mobile.R
@@ -40,7 +39,6 @@ class AddPetFragment : ScreenFragment(R.layout.fragment_add_pet), PetExtraDataHo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val repositories = LocalRepositories.get(requireContext())
         presenter = retainedPresenter { scope ->
             AddPetPresenter(repositories.owner, repositories.pets, repositories.petPhotos, scope)
         }
@@ -95,7 +93,7 @@ class AddPetFragment : ScreenFragment(R.layout.fragment_add_pet), PetExtraDataHo
             })
             view.findViewById<View>(R.id.back).isEnabled = !state.saving
             val messageId = state.error?.petStringResource() ?: when {
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 state.photoFailed -> R.string.error_pet_photo
                 state.photoLoading -> R.string.pet_photo_loading
                 state.errors.microchip != null -> R.string.error_pet_microchip

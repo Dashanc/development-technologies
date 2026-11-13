@@ -22,7 +22,10 @@ internal class RemoteFailure(
     val status: Int? = null,
 ) : RuntimeException()
 
-internal class RemoteOperations(private val sessions: StateFlow<RemoteSession?>) {
+internal class RemoteOperations(
+    private val sessions: StateFlow<RemoteSession?>,
+    private val unauthorized: (RemoteSession) -> Unit = {},
+) {
     private val revision = MutableStateFlow(0L)
 
     fun check(session: RemoteSession) {
@@ -31,26 +34,17 @@ internal class RemoteOperations(private val sessions: StateFlow<RemoteSession?>)
 
     fun refresh() = revision.update { it + 1 }
 
-    suspend fun <T> run(write: Boolean = false, block: suspend (RemoteSession) -> T): RepositoryResult<T> = try {
-        withContext(Dispatchers.Default) {
-            val session = sessions.value ?: throw RemoteFailure(RepositoryError.AUTHENTICATION_REQUIRED)
+    suspend fun <T> run(write: Boolean = false, block: suspend (RemoteSession) -> T): RepositoryResult<T> {
+        val session = sessions.value
+        val result = remoteResult {
+            if (session == null) throw RemoteFailure(RepositoryError.AUTHENTICATION_REQUIRED)
             val result = block(session)
             check(session)
             if (write) refresh()
-            RepositoryResult.Success(result)
+            result
         }
-    } catch (error: CancellationException) {
-        throw error
-    } catch (error: RemoteFailure) {
-        RepositoryResult.Failure(error.error, error.fields)
-    } catch (_: InterruptedIOException) {
-        RepositoryResult.Failure(RepositoryError.REQUEST_TIMEOUT)
-    } catch (_: IOException) {
-        RepositoryResult.Failure(RepositoryError.NETWORK_UNAVAILABLE)
-    } catch (_: IllegalArgumentException) {
-        RepositoryResult.Failure(RepositoryError.INVALID_RESPONSE)
-    } catch (_: DateTimeException) {
-        RepositoryResult.Failure(RepositoryError.INVALID_RESPONSE)
+        if (session != null && result is RepositoryResult.Failure && result.error == RepositoryError.AUTHENTICATION_REQUIRED) unauthorized(session)
+        return result
     }
 
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
@@ -58,4 +52,20 @@ internal class RemoteOperations(private val sessions: StateFlow<RemoteSession?>)
         combine(sessions, revision) { session, _ -> session }
             .mapLatest { run(block = read) }
             .distinctUntilChanged()
+}
+
+internal suspend fun <T> remoteResult(block: suspend () -> T): RepositoryResult<T> = try {
+    withContext(Dispatchers.Default) { RepositoryResult.Success(block()) }
+} catch (error: CancellationException) {
+    throw error
+} catch (error: RemoteFailure) {
+    RepositoryResult.Failure(error.error, error.fields)
+} catch (_: InterruptedIOException) {
+    RepositoryResult.Failure(RepositoryError.REQUEST_TIMEOUT)
+} catch (_: IOException) {
+    RepositoryResult.Failure(RepositoryError.NETWORK_UNAVAILABLE)
+} catch (_: IllegalArgumentException) {
+    RepositoryResult.Failure(RepositoryError.INVALID_RESPONSE)
+} catch (_: DateTimeException) {
+    RepositoryResult.Failure(RepositoryError.INVALID_RESPONSE)
 }

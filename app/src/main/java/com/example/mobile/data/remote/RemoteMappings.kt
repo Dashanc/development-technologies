@@ -39,7 +39,7 @@ internal fun validateId(id: String) {
     }
 }
 
-internal fun OwnerDto.toDomain(revision: String) = Owner(id.canonicalId(), name, email, phone.orEmpty(), revision)
+internal fun OwnerDto.toDomain(revision: String?) = Owner(id.canonicalId(), name, email, phone.orEmpty(), revision)
 
 internal fun PetDto.toDomain(photoUri: String?, revision: String?) = Pet(
     id = id.canonicalId(), ownerId = ownerId.canonicalId(), name = name,

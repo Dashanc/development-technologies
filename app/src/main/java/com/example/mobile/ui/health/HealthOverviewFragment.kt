@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.R
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.health.HealthOverviewPresenter
 import com.example.mobile.ui.common.ScreenFragment
 import com.example.mobile.ui.common.renderState
@@ -22,7 +21,6 @@ class HealthOverviewFragment : ScreenFragment(R.layout.fragment_health_overview)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.link(R.id.all_records, Screen.HEALTH_HISTORY)
-        val repositories = LocalRepositories.get(requireContext())
         presenter = retainedPresenter { scope -> HealthOverviewPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, scope, repositories.settings) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val pets = HealthPetAdapter(photos) { navigator.open(Screen.PET_PROFILE, it) }
@@ -45,7 +43,7 @@ class HealthOverviewFragment : ScreenFragment(R.layout.fragment_health_overview)
             val ready = !state.loading && state.error == null && !state.ownerMissing
             val messageId = state.error?.medicalStringResource() ?: when {
                 state.loading -> R.string.medical_loading
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 else -> null
             }
             message.isVisible = messageId != null

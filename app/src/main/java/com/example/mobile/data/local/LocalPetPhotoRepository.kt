@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 internal class LocalPetPhotoRepository(
     private val resolver: ContentResolver,
     private val storage: PassportStorage,
+    private val accounts: AccountPhotoStorage,
 ) : PetPhotoRepository {
     override suspend fun retain(uri: String): RepositoryResult<String> = withContext(Dispatchers.IO) {
         try {
@@ -41,6 +42,10 @@ internal class LocalPetPhotoRepository(
             is RepositoryResult.Failure -> result
             is RepositoryResult.Success -> {
                 if (result.value) return@withContext RepositoryResult.Success(Unit)
+                when (val account = accounts.read()) {
+                    is RepositoryResult.Failure -> return@withContext account
+                    is RepositoryResult.Success -> if (uri in account.value.photos.values) return@withContext RepositoryResult.Success(Unit)
+                }
                 try {
                     val photo = uri.toUri()
                     val grant = resolver.persistedUriPermissions.find { it.uri == photo && it.isReadPermission }

@@ -10,7 +10,7 @@ internal fun RepositoryError.petStringResource(): Int = when (this) {
     RepositoryError.WRITE_FAILED -> R.string.error_pet_write
     RepositoryError.CORRUPT_DATA -> R.string.error_local_data_corrupt
     RepositoryError.UNSUPPORTED_SCHEMA -> R.string.error_local_schema
-    RepositoryError.INVALID_REFERENCE -> R.string.local_profile_missing
+    RepositoryError.INVALID_REFERENCE -> R.string.account_required
     RepositoryError.INVALID_DATA, RepositoryError.IDENTITY_CONFLICT -> R.string.error_pet_data
     else -> remoteStringResource()
 }

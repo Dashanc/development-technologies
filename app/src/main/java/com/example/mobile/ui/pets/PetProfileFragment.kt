@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.pets.PetProfilePresenter
 import com.example.mobile.R
 import com.example.mobile.ui.common.renderState
@@ -26,7 +25,6 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
         view.link(R.id.history, Screen.HEALTH_HISTORY)
         view.link(R.id.upcoming_event, Screen.HEALTH_HISTORY)
         view.link(R.id.edit_pet, Screen.EDIT_PET)
-        val repositories = LocalRepositories.get(requireContext())
         presenter = retainedPresenter { scope -> PetProfilePresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope, repositories.settings) }
         val photos = PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope)
         val text = PetText(requireContext())
@@ -48,7 +46,7 @@ class PetProfileFragment : ScreenFragment(R.layout.fragment_pet_profile) {
             view.findViewById<View>(R.id.pet_profile_content).isVisible = card != null
             val messageId = state.error?.petStringResource() ?: when {
                 state.loading -> R.string.pet_loading
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 card == null -> R.string.pet_not_found
                 else -> null
             }

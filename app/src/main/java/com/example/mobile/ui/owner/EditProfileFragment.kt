@@ -6,7 +6,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.mobile.R
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.owner.EditProfilePresenter
 import com.example.mobile.ui.common.ScreenFragment
 import com.example.mobile.ui.common.renderState
@@ -18,7 +17,6 @@ import com.google.android.material.button.MaterialButton
 class EditProfileFragment : ScreenFragment(R.layout.fragment_edit_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repositories = LocalRepositories.get(requireContext())
         val presenter = retainedPresenter { scope -> EditProfilePresenter(repositories.owner, scope) }
         val fields = OwnerFormFields(view, presenter::changeInput)
         val save = view.findViewById<MaterialButton>(R.id.save)
@@ -28,7 +26,7 @@ class EditProfileFragment : ScreenFragment(R.layout.fragment_edit_profile) {
             fields.focusError(presenter.state.value.errors)
         }
         renderState(presenter.state) { state ->
-            fields.render(state.input, state.errors, state.hasOwner && !state.loading && !state.saving)
+            fields.render(state.input, state.errors, state.hasOwner && !state.loading && !state.saving, state.serverErrors)
             save.isEnabled = !state.loading && !state.saving
             save.setText(when {
                 state.loading -> R.string.profile_loading
@@ -40,7 +38,7 @@ class EditProfileFragment : ScreenFragment(R.layout.fragment_edit_profile) {
             view.findViewById<View>(R.id.back).isEnabled = !state.saving
             val messageId = state.repositoryError?.stringResource() ?: when {
                 state.loading -> R.string.profile_loading
-                !state.hasOwner -> R.string.local_profile_missing
+                !state.hasOwner -> R.string.account_required
                 else -> null
             }
             message.isVisible = messageId != null

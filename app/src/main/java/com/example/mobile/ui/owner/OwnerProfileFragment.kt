@@ -6,8 +6,8 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.owner.OwnerProfilePresenter
+import com.example.mobile.domain.model.AccountMode
 import com.example.mobile.R
 import com.example.mobile.ui.common.PhoneMask
 import com.example.mobile.ui.common.renderState
@@ -24,8 +24,19 @@ class OwnerProfileFragment : ScreenFragment(R.layout.fragment_owner_profile) {
         super.onViewCreated(view, savedInstanceState)
         view.link(R.id.edit_profile, Screen.EDIT_PROFILE)
         view.link(R.id.settings, Screen.SETTINGS)
-        val repositories = LocalRepositories.get(requireContext())
-        val presenter = retainedPresenter { scope -> OwnerProfilePresenter(repositories.owner, repositories.pets, scope) }
+        val presenter = retainedPresenter { scope -> OwnerProfilePresenter(repositories.owner, repositories.pets, repositories.authentication, scope) }
+        val logout = view.findViewById<MaterialButton>(R.id.logout)
+        val accountMessage = view.findViewById<TextView>(R.id.account_message)
+        logout.setOnClickListener { presenter.logout() }
+        renderState(presenter.account) { account ->
+            view.findViewById<TextView>(R.id.account_mode).setText(if (account.mode == AccountMode.LOCAL) R.string.auth_local_mode else R.string.auth_server_mode)
+            logout.setText(if (account.mode == AccountMode.LOCAL) R.string.auth_leave_local else R.string.auth_logout)
+        }
+        renderState(presenter.accountAction) { action ->
+            logout.isEnabled = !action.busy
+            accountMessage.isVisible = action.error != null
+            accountMessage.text = action.error?.let { getString(it.stringResource()) }
+        }
         val petList = view.findViewById<RecyclerView>(R.id.owner_pets_list)
         val petAdapter = PetCardAdapter(PetAvatarLoader(requireContext(), viewLifecycleOwner.lifecycleScope), ownerCards = true) {
             navigator.open(Screen.PET_PROFILE, it)
@@ -56,7 +67,7 @@ class OwnerProfileFragment : ScreenFragment(R.layout.fragment_owner_profile) {
             petsEmpty.setText(if (state.petsLoading) R.string.pet_loading else R.string.no_pets)
             val messageId = state.error?.stringResource() ?: state.petError?.petStringResource() ?: when {
                 state.loading -> R.string.profile_loading
-                state.owner == null -> R.string.local_profile_missing
+                state.owner == null -> R.string.account_required
                 else -> null
             }
             message.isVisible = messageId != null

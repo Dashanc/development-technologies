@@ -4,13 +4,15 @@ import com.example.mobile.data.remote.dto.PetDto
 import com.example.mobile.domain.model.Pet
 import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.domain.repository.RepositoryResult
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.encodeToJsonElement
 
 internal class RemotePetRepository(
     private val api: ApiClient,
     private val operations: RemoteOperations,
-    private val localPhoto: (ownerId: String, petId: String) -> String?,
+    private val localPhoto: suspend (ownerId: String, petId: String) -> String?,
+    private val savePhoto: suspend (ownerId: String, petId: String, uri: String?) -> RepositoryResult<Unit>,
 ) : PetRepository {
     override fun observePets(ownerId: String) = operations.observe { session ->
         if (session.ownerId != ownerId) throw RemoteFailure(RepositoryError.ACCESS_DENIED)
@@ -34,6 +36,7 @@ internal class RemotePetRepository(
     override suspend fun delete(petId: String, revision: String?) = operations.run(write = true) { session ->
         validateId(petId)
         api.request(session, "DELETE", listOf("pets", petId), etag = api.version(revision))
+        persistPhoto(session, petId, null)
         session.metadata.pets.remove(petId)
         session.metadata.photos.remove(petId)
         session.metadata.records.entries.removeIf { it.value.petId == petId }
@@ -70,11 +73,12 @@ internal class RemotePetRepository(
             }
         }
         val result = read(session, response, if (pet.revision != null) pet.id else null)
+        persistPhoto(session, result.id, pet.photoUri)
         session.metadata.photos[result.id] = pet.photoUri.orEmpty()
         result.copy(photoUri = pet.photoUri)
     }
 
-    private fun read(session: RemoteSession, response: ApiPayload, expectedId: String?): Pet {
+    private suspend fun read(session: RemoteSession, response: ApiPayload, expectedId: String?): Pet {
         val dto = api.decode(response, PetDto.serializer())
         val pet = dto.toDomain(photo(session, dto.id), api.revision(response))
         if (pet.ownerId != session.ownerId || (expectedId != null && pet.id != expectedId)) {
@@ -84,7 +88,13 @@ internal class RemotePetRepository(
         return pet
     }
 
-    private fun photo(session: RemoteSession, petId: String): String? =
+    private suspend fun persistPhoto(session: RemoteSession, petId: String, uri: String?) {
+        operations.check(session)
+        val result = savePhoto(session.ownerId, petId, uri)
+        if (result is RepositoryResult.Failure) throw RemoteFailure(result.error)
+    }
+
+    private suspend fun photo(session: RemoteSession, petId: String): String? =
         if (session.metadata.photos.containsKey(petId)) session.metadata.photos[petId]?.takeIf { it.isNotEmpty() }
         else localPhoto(session.ownerId, petId)
 }

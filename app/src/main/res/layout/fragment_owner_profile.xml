@@ -33,6 +33,11 @@
         <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarPersonLarge" />
         <TextView
             style="@style/MpCaption"
+            android:id="@+id/account_mode"
+            android:gravity="center"
+            android:text="@string/auth_server_mode" />
+        <TextView
+            style="@style/MpCaption"
             android:id="@+id/profile_message"
             android:gravity="center"
             android:accessibilityLiveRegion="polite"
@@ -106,5 +111,14 @@
                 style="@style/MpIconSmall"
                 app:srcCompat="@drawable/ic_chevron_right" />
         </LinearLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/account_message"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/logout"
+            android:text="@string/auth_logout" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -24,7 +24,7 @@ import okhttp3.Response
 internal class ApiClient(
     baseUrl: String,
     private val operations: RemoteOperations,
-    private val language: () -> AppLanguage,
+    private val language: suspend () -> AppLanguage,
 ) {
     val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; classDiscriminator = "type" }
     private val base = baseUrl.toHttpUrlOrNull()?.takeIf {
@@ -35,30 +35,33 @@ internal class ApiClient(
         .connectTimeout(10, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS).callTimeout(30, TimeUnit.SECONDS)
         .followRedirects(false).followSslRedirects(false).retryOnConnectionFailure(false).build()
 
+    val server: String get() = base?.toString() ?: throw RemoteFailure(RepositoryError.NOT_CONFIGURED)
+
     suspend fun request(
-        session: RemoteSession,
+        session: RemoteSession?,
         method: String,
         path: List<String>,
         body: JsonElement? = null,
         etag: String? = null,
         key: String? = null,
     ): ApiPayload {
-        operations.check(session)
+        session?.let(operations::check)
         val url = (base ?: throw RemoteFailure(RepositoryError.NOT_CONFIGURED)).newBuilder()
         url.addPathSegment("api").addPathSegment("v1")
         path.forEach(url::addPathSegment)
         val builder = Request.Builder().url(url.build())
-            .header("Authorization", session.authorization()).header("Accept", "application/json")
+            .header("Accept", "application/json")
             .header("Accept-Language", language().languageTag)
+        session?.let { builder.header("Authorization", it.authorization()) }
         etag?.let { builder.header("If-Match", it) }
         key?.let { builder.header("Idempotency-Key", it) }
         val response = execute(builder.method(method, body?.toString()?.toRequestBody("application/json; charset=utf-8".toMediaType())).build())
-        operations.check(session)
+        session?.let(operations::check)
         if (response.status !in 200..299) {
             val detail = runCatching { json.decodeFromString<ApiErrorEnvelope>(response.body).error }.getOrNull()
             val error = when (response.status) {
                 400, 422 -> RepositoryError.INVALID_DATA
-                401 -> RepositoryError.AUTHENTICATION_REQUIRED
+                401 -> if (session == null) RepositoryError.INVALID_CREDENTIALS else RepositoryError.AUTHENTICATION_REQUIRED
                 403 -> RepositoryError.ACCESS_DENIED
                 404 -> RepositoryError.INVALID_REFERENCE
                 409 -> if (detail?.code == "EMAIL_ALREADY_USED") RepositoryError.IDENTITY_CONFLICT else RepositoryError.CONFLICT

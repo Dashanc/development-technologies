@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.R
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.health.HealthHistoryPresenter
 import com.example.mobile.presenter.health.MedicalHistoryFilter
 import com.example.mobile.ui.common.ScreenFragment
@@ -19,7 +18,6 @@ import com.google.android.material.button.MaterialButton
 class HealthHistoryFragment : ScreenFragment(R.layout.fragment_health_history) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repositories = LocalRepositories.get(requireContext())
         val presenter = retainedPresenter { scope -> HealthHistoryPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope, repositories.settings) }
         val adapter = MedicalHistoryAdapter()
         val list = view.findViewById<RecyclerView>(R.id.health_records)
@@ -60,7 +58,7 @@ class HealthHistoryFragment : ScreenFragment(R.layout.fragment_health_history) {
             })
             val messageId = state.error?.medicalStringResource() ?: when {
                 state.loading -> R.string.medical_loading
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 state.petMissing -> R.string.pet_not_found
                 state.noPets -> R.string.medical_no_pets
                 state.items.isEmpty() && state.filter != MedicalHistoryFilter.ALL -> R.string.history_no_matching_records
