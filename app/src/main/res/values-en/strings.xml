@@ -132,7 +132,7 @@
     <string name="no_health_records">No health records yet</string>
     <string name="no_upcoming_events">No scheduled events</string>
     <string name="terms_unavailable">Placeholder: this text needs legal and factual review before a real release. The app does not diagnose conditions or replace veterinary advice.</string>
-    <string name="privacy_unavailable">Placeholder: this text needs legal and factual review before a real release. In server mode, the profile, pets and medical records are sent to the server. The password is sent only for registration or sign-in and is not saved by the app. The session token is stored encrypted with an Android Keystore key. Photos and settings stay on the device. The previous local profile is not sent automatically. Reminders are local notifications, without push.</string>
+    <string name="privacy_unavailable">Placeholder: this text needs legal and factual review before a real release. In server mode, the profile, pets and medical records are sent to the server. The password is sent only for registration or sign-in and is not saved by the app. The session token is stored encrypted with an Android Keystore key. Photos and settings stay on the device. The previous local profile is not sent automatically. Reminders are local notifications, without push. Received server data is also saved on this device for offline viewing. Offline changes are not sent automatically. The account cache is cleared on sign-out.</string>
     <string name="about_description">MurPassport is an app for pet profiles and health records. It does not replace advice from a veterinarian.</string>
     <string name="error_name_required">Enter your name.</string>
     <string name="error_email_required">Enter your email address.</string>

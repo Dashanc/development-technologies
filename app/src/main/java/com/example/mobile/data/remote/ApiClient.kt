@@ -36,6 +36,7 @@ internal class ApiClient(
         .followRedirects(false).followSslRedirects(false).retryOnConnectionFailure(false).build()
 
     val server: String get() = base?.toString() ?: throw RemoteFailure(RepositoryError.NOT_CONFIGURED)
+    internal val serverIdentity: String get() = base?.toString().orEmpty()
 
     suspend fun request(
         session: RemoteSession?,

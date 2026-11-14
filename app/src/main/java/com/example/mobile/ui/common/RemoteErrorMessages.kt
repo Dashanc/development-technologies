@@ -15,5 +15,6 @@ internal fun RepositoryError.remoteStringResource(): Int = when (this) {
     RepositoryError.NOT_CONFIGURED -> R.string.remote_error_configuration
     RepositoryError.SECURE_STORAGE_FAILED -> R.string.auth_error_storage
     RepositoryError.INVALID_CREDENTIALS -> R.string.auth_error_credentials
+    RepositoryError.OFFLINE_WRITE_NOT_ALLOWED -> R.string.cache_write_offline
     else -> R.string.remote_error_response
 }

@@ -36,7 +36,8 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
 
     fun retry() {
         if (loadJob?.isActive == true || state.value.saving) return
-        mutableState.value = state.value.copy(loading = true, loadFailed = false, repositoryError = null)
+        mutableState.value = state.value.copy(loading = true, loadFailed = false, repositoryError = null,
+            errors = OwnerInputErrors(), serverErrors = emptyMap())
         loadJob = scope.launch {
             when (val result = owners.observeOwner().first()) {
                 is RepositoryResult.Failure -> mutableState.value = state.value.copy(
@@ -85,6 +86,7 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
             when (val result = owners.save(updatedOwner)) {
                 is RepositoryResult.Failure -> mutableState.value = state.value.copy(
                     saving = false, repositoryError = result.error, serverErrors = result.fieldErrors,
+                    loadFailed = result.error == RepositoryError.VERSION_CONFLICT,
                 )
                 is RepositoryResult.Success -> {
                     owner = result.value

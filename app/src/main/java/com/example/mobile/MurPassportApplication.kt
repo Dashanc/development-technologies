@@ -36,5 +36,6 @@ class MurPassportApplication : Application() {
     internal fun refreshSettings() {
         appearance.start(scope)
         reminders.refresh()
+        repositories.dataStatus.refresh()
     }
 }

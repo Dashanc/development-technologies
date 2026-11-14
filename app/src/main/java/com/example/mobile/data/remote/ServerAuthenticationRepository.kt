@@ -3,6 +3,7 @@ package com.example.mobile.data.remote
 import com.example.mobile.data.local.SecureSessionStorage
 import com.example.mobile.data.local.AccountModeStorage
 import com.example.mobile.data.local.StoredSession
+import com.example.mobile.data.cache.allowsCachedRead
 import com.example.mobile.domain.model.AccountMode
 import com.example.mobile.domain.model.AccountSession
 import com.example.mobile.domain.model.Owner
@@ -18,6 +19,11 @@ import java.io.IOException
 import java.security.GeneralSecurityException
 import java.security.ProviderException
 import java.time.Instant
+import java.time.Duration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,11 +41,15 @@ internal class ServerAuthenticationRepository(
     private val storage: SecureSessionStorage,
     private val localOwner: OwnerRepository,
     private val modeStorage: AccountModeStorage,
+    private val scope: CoroutineScope,
+    private val networkAvailable: () -> Boolean,
+    private val hasCachedOwner: suspend (String, String) -> Boolean,
     private val clearAccount: suspend () -> Unit,
 ) : AuthenticationRepository {
     private val mutableSession = MutableStateFlow(AccountSession())
     override val session = mutableSession.asStateFlow()
     private val mutex = Mutex()
+    private var expiryJob: Job? = null
 
     override suspend fun restore(): RepositoryResult<Unit> = mutex.withLock {
         if (session.value.mode != AccountMode.RESTORING && session.value.restoreError == null) return@withLock RepositoryResult.Success(Unit)
@@ -65,23 +75,31 @@ internal class ServerAuthenticationRepository(
             }
             val active = RemoteSession(saved.token, saved.ownerId)
             sessions.value = active
-            try {
+            val cached = hasCachedOwner(active.ownerId, api.server)
+            if (cached) {
+                activate(active, saved.expiresAt)
+                if (!networkAvailable()) return@remoteResult
+            }
+            val validation = remoteResult {
                 val response = api.request(active, "GET", listOf("auth", "session"))
                 val detail = api.decode(response, SessionDto.serializer())
                 if (detail.owner.id != active.ownerId || !Instant.parse(detail.expiresAt).isAfter(Instant.now())) {
                     throw RemoteFailure(RepositoryError.INVALID_RESPONSE)
                 }
                 secure { storage.write(StoredSession(saved.token, active.ownerId, detail.expiresAt, api.server)) }
-                mutableSession.value = AccountSession(AccountMode.SERVER, active.ownerId)
-            } catch (error: RemoteFailure) {
-                if (error.error == RepositoryError.AUTHENTICATION_REQUIRED) {
+                activate(active, detail.expiresAt)
+            }
+            if (validation is RepositoryResult.Failure) {
+                if (cached && validation.error.allowsCachedRead()) return@remoteResult
+                if (validation.error == RepositoryError.AUTHENTICATION_REQUIRED) {
                     clear()
                     return@remoteResult
                 }
-                throw error
+                throw RemoteFailure(validation.error, validation.fieldErrors)
             }
         }
         if (result is RepositoryResult.Failure) {
+            expiryJob?.cancel()
             sessions.value = null
             mutableSession.value = AccountSession(AccountMode.SIGNED_OUT, restoreError = result.error)
         }
@@ -111,7 +129,7 @@ internal class ServerAuthenticationRepository(
                     clearAccount()
                     secure { storage.write(StoredSession(detail.token, active.ownerId, detail.expiresAt, api.server)) }
                     sessions.value = active
-                    mutableSession.value = AccountSession(AccountMode.SERVER, active.ownerId)
+                    activate(active, detail.expiresAt)
                 }
                 detail.owner.toDomain(null)
             }
@@ -149,6 +167,7 @@ internal class ServerAuthenticationRepository(
     }
 
     private suspend fun clear() = withContext(NonCancellable) {
+        expiryJob?.cancel()
         sessions.value = null
         try {
             secure { storage.clear() }
@@ -162,6 +181,15 @@ internal class ServerAuthenticationRepository(
             } finally {
                 mutableSession.value = AccountSession(AccountMode.SIGNED_OUT)
             }
+        }
+    }
+
+    private fun activate(active: RemoteSession, expiresAt: String) {
+        mutableSession.value = AccountSession(AccountMode.SERVER, active.ownerId)
+        expiryJob?.cancel()
+        expiryJob = scope.launch {
+            delay(Duration.between(Instant.now(), Instant.parse(expiresAt)).toMillis().coerceAtLeast(0))
+            expire(active)
         }
     }
 

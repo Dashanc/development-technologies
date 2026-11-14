@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cache_updating">Обновляем данные с сервера…</string>
+    <string name="cache_showing_saved">Показаны сохранённые данные. Для изменений требуется соединение с сервером.</string>
+    <string name="cache_error_storage">Не удалось прочитать или сохранить кэш. Повторите попытку.</string>
+    <string name="cache_no_data">Сохранённых данных пока нет. Подключитесь к серверу.</string>
+    <string name="cache_write_offline">Нет сети. Изменения не сохранены и не будут отправлены автоматически.</string>
+    <string name="cache_saved_at">%1$s\nПоследнее полное обновление: %2$s</string>
+</resources>

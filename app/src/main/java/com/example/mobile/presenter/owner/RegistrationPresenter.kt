@@ -53,7 +53,8 @@ class RegistrationPresenter(
             val result = if (authentication.session.value.mode == AccountMode.RESTORING) {
                 val restored = authentication.session.first { it.mode != AccountMode.RESTORING }
                 restored.restoreError?.let { RepositoryResult.Failure(it) } ?: RepositoryResult.Success(Unit)
-            } else authentication.restore()
+            } else if (authentication.session.value.mode in setOf(AccountMode.SERVER, AccountMode.LOCAL)) RepositoryResult.Success(Unit)
+            else authentication.restore()
             val preferences = settings.observeSettings().first()
             val local = localOwners.observeOwner().first()
             val active = authentication.session.value.mode in setOf(AccountMode.SERVER, AccountMode.LOCAL)

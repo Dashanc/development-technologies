@@ -15,6 +15,7 @@ class LocalRepositories private constructor(context: Context) {
     private val storage = PassportStorage(preferences)
     internal val accountPhotos = AccountPhotoStorage(preferences)
     internal val accountMode = AccountModeStorage(preferences)
+    internal val accountCache = AccountCacheStorage(preferences)
 
     val owner: OwnerRepository = LocalOwnerRepository(storage)
     val pets: PetRepository = LocalPetRepository(storage)

@@ -50,6 +50,7 @@ class EditPetPresenter(
     private var original: Pet? = null
     private var loadJob: Job? = null
     private var pendingPhoto: String? = null
+    private var reloadAfterConflict = false
 
     init {
         retry()
@@ -80,7 +81,12 @@ class EditPetPresenter(
                             if (pet == null) {
                                 mutableState.value = state.value.copy(loading = false, hasPet = false, petMissing = true)
                             } else {
-                                val input = if (original == null) restoredInput ?: pet.toInput() else state.value.input
+                                val input = when {
+                                    reloadAfterConflict -> pet.toInput()
+                                    original == null -> restoredInput ?: pet.toInput()
+                                    else -> state.value.input
+                                }
+                                reloadAfterConflict = false
                                 original = pet
                                 mutableState.value = state.value.copy(input = input, loading = false, hasPet = true)
                                 pendingPhoto?.let {
@@ -171,11 +177,14 @@ class EditPetPresenter(
                 return@launch
             }
             when (val result = pets.update(updated)) {
-                is RepositoryResult.Failure -> mutableState.value = state.value.copy(
-                    saving = false,
-                    error = result.error.takeUnless { it == RepositoryError.INVALID_REFERENCE },
-                    petMissing = result.error == RepositoryError.INVALID_REFERENCE,
-                )
+                is RepositoryResult.Failure -> {
+                    reloadAfterConflict = result.error == RepositoryError.VERSION_CONFLICT
+                    mutableState.value = state.value.copy(
+                        saving = false, loadFailed = reloadAfterConflict,
+                        error = result.error.takeUnless { it == RepositoryError.INVALID_REFERENCE },
+                        petMissing = result.error == RepositoryError.INVALID_REFERENCE,
+                    )
+                }
                 is RepositoryResult.Success -> {
                     original = result.value
                     mutableState.value = state.value.copy(saving = false, saved = true, destination = EditPetDestination.SAVED)

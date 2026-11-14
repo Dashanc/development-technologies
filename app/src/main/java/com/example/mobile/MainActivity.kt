@@ -9,6 +9,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.mobile.domain.model.AccountMode
+import com.example.mobile.presenter.DataStatusPresenter
+import com.example.mobile.ui.common.DataStatusBanner
 import com.example.mobile.ui.navigation.AppNavigator
 import com.example.mobile.ui.navigation.NavigationHost
 import com.example.mobile.ui.navigation.ScreenNavigator
@@ -37,8 +39,10 @@ class MainActivity : AppCompatActivity(), NavigationHost {
         }
         appNavigator = AppNavigator(this, findViewById(R.id.bottom_navigation))
         appNavigator.attach(savedInstanceState == null)
+        val repositories = (application as MurPassportApplication).repositories
+        DataStatusBanner(findViewById(R.id.main), this, DataStatusPresenter(repositories.dataStatus, lifecycleScope))
         val container = findViewById<android.view.View>(R.id.screen_container)
-        val authentication = (application as MurPassportApplication).repositories.authentication
+        val authentication = repositories.authentication
         if (authentication.session.value.mode == AccountMode.RESTORING) container.visibility = android.view.View.INVISIBLE
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {

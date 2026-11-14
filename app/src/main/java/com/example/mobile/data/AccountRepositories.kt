@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.emptyFlow
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class AccountSource(private val session: StateFlow<AccountSession>) {
@@ -23,6 +24,7 @@ internal class AccountSource(private val session: StateFlow<AccountSession>) {
         session.flatMapLatest { state -> when (state.mode) {
             AccountMode.LOCAL -> local()
             AccountMode.SERVER -> server()
+            AccountMode.RESTORING -> emptyFlow()
             else -> flowOf(RepositoryResult.Success(empty))
         } }
 }
