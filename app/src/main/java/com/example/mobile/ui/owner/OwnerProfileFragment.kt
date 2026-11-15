@@ -18,13 +18,17 @@ import com.example.mobile.ui.pets.PetAvatarLoader
 import com.example.mobile.ui.pets.PetCardAdapter
 import com.example.mobile.ui.pets.petStringResource
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.flow.combine
 
 class OwnerProfileFragment : ScreenFragment(R.layout.fragment_owner_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.link(R.id.edit_profile, Screen.EDIT_PROFILE)
         view.link(R.id.settings, Screen.SETTINGS)
-        val presenter = retainedPresenter { scope -> OwnerProfilePresenter(repositories.owner, repositories.pets, repositories.authentication, scope) }
+        val presenter = retainedPresenter { scope -> OwnerProfilePresenter(repositories.owner, repositories.pets,
+            repositories.authentication, repositories.localDataTransfer, scope) }
+        val transfer = LocalDataTransferSection(view, presenter.transfer)
+        renderState(presenter.transfer.state, transfer::render)
         val logout = view.findViewById<MaterialButton>(R.id.logout)
         val accountMessage = view.findViewById<TextView>(R.id.account_message)
         logout.setOnClickListener { presenter.logout() }
@@ -32,8 +36,8 @@ class OwnerProfileFragment : ScreenFragment(R.layout.fragment_owner_profile) {
             view.findViewById<TextView>(R.id.account_mode).setText(if (account.mode == AccountMode.LOCAL) R.string.auth_local_mode else R.string.auth_server_mode)
             logout.setText(if (account.mode == AccountMode.LOCAL) R.string.auth_leave_local else R.string.auth_logout)
         }
-        renderState(presenter.accountAction) { action ->
-            logout.isEnabled = !action.busy
+        renderState(combine(presenter.accountAction, presenter.transfer.state) { action, transferState -> action to transferState.busy }) { (action, transferring) ->
+            logout.isEnabled = !action.busy && !transferring
             accountMessage.isVisible = action.error != null
             accountMessage.text = action.error?.let { getString(it.stringResource()) }
         }

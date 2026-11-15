@@ -37,7 +37,7 @@ internal class PassportCodec {
         return json.encodeToString(LocalPassportData.serializer(), data)
     }
 
-    private fun validate(data: LocalPassportData) {
+    fun validate(data: LocalPassportData) {
         require(data.schemaVersion == 1)
         require(data.owner == null || data.owner.id.isNotBlank())
         val petIds = data.pets.map { it.id }.toSet()

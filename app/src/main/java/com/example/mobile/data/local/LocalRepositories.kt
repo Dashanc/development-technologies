@@ -12,7 +12,8 @@ private val Context.passportDataStore by preferencesDataStore(name = "mur_passpo
 
 class LocalRepositories private constructor(context: Context) {
     private val preferences = LocalPreferences(context.applicationContext.passportDataStore)
-    private val storage = PassportStorage(preferences)
+    internal val storage = PassportStorage(preferences)
+    internal val transfers = LocalDataTransferStorage(preferences)
     internal val accountPhotos = AccountPhotoStorage(preferences)
     internal val accountMode = AccountModeStorage(preferences)
     internal val accountCache = AccountCacheStorage(preferences)

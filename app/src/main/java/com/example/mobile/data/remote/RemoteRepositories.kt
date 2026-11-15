@@ -18,6 +18,7 @@ class RemoteRepositories(
 ) {
     private val operations = RemoteOperations(sessions, onUnauthorized)
     internal val api = ApiClient(baseUrl, operations, language)
+    internal val transfers = RemoteTransferSource(api, operations)
     private val remotePets = RemotePetRepository(api, operations, localPhoto, savePhoto)
 
     val owner: OwnerRepository = RemoteOwnerRepository(api, operations)

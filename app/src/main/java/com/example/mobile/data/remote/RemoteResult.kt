@@ -34,10 +34,11 @@ internal class RemoteOperations(
 
     fun refresh() = revision.update { it + 1 }
 
-    suspend fun <T> run(write: Boolean = false, block: suspend (RemoteSession) -> T): RepositoryResult<T> {
-        val session = sessions.value
+    suspend fun <T> run(write: Boolean = false, expected: RemoteSession? = null, block: suspend (RemoteSession) -> T): RepositoryResult<T> {
+        val session = expected ?: sessions.value
         val result = remoteResult {
             if (session == null) throw RemoteFailure(RepositoryError.AUTHENTICATION_REQUIRED)
+            check(session)
             val result = block(session)
             check(session)
             if (write) refresh()

@@ -79,6 +79,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_owner_pet"
             tools:itemCount="2" />
+        <include layout="@layout/section_local_data_transfer" />
         <LinearLayout
             style="@style/MpCard"
             android:id="@+id/settings"

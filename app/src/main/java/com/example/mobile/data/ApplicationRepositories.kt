@@ -12,9 +12,11 @@ import com.example.mobile.data.cache.CacheCoordinator
 import com.example.mobile.data.cache.CachedOwnerRepository
 import com.example.mobile.data.cache.CachedPetRepository
 import com.example.mobile.data.cache.CachedMedicalRecordRepository
+import com.example.mobile.data.transfer.LocalDataTransferRepositoryImpl
 import com.example.mobile.domain.model.AppLanguage
 import com.example.mobile.domain.repository.AuthenticationRepository
 import com.example.mobile.domain.repository.DataStatusRepository
+import com.example.mobile.domain.repository.LocalDataTransferRepository
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
 import kotlinx.coroutines.CoroutineScope
@@ -75,8 +77,30 @@ internal class ApplicationRepositories(context: Context, scope: CoroutineScope, 
     private val cached = CacheCoordinator(local.accountCache, local.accountPhotos, sessions, authentication.session,
         network, remote, remote.api.serverIdentity, scope)
     val dataStatus: DataStatusRepository = cached
+    val localDataTransfer: LocalDataTransferRepository = LocalDataTransferRepositoryImpl(local.storage, local.transfers, remote.transfers, sessions,
+        authentication.session, remote.api.serverIdentity, { network.state.value.available }, cached::refresh, ::linkTransferredPhotos)
     private val source = AccountSource(authentication.session)
     val owner = AccountOwnerRepository(source, local.owner, CachedOwnerRepository(remote.owner, cached))
     val pets = AccountPetRepository(source, local.pets, CachedPetRepository(remote.pets, cached))
     val medicalRecords = AccountMedicalRecordRepository(source, local.medicalRecords, CachedMedicalRecordRepository(remote.medicalRecords, cached))
+
+    private suspend fun linkTransferredPhotos(session: RemoteSession, sourceOwner: String, petIds: Map<String, String>): RepositoryResult<Unit> = accountLock.withLock {
+        if (sessions.value !== session) return@withLock RepositoryResult.Failure(RepositoryError.AUTHENTICATION_REQUIRED)
+        val source = local.storage.observe { it }.first()
+        if (source is RepositoryResult.Failure) return@withLock source
+        val passport = (source as RepositoryResult.Success).value
+        if (passport.owner?.id != sourceOwner) return@withLock RepositoryResult.Success(Unit)
+        val stored = local.accountPhotos.read()
+        if (stored is RepositoryResult.Failure) return@withLock stored
+        val photos = (stored as RepositoryResult.Success).value
+        if (photos.ownerId != null && photos.ownerId != session.ownerId) return@withLock RepositoryResult.Failure(RepositoryError.IDENTITY_CONFLICT)
+        for ((localId, serverId) in petIds) {
+            if (sessions.value !== session) return@withLock RepositoryResult.Failure(RepositoryError.AUTHENTICATION_REQUIRED)
+            val uri = passport.pets.firstOrNull { it.id == localId }?.photoUri ?: continue
+            if (serverId in photos.photos) continue
+            val saved = local.accountPhotos.save(session.ownerId, serverId, uri)
+            if (saved is RepositoryResult.Failure) return@withLock saved
+        }
+        RepositoryResult.Success(Unit)
+    }
 }

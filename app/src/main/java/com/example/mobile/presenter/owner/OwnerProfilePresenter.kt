@@ -3,6 +3,7 @@ package com.example.mobile.presenter.owner
 import com.example.mobile.domain.model.Owner
 import com.example.mobile.domain.repository.OwnerRepository
 import com.example.mobile.domain.repository.AuthenticationRepository
+import com.example.mobile.domain.repository.LocalDataTransferRepository
 import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
@@ -30,8 +31,10 @@ class OwnerProfilePresenter(
     private val owners: OwnerRepository,
     private val pets: PetRepository,
     private val authentication: AuthenticationRepository,
+    transfers: LocalDataTransferRepository,
     private val scope: CoroutineScope,
 ) {
+    val transfer = LocalDataTransferPresenter(transfers, authentication, scope)
     private val mutableState = MutableStateFlow(OwnerProfileState())
     val state = mutableState.asStateFlow()
     val account = authentication.session
@@ -44,7 +47,7 @@ class OwnerProfilePresenter(
     }
 
     fun logout() {
-        if (accountAction.value.busy) return
+        if (accountAction.value.busy || transfer.state.value.busy) return
         mutableAccountAction.value = AccountActionState(busy = true)
         scope.launch {
             val result = authentication.logout()
