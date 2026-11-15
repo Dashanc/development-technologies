@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/mp_screen_padding">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <TextView
+                style="@style/MpTitle"
+                android:text="@string/my_profile"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                style="@style/MpIconButton"
+                android:id="@+id/edit_profile"
+                app:srcCompat="@drawable/ic_edit"
+                android:contentDescription="@string/edit_profile" />
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarPersonLarge" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/profile_message"
+            android:gravity="center"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/profile_retry"
+            android:text="@string/retry"
+            android:visibility="gone" />
+        <TextView
+            style="@style/MpSection"
+            android:gravity="center"
+            android:id="@+id/owner_name"
+            tools:text="@string/name" />
+        <TextView
+            style="@style/MpCaption"
+            android:gravity="center"
+            android:id="@+id/owner_email"
+            tools:text="name@example.com" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/owner_phone"
+            android:gravity="center"
+            android:textDirection="ltr"
+            android:visibility="gone" />
+        <TextView
+            style="@style/MpSection"
+            android:text="@string/my_pets" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/owner_pets_empty"
+            android:text="@string/no_pets"
+            tools:visibility="gone" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/owner_pets_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mp_owner_pet_list_height"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_owner_pet"
+            tools:itemCount="2" />
+        <LinearLayout
+            style="@style/MpCard"
+            android:id="@+id/settings"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+            <androidx.appcompat.widget.AppCompatImageView
+                style="@style/MpIcon"
+                app:srcCompat="@drawable/ic_settings" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+                <TextView
+                    style="@style/MpText"
+                    android:text="@string/settings"
+                    android:textStyle="bold" />
+                <TextView
+                    style="@style/MpCaption"
+                    android:text="@string/settings_caption" />
+            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                style="@style/MpIconSmall"
+                app:srcCompat="@drawable/ic_chevron_right" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

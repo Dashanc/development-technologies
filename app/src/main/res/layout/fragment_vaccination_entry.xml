@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/mp_screen_padding">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/back"
+                style="@style/MpIconButton"
+                app:srcCompat="@drawable/ic_back"
+                android:contentDescription="@string/back" />
+            <TextView
+                style="@style/MpTitle"
+                android:text="@string/new_vaccine"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:text="@string/vaccine_caption" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/pet"
+            android:labelFor="@id/pet_selector" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/MpSpinner"
+            android:id="@+id/pet_selector"
+            android:prompt="@string/pet" />
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/medical_pet_error"
+            android:text="@string/medical_error_pet"
+            android:textColor="?attr/colorError"
+            android:visibility="gone" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/record_type"
+            android:labelFor="@id/record_type" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/MpSpinner"
+            android:id="@+id/record_type"
+            android:entries="@array/record_options" />
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/vaccine"
+            android:labelFor="@id/vaccine" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/vaccine_field"
+            style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/vaccine"
+                android:hint="@string/vaccine_hint"
+                android:inputType="textCapSentences"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/vaccine_date"
+            android:labelFor="@id/vaccine_date" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/vaccine_date_field"
+            style="@style/MpField"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconTint="@color/mp_primary"
+            app:endIconCheckable="false">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/vaccine_date"
+                android:hint="@string/date_hint"
+                android:inputType="text"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/next_vaccine_date"
+            android:labelFor="@id/next_vaccine" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/next_vaccine_field"
+            style="@style/MpField"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconTint="@color/mp_primary"
+            app:endIconCheckable="false">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/next_vaccine"
+                android:hint="@string/date_hint"
+                android:inputType="text"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/clinic"
+            android:labelFor="@id/clinic" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/clinic"
+                android:hint="@string/optional"
+                android:inputType="textCapSentences"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/medical_veterinarian"
+            android:labelFor="@id/veterinarian" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/veterinarian"
+                android:hint="@string/optional"
+                android:inputType="textPersonName"
+                android:importantForAutofill="no"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpLabel"
+            android:text="@string/comment"
+            android:labelFor="@id/comment" />
+        <com.google.android.material.textfield.TextInputLayout style="@style/MpField">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/MpInput"
+                android:id="@+id/comment"
+                android:hint="@string/vaccine_comment"
+                android:inputType="textCapSentences|textMultiLine"
+                android:importantForAutofill="no"
+                android:minLines="3"
+                android:gravity="top|start" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            style="@style/MpCaption"
+            android:id="@+id/medical_message"
+            android:layout_marginTop="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButton"
+            android:id="@+id/save"
+            android:text="@string/save_vaccine" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
