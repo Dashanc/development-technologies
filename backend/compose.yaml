@@ -1,0 +1,52 @@
+name: murpassport
+
+x-backend: &backend
+    image: murpassport-backend:local
+    build:
+        context: .
+    environment:
+        APP_ENV: prod
+        APP_DEBUG: '0'
+        APP_SECRET: ${APP_SECRET:?Set APP_SECRET in .env.docker.local}
+        POSTGRES_DB: ${POSTGRES_DB:-murpassport}
+        POSTGRES_USER: ${POSTGRES_USER:-murpassport}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.docker.local}
+
+services:
+    api:
+        <<: *backend
+        ports:
+            - '0.0.0.0:${HTTP_PORT:-8000}:80'
+        depends_on:
+            database:
+                condition: service_healthy
+            migrations:
+                condition: service_completed_successfully
+        restart: unless-stopped
+
+    migrations:
+        <<: *backend
+        user: www-data
+        command: ['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction', '--allow-no-migration']
+        depends_on:
+            database:
+                condition: service_healthy
+
+    database:
+        image: postgres:16-bookworm
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB:-murpassport}
+            POSTGRES_USER: ${POSTGRES_USER:-murpassport}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.docker.local}
+        volumes:
+            - database_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+            interval: 5s
+            timeout: 5s
+            retries: 10
+            start_period: 10s
+        restart: unless-stopped
+
+volumes:
+    database_data:

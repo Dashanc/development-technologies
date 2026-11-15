@@ -50,6 +50,7 @@ class EditPetPresenter(
     private var original: Pet? = null
     private var loadJob: Job? = null
     private var pendingPhoto: String? = null
+    private var reloadAfterConflict = false
 
     init {
         retry()
@@ -80,7 +81,12 @@ class EditPetPresenter(
                             if (pet == null) {
                                 mutableState.value = state.value.copy(loading = false, hasPet = false, petMissing = true)
                             } else {
-                                val input = if (original == null) restoredInput ?: pet.toInput() else state.value.input
+                                val input = when {
+                                    reloadAfterConflict -> pet.toInput()
+                                    original == null -> restoredInput ?: pet.toInput()
+                                    else -> state.value.input
+                                }
+                                reloadAfterConflict = false
                                 original = pet
                                 mutableState.value = state.value.copy(input = input, loading = false, hasPet = true)
                                 pendingPhoto?.let {
@@ -163,7 +169,7 @@ class EditPetPresenter(
         val errors = PetFormValidator.validate(current.input, today)
         mutableState.value = current.copy(errors = errors, error = null)
         if (!errors.isEmpty) return
-        val updated = PetFormValidator.pet(source.id, source.ownerId, current.input, today)
+        val updated = PetFormValidator.pet(source.id, source.ownerId, current.input, today).copy(revision = source.revision)
         mutableState.value = state.value.copy(saving = true)
         scope.launch {
             if (updated.photoUri != null && updated.photoUri != source.photoUri && photos.retain(updated.photoUri) is RepositoryResult.Failure) {
@@ -171,13 +177,16 @@ class EditPetPresenter(
                 return@launch
             }
             when (val result = pets.update(updated)) {
-                is RepositoryResult.Failure -> mutableState.value = state.value.copy(
-                    saving = false,
-                    error = result.error.takeUnless { it == RepositoryError.INVALID_REFERENCE },
-                    petMissing = result.error == RepositoryError.INVALID_REFERENCE,
-                )
+                is RepositoryResult.Failure -> {
+                    reloadAfterConflict = result.error == RepositoryError.VERSION_CONFLICT
+                    mutableState.value = state.value.copy(
+                        saving = false, loadFailed = reloadAfterConflict,
+                        error = result.error.takeUnless { it == RepositoryError.INVALID_REFERENCE },
+                        petMissing = result.error == RepositoryError.INVALID_REFERENCE,
+                    )
+                }
                 is RepositoryResult.Success -> {
-                    original = updated
+                    original = result.value
                     mutableState.value = state.value.copy(saving = false, saved = true, destination = EditPetDestination.SAVED)
                 }
             }

@@ -3,7 +3,6 @@ package com.example.mobile.ui.health
 import android.os.Bundle
 import android.view.View
 import com.example.mobile.R
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.presenter.health.MedicalField
 import com.example.mobile.presenter.health.VaccinationEntryPresenter
 import com.example.mobile.ui.common.retainedPresenter
@@ -11,7 +10,6 @@ import com.example.mobile.ui.common.retainedPresenter
 class VaccinationEntryFragment : MedicalEntryFragment(R.layout.fragment_vaccination_entry, 1) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repositories = LocalRepositories.get(requireContext())
         val presenter = retainedPresenter { scope -> VaccinationEntryPresenter(repositories.owner, repositories.pets, repositories.medicalRecords, petId, scope) }
         val vaccine = MedicalTextInput(view, R.id.vaccine, R.id.vaccine_field) {
             presenter.changeInput(presenter.state.value.input.copy(vaccine = it), MedicalField.VACCINE)

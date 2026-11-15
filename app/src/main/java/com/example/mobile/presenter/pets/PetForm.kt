@@ -4,6 +4,7 @@ import com.example.mobile.domain.model.Pet
 import com.example.mobile.domain.model.PetExtraData
 import com.example.mobile.domain.model.PetSex
 import com.example.mobile.domain.model.PetSpecies
+import com.example.mobile.presenter.health.UpcomingHealthEvent
 import java.time.DateTimeException
 import java.time.format.DateTimeFormatter
 import java.time.format.ResolverStyle
@@ -50,7 +51,12 @@ internal fun Pet.toInput() = PetInput(
 
 data class PetAge(val years: Int, val months: Int, val days: Int)
 
-data class PetCard(val pet: Pet, val age: PetAge?, val lastWeightKg: Double? = null)
+data class PetCard(
+    val pet: Pet,
+    val age: PetAge?,
+    val lastWeightKg: Double? = null,
+    val nextEvent: UpcomingHealthEvent? = null,
+)
 
 internal fun Pet.toCard(today: LocalDate = LocalDate.now()): PetCard {
     val age = birthDate?.takeUnless { it.isAfter(today) }?.let {

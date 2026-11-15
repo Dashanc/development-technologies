@@ -12,11 +12,15 @@ private val Context.passportDataStore by preferencesDataStore(name = "mur_passpo
 
 class LocalRepositories private constructor(context: Context) {
     private val preferences = LocalPreferences(context.applicationContext.passportDataStore)
-    private val storage = PassportStorage(preferences)
+    internal val storage = PassportStorage(preferences)
+    internal val transfers = LocalDataTransferStorage(preferences)
+    internal val accountPhotos = AccountPhotoStorage(preferences)
+    internal val accountMode = AccountModeStorage(preferences)
+    internal val accountCache = AccountCacheStorage(preferences)
 
     val owner: OwnerRepository = LocalOwnerRepository(storage)
     val pets: PetRepository = LocalPetRepository(storage)
-    val petPhotos: PetPhotoRepository = LocalPetPhotoRepository(context.applicationContext.contentResolver, storage)
+    val petPhotos: PetPhotoRepository = LocalPetPhotoRepository(context.applicationContext.contentResolver, storage, accountPhotos)
     val medicalRecords: MedicalRecordRepository = LocalMedicalRecordRepository(storage)
     val settings: SettingsRepository = LocalSettingsRepository(preferences)
     internal val reminderStorage = LocalReminderStorage(preferences)

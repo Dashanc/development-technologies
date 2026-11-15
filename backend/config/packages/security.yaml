@@ -1,0 +1,27 @@
+security:
+    password_hashers:
+        App\Entity\Account: auto
+
+    providers:
+        accounts:
+            entity:
+                class: App\Entity\Account
+                property: id
+
+    firewalls:
+        public_auth:
+            pattern: ^/api/v1/auth/(register|login)$
+            security: false
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: accounts
+            entry_point: App\Security\ApiAuthenticationHandler
+            access_denied_handler: App\Security\ApiAuthenticationHandler
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
+                token_extractors: [header]
+                failure_handler: App\Security\ApiAuthenticationHandler
+
+    access_control:
+        - { path: ^/api/, roles: ROLE_USER }

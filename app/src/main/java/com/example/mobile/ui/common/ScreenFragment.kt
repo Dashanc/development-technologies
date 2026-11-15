@@ -6,10 +6,12 @@ import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.example.mobile.R
+import com.example.mobile.MurPassportApplication
 import com.example.mobile.ui.navigation.NavigationHost
 import com.example.mobile.ui.navigation.Screen
 
 abstract class ScreenFragment(@LayoutRes layout: Int) : Fragment(layout) {
+    internal val repositories get() = (requireContext().applicationContext as MurPassportApplication).repositories
     protected val navigator get() = (requireActivity() as NavigationHost).navigator
     protected val petId: String? get() = arguments?.getString(Screen.ARG_PET_ID)
 

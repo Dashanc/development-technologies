@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_login">Войти</string>
+    <string name="auth_create_instead">Создать новый аккаунт</string>
+    <string name="auth_caption">Серверный аккаунт. Локальный профиль не переносится автоматически.</string>
+    <string name="auth_open_profile">Открыть профиль</string>
+    <string name="auth_open_local">Открыть прежний локальный профиль</string>
+    <string name="auth_forget_session">Сбросить сохранённый вход</string>
+    <string name="auth_password_required">Введите пароль (не более 128 символов).</string>
+    <string name="auth_password_length">Пароль должен содержать от 8 до 128 символов.</string>
+    <string name="auth_logout">Выйти из аккаунта</string>
+    <string name="auth_leave_local">Перейти к серверному входу</string>
+    <string name="auth_local_mode">Локальный профиль • данные на устройстве</string>
+    <string name="auth_server_mode">Серверный аккаунт</string>
+    <string name="auth_error_storage">Не удалось безопасно сохранить или прочитать сессию. Повторите попытку или сбросьте сохранённый вход.</string>
+    <string name="auth_error_credentials">Неверный email или пароль.</string>
+    <string name="auth_error_email_used">Этот email уже используется. Войдите или укажите другой.</string>
+    <string name="account_required">Войдите в аккаунт, чтобы открыть профиль.</string>
+</resources>

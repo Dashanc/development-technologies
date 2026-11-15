@@ -3,6 +3,7 @@ package com.example.mobile.data.local
 import com.example.mobile.domain.model.Pet
 import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.domain.repository.map
 
 internal class LocalPetRepository(private val storage: PassportStorage) : PetRepository {
     override fun observePets(ownerId: String) = storage.observe { data ->
@@ -13,9 +14,9 @@ internal class LocalPetRepository(private val storage: PassportStorage) : PetRep
         data.pets.find { it.id == petId }?.toDomain()
     }
 
-    override suspend fun save(pet: Pet) = write(pet, requireExisting = false)
+    override suspend fun save(pet: Pet) = write(pet, requireExisting = false).map { pet }
 
-    override suspend fun update(pet: Pet) = write(pet, requireExisting = true)
+    override suspend fun update(pet: Pet) = write(pet, requireExisting = true).map { pet }
 
     private suspend fun write(pet: Pet, requireExisting: Boolean) = storage.update { data ->
         if (data.owner == null || data.owner.id != pet.ownerId) {
@@ -34,7 +35,7 @@ internal class LocalPetRepository(private val storage: PassportStorage) : PetRep
         })
     }
 
-    override suspend fun delete(petId: String) = storage.update { data ->
+    override suspend fun delete(petId: String, revision: String?) = storage.update { data ->
         data.copy(
             pets = data.pets.filterNot { it.id == petId },
             records = data.records.filterNot { it.petId == petId },

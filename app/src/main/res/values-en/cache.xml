@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cache_updating">Updating data from the server…</string>
+    <string name="cache_showing_saved">Showing saved data. Changes require a server connection.</string>
+    <string name="cache_error_storage">Could not read or save cached data. Try again.</string>
+    <string name="cache_no_data">No saved data yet. Connect to the server.</string>
+    <string name="cache_write_offline">No network. Changes were not saved and will not be sent automatically.</string>
+    <string name="cache_saved_at">%1$s\nLast full update: %2$s</string>
+</resources>

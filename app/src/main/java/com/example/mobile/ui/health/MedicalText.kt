@@ -8,6 +8,7 @@ import com.example.mobile.domain.model.VetVisitRecord
 import com.example.mobile.domain.model.WeightRecord
 import com.example.mobile.domain.model.WeightUnit
 import com.example.mobile.domain.repository.RepositoryError
+import com.example.mobile.ui.common.remoteStringResource
 import com.example.mobile.presenter.health.HealthEventType
 import com.example.mobile.presenter.health.MedicalInputError
 import com.example.mobile.presenter.health.PetHealthSummary
@@ -34,6 +35,7 @@ internal fun RepositoryError.medicalStringResource() = when (this) {
     RepositoryError.UNSUPPORTED_SCHEMA -> R.string.error_local_schema
     RepositoryError.INVALID_REFERENCE -> R.string.medical_error_pet_missing
     RepositoryError.IDENTITY_CONFLICT, RepositoryError.INVALID_DATA -> R.string.medical_error_data
+    else -> remoteStringResource()
 }
 
 internal class MedicalText(private val context: Context, private val weightUnit: WeightUnit = WeightUnit.KILOGRAM) {

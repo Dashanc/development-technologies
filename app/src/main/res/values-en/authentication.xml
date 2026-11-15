@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_login">Sign in</string>
+    <string name="auth_create_instead">Create a new account</string>
+    <string name="auth_caption">Server account. Your local profile is not transferred automatically.</string>
+    <string name="auth_open_profile">Open profile</string>
+    <string name="auth_open_local">Open previous local profile</string>
+    <string name="auth_forget_session">Reset saved sign-in</string>
+    <string name="auth_password_required">Enter your password (up to 128 characters).</string>
+    <string name="auth_password_length">Use 8 to 128 characters for your password.</string>
+    <string name="auth_logout">Sign out</string>
+    <string name="auth_leave_local">Go to server sign-in</string>
+    <string name="auth_local_mode">Local profile • data on this device</string>
+    <string name="auth_server_mode">Server account</string>
+    <string name="auth_error_storage">Could not securely save or read your session. Try again or reset saved sign-in.</string>
+    <string name="auth_error_credentials">Incorrect email or password.</string>
+    <string name="auth_error_email_used">This email is already in use. Sign in or use another email.</string>
+    <string name="account_required">Sign in to open your profile.</string>
+</resources>

@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.mobile.R
-import com.example.mobile.data.local.LocalRepositories
 import com.example.mobile.domain.model.PetExtraData
 import com.example.mobile.presenter.pets.EditPetDestination
 import com.example.mobile.presenter.pets.EditPetPresenter
@@ -39,7 +38,6 @@ class EditPetFragment : ScreenFragment(R.layout.fragment_add_pet), PetExtraDataH
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val draft = savedInstanceState?.getBundle(PetEditArguments.DRAFT)?.let(PetEditArguments::input)
-        val repositories = LocalRepositories.get(requireContext())
         presenter = retainedPresenter { scope ->
             EditPetPresenter(repositories.owner, repositories.pets, repositories.petPhotos, petId, scope, draft)
         }
@@ -114,7 +112,7 @@ class EditPetFragment : ScreenFragment(R.layout.fragment_add_pet), PetExtraDataH
             savingBack.isEnabled = state.saving
             val messageId = state.error?.petStringResource() ?: when {
                 state.loading -> R.string.pet_loading
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 state.petMissing -> R.string.pet_not_found
                 state.photoFailed -> R.string.error_pet_photo
                 state.photoLoading -> R.string.pet_photo_loading

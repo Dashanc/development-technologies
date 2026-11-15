@@ -83,7 +83,7 @@ abstract class MedicalEntryFragment(
             })
             view.findViewById<View>(R.id.back).isEnabled = !state.saving
             val messageId = state.error?.medicalStringResource() ?: when {
-                state.ownerMissing -> R.string.local_profile_missing
+                state.ownerMissing -> R.string.account_required
                 !state.loading && state.pets.isEmpty() -> R.string.medical_no_pets
                 else -> null
             }

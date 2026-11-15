@@ -1,12 +1,16 @@
 package com.example.mobile.reminders
 
 import android.content.Context
-import com.example.mobile.data.local.LocalRepositories
+import com.example.mobile.data.local.LocalReminderStorage
 import com.example.mobile.data.local.ReminderLedger
 import com.example.mobile.domain.model.AppSettings
 import com.example.mobile.domain.repository.RepositoryResult
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.ReminderScheduleRepository
+import com.example.mobile.domain.repository.OwnerRepository
+import com.example.mobile.domain.repository.PetRepository
+import com.example.mobile.domain.repository.MedicalRecordRepository
+import com.example.mobile.domain.repository.SettingsRepository
 import com.example.mobile.presenter.health.HealthData
 import com.example.mobile.presenter.health.observeHealthData
 import com.example.mobile.presenter.owner.ReminderStatus
@@ -16,6 +20,7 @@ import java.time.ZoneId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -24,10 +29,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal class ReminderCoordinator(context: Context, private val repositories: LocalRepositories, private val scope: CoroutineScope) : ReminderScheduleRepository {
+internal class ReminderCoordinator(
+    context: Context,
+    private val owners: OwnerRepository,
+    private val pets: PetRepository,
+    private val records: MedicalRecordRepository,
+    private val settings: SettingsRepository,
+    private val storage: LocalReminderStorage,
+    private val scope: CoroutineScope,
+) : ReminderScheduleRepository {
     private val alarms = ReminderAlarms(context)
     private val notifications = ReminderNotifications(context)
-    private val storage = repositories.reminderStorage
     private val mutex = Mutex()
     private val mutableStatus = MutableStateFlow(ReminderStatus.READY)
     val status = mutableStatus.asStateFlow()
@@ -40,6 +52,27 @@ internal class ReminderCoordinator(context: Context, private val repositories: L
 
     fun refresh() {
         start()
+    }
+
+    suspend fun clearAccount(): RepositoryResult<Unit> {
+        observation?.cancelAndJoin()
+        return mutex.withLock {
+            try {
+                notifications.cancelAll()
+                val ledger = readLedger() ?: return@withLock RepositoryResult.Failure(RepositoryError.READ_FAILED)
+                (ledger.scheduled.keys + ledger.delivered.keys).forEach(alarms::cancel)
+                if (writeLedger(ReminderLedger())) RepositoryResult.Success(Unit)
+                else RepositoryResult.Failure(RepositoryError.WRITE_FAILED)
+            } catch (error: CancellationException) {
+                throw error
+            } catch (_: SecurityException) {
+                RepositoryResult.Failure(RepositoryError.WRITE_FAILED)
+            } catch (_: IllegalArgumentException) {
+                RepositoryResult.Failure(RepositoryError.WRITE_FAILED)
+            } catch (_: IllegalStateException) {
+                RepositoryResult.Failure(RepositoryError.WRITE_FAILED)
+            }
+        }
     }
 
     suspend fun rebuild(reset: Boolean = false) {
@@ -97,8 +130,8 @@ internal class ReminderCoordinator(context: Context, private val repositories: L
     }
 
     private fun snapshots() = combine(
-        observeHealthData(repositories.owner, repositories.pets, repositories.medicalRecords),
-        repositories.settings.observeSettings(),
+        observeHealthData(owners, pets, records),
+        settings.observeSettings(),
     ) { data, settings -> data to (settings as? RepositoryResult.Success)?.value }
 
     private suspend fun reconcile(snapshot: Pair<HealthData, AppSettings?>, reset: Boolean = false) {

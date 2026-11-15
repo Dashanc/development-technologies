@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 data class EditProfileState(
     val input: OwnerInput = OwnerInput(),
     val errors: OwnerInputErrors = OwnerInputErrors(),
+    val serverErrors: Map<String, String> = emptyMap(),
     val loading: Boolean = true,
     val saving: Boolean = false,
     val hasOwner: Boolean = false,
@@ -35,7 +36,8 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
 
     fun retry() {
         if (loadJob?.isActive == true || state.value.saving) return
-        mutableState.value = state.value.copy(loading = true, loadFailed = false, repositoryError = null)
+        mutableState.value = state.value.copy(loading = true, loadFailed = false, repositoryError = null,
+            errors = OwnerInputErrors(), serverErrors = emptyMap())
         loadJob = scope.launch {
             when (val result = owners.observeOwner().first()) {
                 is RepositoryResult.Failure -> mutableState.value = state.value.copy(
@@ -59,6 +61,7 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
             input = input,
             errors = state.value.errors.clearChanged(state.value.input, input),
             repositoryError = null,
+            serverErrors = emptyMap(),
         )
     }
 
@@ -77,15 +80,16 @@ class EditProfilePresenter(private val owners: OwnerRepository, private val scop
         val errors = OwnerFormValidator.validate(current.input)
         mutableState.value = current.copy(errors = errors, repositoryError = null)
         if (!errors.isEmpty) return
-        val updatedOwner = OwnerFormValidator.owner(original.id, current.input)
+        val updatedOwner = OwnerFormValidator.owner(original.id, current.input).copy(revision = original.revision)
         mutableState.value = state.value.copy(saving = true)
         scope.launch {
             when (val result = owners.save(updatedOwner)) {
                 is RepositoryResult.Failure -> mutableState.value = state.value.copy(
-                    saving = false, repositoryError = result.error,
+                    saving = false, repositoryError = result.error, serverErrors = result.fieldErrors,
+                    loadFailed = result.error == RepositoryError.VERSION_CONFLICT,
                 )
                 is RepositoryResult.Success -> {
-                    owner = updatedOwner
+                    owner = result.value
                     mutableState.value = state.value.copy(saving = false, saved = true)
                 }
             }

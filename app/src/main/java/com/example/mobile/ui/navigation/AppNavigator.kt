@@ -67,6 +67,16 @@ class AppNavigator(
         commit(screen, petId, addToBackStack = true)
     }
 
+    fun requireAuthentication(resumeProfile: Boolean = false) {
+        if (fragments.isStateSaved) return
+        fragments.executePendingTransactions()
+        if (fragments.isStateSaved || currentScreen() == Screen.REGISTRATION) return
+        navigationPending = false
+        fragments.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        commit(Screen.REGISTRATION, null, addToBackStack = false, resumeProfile = resumeProfile)
+        fragments.executePendingTransactions()
+    }
+
     override fun replace(screen: Screen, petId: String?) {
         if (screen.isTab || screen == Screen.REGISTRATION) {
             openRoot(screen)

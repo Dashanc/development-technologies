@@ -132,7 +132,7 @@ class AddPetPresenter(
         scope.launch {
             when (val result = pets.save(pet)) {
                 is RepositoryResult.Failure -> mutableState.value = state.value.copy(saving = false, error = result.error)
-                is RepositoryResult.Success -> mutableState.value = state.value.copy(saving = false, savedPetId = pet.id)
+                is RepositoryResult.Success -> mutableState.value = state.value.copy(saving = false, savedPetId = result.value.id)
             }
         }
     }

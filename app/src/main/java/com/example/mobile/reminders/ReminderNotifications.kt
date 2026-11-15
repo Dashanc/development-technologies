@@ -55,6 +55,7 @@ internal class ReminderNotifications(private val context: Context) {
     }
 
     fun cancel(identity: String) = manager.cancel(identity, 0)
+    fun cancelAll() = manager.cancelAll()
 
     fun settingsIntent(): Intent = Intent(
         if (manager.areNotificationsEnabled()) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS else Settings.ACTION_APP_NOTIFICATION_SETTINGS,

@@ -28,15 +28,15 @@ internal class OwnerFormFields(view: View, private val changed: (OwnerInput) -> 
         }
     }
 
-    fun render(input: OwnerInput, errors: OwnerInputErrors, enabled: Boolean) {
+    fun render(input: OwnerInput, errors: OwnerInputErrors, enabled: Boolean, serverErrors: Map<String, String> = emptyMap()) {
         rendering = true
         name.setValue(input.name)
         email.setValue(input.email)
         phone.setValue(input.phone)
         listOf(name, email, phone).forEach { it.isEnabled = enabled }
-        nameField.error = errors.name?.let { name.context.getString(it.stringResource()) }
-        emailField.error = errors.email?.let { email.context.getString(it.stringResource()) }
-        phoneField.error = errors.phone?.let { phone.context.getString(it.stringResource()) }
+        nameField.error = errors.name?.let { name.context.getString(it.stringResource()) } ?: serverErrors["name"]
+        emailField.error = errors.email?.let { email.context.getString(it.stringResource()) } ?: serverErrors["email"]
+        phoneField.error = errors.phone?.let { phone.context.getString(it.stringResource()) } ?: serverErrors["phone"]
         rendering = false
     }
 

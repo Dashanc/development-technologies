@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cache_updating">Сервердегі деректер жаңартылуда…</string>
+    <string name="cache_showing_saved">Сақталған деректер көрсетілген. Өзгерту үшін серверге қосылу қажет.</string>
+    <string name="cache_error_storage">Кэшті оқу немесе сақтау мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="cache_no_data">Сақталған деректер әзірге жоқ. Серверге қосылыңыз.</string>
+    <string name="cache_write_offline">Желі жоқ. Өзгерістер сақталмады және автоматты түрде жіберілмейді.</string>
+    <string name="cache_saved_at">%1$s\nСоңғы толық жаңарту: %2$s</string>
+</resources>

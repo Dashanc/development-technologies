@@ -2,6 +2,8 @@ package com.example.mobile.presenter.owner
 
 import com.example.mobile.domain.model.Owner
 import com.example.mobile.domain.repository.OwnerRepository
+import com.example.mobile.domain.repository.AuthenticationRepository
+import com.example.mobile.domain.repository.LocalDataTransferRepository
 import com.example.mobile.domain.repository.PetRepository
 import com.example.mobile.domain.repository.RepositoryError
 import com.example.mobile.domain.repository.RepositoryResult
@@ -23,17 +25,34 @@ data class OwnerProfileState(
     val petError: RepositoryError? = null,
 )
 
+data class AccountActionState(val busy: Boolean = false, val error: RepositoryError? = null)
+
 class OwnerProfilePresenter(
     private val owners: OwnerRepository,
     private val pets: PetRepository,
+    private val authentication: AuthenticationRepository,
+    transfers: LocalDataTransferRepository,
     private val scope: CoroutineScope,
 ) {
+    val transfer = LocalDataTransferPresenter(transfers, authentication, scope)
     private val mutableState = MutableStateFlow(OwnerProfileState())
     val state = mutableState.asStateFlow()
+    val account = authentication.session
+    private val mutableAccountAction = MutableStateFlow(AccountActionState())
+    val accountAction = mutableAccountAction.asStateFlow()
     private var observation: Job? = null
 
     init {
         retry()
+    }
+
+    fun logout() {
+        if (accountAction.value.busy || transfer.state.value.busy) return
+        mutableAccountAction.value = AccountActionState(busy = true)
+        scope.launch {
+            val result = authentication.logout()
+            mutableAccountAction.value = AccountActionState(error = (result as? RepositoryResult.Failure)?.error)
+        }
     }
 
     fun retry() {

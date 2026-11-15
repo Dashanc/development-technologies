@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="remote_error_network">Сервермен байланыс жоқ. Қосылымды тексеріңіз.</string>
+    <string name="remote_error_timeout">Сервер уақытында жауап бермеді. Қайталап көріңіз.</string>
+    <string name="remote_error_authentication">Аккаунтыңызға қайта кіріңіз.</string>
+    <string name="remote_error_access">Бұл деректерге қол жеткізуге рұқсат жоқ.</string>
+    <string name="remote_error_conflict">Сұрау сақталған деректермен қайшы келеді. Деректерді жаңартыңыз.</string>
+    <string name="remote_error_version">Деректер өзгертілген. Соңғы нұсқасын жүктеңіз.</string>
+    <string name="remote_error_rate">Сұраулар тым көп. Кейінірек қайталаңыз.</string>
+    <string name="remote_error_server">Сервер уақытша қолжетімсіз. Кейінірек қайталаңыз.</string>
+    <string name="remote_error_response">Сервер жауабын оқу мүмкін болмады.</string>
+    <string name="remote_error_configuration">Серверге қосылу бапталмаған.</string>
+</resources>

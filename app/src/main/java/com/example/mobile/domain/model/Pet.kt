@@ -12,6 +12,7 @@ data class Pet(
     val sex: PetSex = PetSex.UNKNOWN,
     val photoUri: String? = null,
     val extra: PetExtraData = PetExtraData(),
+    val revision: String? = null,
 )
 
 enum class PetSpecies { CAT, DOG, OTHER }

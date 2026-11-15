@@ -15,14 +15,16 @@
         <androidx.appcompat.widget.AppCompatImageView style="@style/MpAvatarPersonLarge" />
         <TextView
             style="@style/MpTitle"
+            android:id="@+id/auth_title"
             android:text="@string/create_account"
             android:gravity="center" />
         <TextView
             style="@style/MpCaption"
-            android:text="@string/registration_caption"
+            android:text="@string/auth_caption"
             android:gravity="center" />
         <TextView
             style="@style/MpLabel"
+            android:id="@+id/name_label"
             android:text="@string/name"
             android:labelFor="@id/owner_name" />
         <com.google.android.material.textfield.TextInputLayout
@@ -53,6 +55,7 @@
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
             style="@style/MpLabel"
+            android:id="@+id/phone_label"
             android:text="@string/phone"
             android:labelFor="@id/owner_phone" />
         <com.google.android.material.textfield.TextInputLayout
@@ -128,5 +131,15 @@
             style="@style/MpButtonSoft"
             android:id="@+id/sign_in"
             android:text="@string/have_account" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/open_local"
+            android:text="@string/auth_open_local"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/MpButtonSoft"
+            android:id="@+id/forget_session"
+            android:text="@string/auth_forget_session"
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

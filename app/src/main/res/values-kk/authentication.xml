@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_login">Кіру</string>
+    <string name="auth_create_instead">Жаңа аккаунт жасау</string>
+    <string name="auth_caption">Серверлік аккаунт. Жергілікті профиль автоматты түрде көшірілмейді.</string>
+    <string name="auth_open_profile">Профильді ашу</string>
+    <string name="auth_open_local">Бұрынғы жергілікті профильді ашу</string>
+    <string name="auth_forget_session">Сақталған кіруді қалпына келтіру</string>
+    <string name="auth_password_required">Құпиясөзді енгізіңіз (128 таңбадан аспасын).</string>
+    <string name="auth_password_length">Құпиясөз 8–128 таңбадан тұруы керек.</string>
+    <string name="auth_logout">Аккаунттан шығу</string>
+    <string name="auth_leave_local">Серверлік кіруге өту</string>
+    <string name="auth_local_mode">Жергілікті профиль • деректер құрылғыда</string>
+    <string name="auth_server_mode">Серверлік аккаунт</string>
+    <string name="auth_error_storage">Сессияны қауіпсіз сақтау немесе оқу мүмкін болмады. Қайталаңыз немесе сақталған кіруді қалпына келтіріңіз.</string>
+    <string name="auth_error_credentials">Email немесе құпиясөз қате.</string>
+    <string name="auth_error_email_used">Бұл email қолданыста. Кіріңіз немесе басқа email көрсетіңіз.</string>
+    <string name="account_required">Профильді ашу үшін аккаунтқа кіріңіз.</string>
+</resources>

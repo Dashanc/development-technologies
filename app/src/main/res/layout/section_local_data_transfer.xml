@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MpCard"
+    android:id="@+id/local_data_transfer"
+    android:orientation="vertical"
+    android:layout_marginTop="16dp"
+    android:visibility="gone">
+    <TextView
+        style="@style/MpSection"
+        android:text="@string/transfer_title" />
+    <TextView
+        style="@style/MpCaption"
+        android:id="@+id/transfer_summary" />
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/transfer_include_owner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/transfer_include_owner"
+        android:saveEnabled="false" />
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/transfer_consent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/transfer_consent"
+        android:saveEnabled="false" />
+    <TextView
+        style="@style/MpCaption"
+        android:id="@+id/transfer_status"
+        android:accessibilityLiveRegion="polite"
+        android:visibility="gone" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButton"
+        android:id="@+id/transfer_action"
+        android:text="@string/transfer_confirm" />
+    <com.google.android.material.button.MaterialButton
+        style="@style/MpButtonSoft"
+        android:id="@+id/transfer_review"
+        android:text="@string/transfer_review" />
+</LinearLayout>
