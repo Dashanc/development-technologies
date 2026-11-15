@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.net.URI
 
 plugins {
     alias(libs.plugins.android.application)
@@ -15,6 +16,19 @@ val apiUrl = providers.gradleProperty("murpassport.apiUrl")
     .get()
 val quotedApiUrl = "\"" + apiUrl.replace("\\", "\\\\").replace("\"", "\\\"")
     .replace("\n", "\\n").replace("\r", "\\r") + "\""
+val releaseApiUrl = providers.gradleProperty("murpassport.releaseApiUrl")
+    .orElse(providers.environmentVariable("MURPASSPORT_RELEASE_API_URL"))
+    .orElse(localConfiguration.getProperty("murpassport.releaseApiUrl", ""))
+    .get()
+if (releaseApiUrl.isNotEmpty()) {
+    val address = runCatching { URI(releaseApiUrl) }.getOrNull()
+    require(address != null && address.scheme == "https" && address.host != null &&
+        address.userInfo == null && address.query == null && address.fragment == null) {
+        "murpassport.releaseApiUrl must be an HTTPS URL without credentials, query or fragment."
+    }
+}
+val quotedReleaseApiUrl = "\"" + releaseApiUrl.replace("\\", "\\\\").replace("\"", "\\\"")
+    .replace("\n", "\\n").replace("\r", "\\r") + "\""
 
 android {
     namespace = "com.example.mobile"
@@ -24,7 +38,6 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mobile"
-        buildConfigField("String", "API_BASE_URL", quotedApiUrl)
         minSdk = 33
         targetSdk = 36
         versionCode = 1
@@ -38,7 +51,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_BASE_URL", quotedApiUrl)
+        }
         release {
+            buildConfigField("String", "API_BASE_URL", quotedReleaseApiUrl)
             optimization {
                 enable = false
             }
